@@ -15,9 +15,10 @@ RUN apt update && \
         libc-l10n locales \
         fonts-noto fonts-droid-fallback \
         strace file xterm vim apt-file \
-        dhcpcd5 \
-        wget curl \
-        net-tools netcat \
+        # As we have no networking, those are somewhat useless
+        # dhcpcd5 \
+        # wget curl \
+        # net-tools netcat \
         wmctrl xdotool \
         mesa-utils libgl1-mesa-dri \
     && \
@@ -50,7 +51,7 @@ RUN { \
 } >> /root/.profile
 COPY xinitrc /root/.xinitrc
 # COPY xorg.conf /etc/X11/
-COPY networking.sh /root/
+# COPY networking.sh /root/
 
 COPY boot-9p /etc/initramfs-tools/scripts/boot-9p
 
