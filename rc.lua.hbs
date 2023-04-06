@@ -1,0 +1,17 @@
+-- If LuaRocks is installed, make sure that packages installed through it are
+-- found (e.g. lgi). If LuaRocks is not installed, do nothing.
+pcall(require, "luarocks.loader")
+
+-- Standard awesome library
+local awful = require("awful")
+local gears = require("gears")
+
+-- Set default background
+gears.wallpaper.fill("{{{ wallpaperPath }}}")
+
+-- Set autostart applications
+{{#each autostartApplications}}
+    awful.spawn.with_shell("{{{ commandLine }}}")
+{{/each}}
+
+package.loaded["naughty.dbus"] = {}
