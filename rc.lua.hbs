@@ -4,10 +4,20 @@ pcall(require, "luarocks.loader")
 
 -- Standard awesome library
 local awful = require("awful")
+local beautiful = require("beautiful")
 local gears = require("gears")
 
+-- Set theme
+local themeConfig = {
+    font = nil,
+}
+
+terminal = "{{ terminal }}"
+
+beautiful.init(themeConfig)
+
 -- Set default background
-gears.wallpaper.fill("{{{ wallpaperPath }}}")
+gears.wallpaper.fill("{{ AWESOME_CONFIG }}/background")
 
 -- Set autostart applications
 {{#each autostartApplications}}

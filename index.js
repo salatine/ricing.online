@@ -25,21 +25,29 @@ async function changeBackground(event) {
     await window.emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
 }
 
-async function updatePreview() {
-    const config = generateConfig({
-        wallpaperPath: AWESOME_CONFIG + "/background",
+function getTerminal() {
+    return document.getElementById("terminal").value;
+}
+
+async function applyConfig() {
+    const options = {
+        AWESOME_CONFIG = AWESOME_CONFIG,
         autostartApplications: [
             { commandLine: "fcitx &" },
             { commandLine: "feh something" },
         ],
-    });
+        terminal = getTerminal(),
+    }
 
-    console.log(config)
+    const config = getConfig(options)
     await window.emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
-    runCommand("echo 'awesome.restart()' | DISPLAY=':0' awesome-client");
 }
 
-function generateConfig(options) {
+function updatePreview() {
+    runCommand("awesome-client awesome.restart()");
+}
+
+function getConfig(options) {
     const renderTemplate = Handlebars.compile(RcLuaTemplate);
 
     return readStringIntoUint8Array(renderTemplate(options))
