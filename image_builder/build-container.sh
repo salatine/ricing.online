@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -veu
 
+DOCKER_CONTEXT="$(dirname "$0")"
 V86_PATH="$(dirname "$0")"/../v86/
 IMAGES_OUTPUT="$(dirname "$0")"/../build/images
 OUT_ROOTFS_TAR="$IMAGES_OUTPUT"/debian-9p-rootfs.tar
@@ -10,7 +11,7 @@ CONTAINER_NAME=debian-full
 IMAGE_NAME=i386/debian-full
 
 mkdir -p "$IMAGES_OUTPUT"
-docker build . --platform linux/386 --rm --tag "$IMAGE_NAME"
+docker build "$DOCKER_CONTEXT" --platform linux/386 --rm --tag "$IMAGE_NAME"
 docker rm "$CONTAINER_NAME" || true
 docker create --platform linux/386 -t -i --name "$CONTAINER_NAME" "$IMAGE_NAME" bash
 
