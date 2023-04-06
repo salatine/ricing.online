@@ -6,8 +6,6 @@ RUN apt update && \
     apt --yes --no-install-recommends install \
         linux-image-686 grub2 systemd \
         libterm-readline-perl-perl \
-        gcc make libc6-dev \
-        unzip bzip2 xz-utils \
         awesome \
         feh \
         xserver-xorg-input-kbd xserver-xorg-input-mouse xserver-xorg-input-evdev \
@@ -36,14 +34,7 @@ RUN apt update && \
     systemctl disable apt-daily.timer && \
     systemctl disable apt-daily-upgrade.timer && \
     systemctl disable dhcpcd.service && \
-    echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab && \
-    cd /root/ && \
-    wget http://www.math.utah.edu/~mayer/linux/nbench-byte-2.2.3.tar.gz && \
-    tar xfv nbench-byte-2.2.3.tar.gz && \
-    rm nbench-byte-2.2.3.tar.gz && \
-    mv nbench-byte-2.2.3 bench && \
-    cd bench && \
-    make
+    echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
