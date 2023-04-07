@@ -31,20 +31,21 @@ function getTerminal() {
 
 async function applyConfig() {
     const options = {
-        AWESOME_CONFIG = AWESOME_CONFIG,
+        AWESOME_CONFIG: AWESOME_CONFIG,
         autostartApplications: [
             { commandLine: "fcitx &" },
             { commandLine: "feh something" },
         ],
-        terminal = getTerminal(),
+        terminal: getTerminal(),
     }
 
     const config = getConfig(options)
     await window.emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
 }
 
-function updatePreview() {
-    runCommand("awesome-client awesome.restart()");
+async function updatePreview() {
+    await applyConfig()
+    runCommand("awesome-client 'awesome.restart()'");
 }
 
 function getConfig(options) {

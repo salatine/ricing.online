@@ -14,10 +14,10 @@ local themeConfig = {
 
 terminal = "{{ terminal }}"
 
-beautiful.init(themeConfig)
+-- beautiful.init(themeConfig)
 
 -- Set default background
-gears.wallpaper.fill("{{ AWESOME_CONFIG }}/background")
+gears.wallpaper.maximized("{{ AWESOME_CONFIG }}/background")
 
 -- Set autostart applications
 {{#each autostartApplications}}
