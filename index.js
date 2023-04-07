@@ -18,6 +18,11 @@ function readStringIntoUint8Array(string) {
     return encoder.encode(string);
 }
 
+function readUint8ArrayIntoString(array) {
+    const decoder = new TextDecoder();
+    return decoder.decode(array);
+}
+
 async function changeBackground(event) {
     const backgroundFile = event.target.files[0];
     const backgroundFileContents = await readFileIntoUint8Array(backgroundFile);
@@ -54,12 +59,36 @@ function getConfig(options) {
     return readStringIntoUint8Array(renderTemplate(options))
 }
 
+async function updateAwesomeLogs() {
+    const stdoutTextarea = document.getElementById('awesome_stdout')
+    const stderrTextarea = document.getElementById('awesome_stderr')
+
+    const stdoutLogs = await readFileToString('/var/log/awesome.stdout.log') ?? ''
+    const stderrLogs = await readFileToString('/var/log/awesome.stderr.log') ?? ''
+
+    stdoutTextarea.value = stdoutLogs
+    stderrTextarea.value = stderrLogs
+}
+
+async function readFileToString(path) {
+    try {
+        const bytes = await window.emulator.read_file(path)
+
+        return readUint8ArrayIntoString(bytes)
+    } catch {
+        return null
+    }
+}
+
 window.addEventListener("load", () => {
     const backgroundInput = document.getElementById("file")
     backgroundInput.addEventListener("change", changeBackground)
 
     const updatePreviewButton = document.getElementById("updatePreview")
     updatePreviewButton.addEventListener("click", updatePreview)
+    
+    const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
+    updateAwesomeLogsButton.addEventListener("click", updateAwesomeLogs)
 })
 
 window.runCommand = runCommand
