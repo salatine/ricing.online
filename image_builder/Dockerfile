@@ -42,9 +42,10 @@ COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.
 
 COPY logind.conf /etc/systemd/logind.conf
 RUN { \
-    echo 'if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]]; then';\
+    echo 'if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]] && [[ ! -f ~/.x-autostarted ]]; then';\
     # echo 'echo "Waiting for 90s"';\
     # echo 'sleep 90s';\
+    echo 'touch ~/.x-autostarted';\
     echo '. startx';\
     echo 'logout';\
     echo 'fi';\
