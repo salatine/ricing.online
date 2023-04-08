@@ -8,13 +8,11 @@ local beautiful = require("beautiful")
 local gears = require("gears")
 
 -- Set theme
-local themeConfig = {
-    font = nil,
-}
-
+local theme = {}
+theme.useless_gap = {{ gap }} or 0
 terminal = "{{ terminal }}"
 
--- beautiful.init(themeConfig)
+beautiful.init(theme)
 
 -- Set default background
 gears.wallpaper.maximized("{{ AWESOME_CONFIG }}/background")
