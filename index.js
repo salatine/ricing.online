@@ -63,6 +63,10 @@ async function updateAwesomeLogs() {
     const stdoutTextarea = document.getElementById('awesome_stdout')
     const stderrTextarea = document.getElementById('awesome_stderr')
 
+    // Sincronizar escritas que estão no cache em memória do disco, pois caso existam escritas
+    // ainda em cache ela não irá aparecer no sistema de arquivos
+    await syncAndDropCaches()
+
     const stdoutLogs = await readFileToString('/var/log/awesome.stdout.log') ?? ''
     const stderrLogs = await readFileToString('/var/log/awesome.stderr.log') ?? ''
 
@@ -78,6 +82,17 @@ async function readFileToString(path) {
     } catch {
         return null
     }
+}
+
+async function syncAndDropCaches() {
+    runCommand('sync;echo 3 >/proc/sys/vm/drop_caches')
+    await sleep(500)
+}
+
+function sleep(ms) {
+    return new Promise((resolve, reject) => {
+        resolve()
+    }, ms)
 }
 
 window.addEventListener("load", () => {
