@@ -6,6 +6,7 @@ RUN apt update && \
     apt --yes --no-install-recommends install \
         linux-image-686 grub2 systemd \
         libterm-readline-perl-perl \
+        python \
         awesome \
         feh \
         xserver-xorg-input-kbd xserver-xorg-input-mouse xserver-xorg-input-evdev \
@@ -51,6 +52,7 @@ RUN { \
     echo 'fi';\
 } >> /root/.profile
 COPY xinitrc /root/.xinitrc
+COPY vm_rpc_server.py /root/vm_rpc_server.py
 # COPY xorg.conf /etc/X11/
 # COPY networking.sh /root/
 

@@ -1,15 +1,57 @@
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./rc.lua.hbs";
 
-AWESOME_CONFIG = "/etc/xdg/awesome";
+const AWESOME_CONFIG = "/etc/xdg/awesome";
 
-function runCommand(command) {
-    window.emulator.serial0_send("DISPLAY=':0' " + command + "\n");
+function sendRequest(request) {
+    return new Promise((resolve, reject) => {
+        let capturedOutput = '';
+        let complete = false;
+        window.emulator.add_listener("serial0-output-char", function (char) {
+            if (complete) return;
+
+            capturedOutput += char;
+            const capturedOutputLines = capturedOutput.split('\n');
+
+            for (let i = 1; i < capturedOutputLines.length - 1; i++) {
+                const line = capturedOutputLines[i];
+                if (line.endsWith("\r")) {
+                    complete = true;
+
+                    resolve(JSON.parse(line));
+                }
+            }
+        });
+
+        window.emulator.serial0_send(JSON.stringify(request) + "\n");
+    });
+}
+
+
+function startRPCServer() {
+    const interval = setInterval(() => {
+        if (window.emulator.is_running()) {
+            window.emulator.serial0_send("python3 vm_rpc_server.py\n");
+
+            clearInterval(interval)
+        }
+    }, 500)
+}
+
+async function runCommand(command) {
+    const result = await sendRequest({
+        "jsonrpc": "2.0",
+        "method": "run_command",
+        "params": [command],
+        "id": 1
+    })
+
+    return result
 }
 
 async function readFileIntoUint8Array(file) {
     const arrayBuffer = await file.arrayBuffer();
-    
+
     return new Uint8Array(arrayBuffer);
 }
 
@@ -86,13 +128,14 @@ async function readFileToString(path) {
 
 async function syncAndDropCaches() {
     runCommand('sync;echo 3 >/proc/sys/vm/drop_caches')
+
     await sleep(500)
 }
 
 function sleep(ms) {
     return new Promise((resolve, reject) => {
-        resolve()
-    }, ms)
+        setTimeout(() => resolve(), ms)
+    })
 }
 
 window.addEventListener("load", () => {
@@ -101,9 +144,10 @@ window.addEventListener("load", () => {
 
     const updatePreviewButton = document.getElementById("updatePreview")
     updatePreviewButton.addEventListener("click", updatePreview)
-    
+
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", updateAwesomeLogs)
 })
 
+window.startRPCServer = startRPCServer
 window.runCommand = runCommand

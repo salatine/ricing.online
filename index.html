@@ -18,14 +18,17 @@
                 filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
                 autostart: true,
             });
+            
+            window.startRPCServer();
 
             window.emulator.add_listener("serial0-output-char", function (char) {
                 if(char === "\r") {
                     return;
                 }
-
+                    
                 document.getElementById("serial").value += char;
             });
+
         };
     </script>
 </head>
