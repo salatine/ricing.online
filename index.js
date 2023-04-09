@@ -92,7 +92,7 @@ async function applyConfig() {
 
 async function updatePreview() {
     await applyConfig()
-    runCommand("awesome-client 'awesome.restart()'");
+    runCommand("DISPLAY=:0 awesome-client 'awesome.restart()'");
 }
 
 function getConfig(options) {
@@ -107,7 +107,7 @@ async function updateAwesomeLogs() {
 
     // Sincronizar escritas que estão no cache em memória do disco, pois caso existam escritas
     // ainda em cache ela não irá aparecer no sistema de arquivos
-    await syncAndDropCaches()
+    await syncCaches()
 
     const stdoutLogs = await readFileToString('/var/log/awesome.stdout.log') ?? ''
     const stderrLogs = await readFileToString('/var/log/awesome.stderr.log') ?? ''
@@ -126,16 +126,8 @@ async function readFileToString(path) {
     }
 }
 
-async function syncAndDropCaches() {
-    runCommand('sync;echo 3 >/proc/sys/vm/drop_caches')
-
-    await sleep(500)
-}
-
-function sleep(ms) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(), ms)
-    })
+async function syncCaches() {
+    await runCommand('sync')
 }
 
 window.addEventListener("load", () => {
