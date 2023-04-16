@@ -9,6 +9,7 @@ RUN apt update && \
         python \
         awesome \
         feh \
+        wget ca-certificates \
         xserver-xorg-input-kbd xserver-xorg-input-mouse xserver-xorg-input-evdev \
         xserver-xorg-video-fbdev xserver-xorg-video-vesa \
         xserver-xorg x11-xserver-utils xinit dbus-x11 \
@@ -38,6 +39,15 @@ RUN apt update && \
     systemctl disable dhcpcd.service && \
     echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab
 
+WORKDIR /usr/share/fonts
+RUN wget "https://github.com/google/fonts/raw/main/ofl/inconsolata/static/Inconsolata-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/firasans/FiraSans-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/lato/Lato-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ufl/ubuntu/Ubuntu-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ufl/ubuntumono/UbuntuMono-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/rubik/Rubik%5Bwght%5D.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/ibmplexsans/IBMPlexSans-Regular.ttf"
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
 
