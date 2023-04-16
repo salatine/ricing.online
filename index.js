@@ -1,5 +1,6 @@
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./rc.lua.hbs";
+import { saveAs } from "file-saver";
 
 const AWESOME_CONFIG = "/etc/xdg/awesome";
 
@@ -76,7 +77,7 @@ function getTerminal() {
     return document.getElementById("terminal").value;
 }
 
-async function applyConfig() {
+function getOptions() {
     const options = {
         AWESOME_CONFIG: AWESOME_CONFIG,
         autostartApplications: [
@@ -86,7 +87,13 @@ async function applyConfig() {
         terminal: getTerminal(),
     }
 
-    const config = getConfig(options)
+    return options
+}
+
+
+async function applyConfig() {
+    const options = getOptions()
+    const config = readStringIntoUint8Array(getConfig(options))
     await window.emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
 }
 
@@ -98,7 +105,7 @@ async function updatePreview() {
 function getConfig(options) {
     const renderTemplate = Handlebars.compile(RcLuaTemplate);
 
-    return readStringIntoUint8Array(renderTemplate(options))
+    return renderTemplate(options)
 }
 
 async function updateAwesomeLogs() {
@@ -130,6 +137,13 @@ async function syncCaches() {
     await runCommand('sync')
 }
 
+async function exportRcLua() {
+    const content = getConfig(getOptions())
+    const rcLua = new Blob([content], { type: "text/plain;charset=utf-8" })
+    
+    saveAs(rcLua, "rc.lua")
+}
+
 window.addEventListener("load", () => {
     const backgroundInput = document.getElementById("file")
     backgroundInput.addEventListener("change", changeBackground)
@@ -139,6 +153,9 @@ window.addEventListener("load", () => {
 
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", updateAwesomeLogs)
+
+    const exportRcLuaButton = document.getElementById("exportRcLua")
+    exportRcLuaButton.addEventListener("click", exportRcLua) 
 })
 
 window.startRPCServer = startRPCServer

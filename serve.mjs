@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import fs from 'node:fs'
 import http2 from 'node:http2'
 import handler from 'serve-handler'
@@ -10,5 +11,5 @@ const server = http2.createSecureServer({
 }, handler)
 
 server.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`)
+    console.log(`Listening on https://localhost:${PORT}/`)
 })
