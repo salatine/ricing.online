@@ -6,16 +6,67 @@ pcall(require, "luarocks.loader")
 local awful = require("awful")
 local beautiful = require("beautiful")
 local gears = require("gears")
+local wibox = require("wibox")
 
 -- Set theme
 local theme = {}
 -- theme.useless_gap = {{ gap }} or 0
+theme.bg_focus   = "#ff0000"
 terminal = "{{ terminal }}"
 
 beautiful.init(theme)
 
+-- Configure layouts
+-- Table of layouts to cover with awful.layout.inc, order matters.
+awful.layout.layouts = {
+    awful.layout.suit.tile,
+    awful.layout.suit.floating,
+    --awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.bottom,
+    -- awful.layout.suit.tile.top,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.spiral,
+    -- awful.layout.suit.spiral.dwindle,
+    -- awful.layout.suit.max,
+    -- awful.layout.suit.max.fullscreen,
+    -- awful.layout.suit.magnifier,
+    -- awful.layout.suit.corner.nw,
+    -- awful.layout.suit.corner.ne,
+    -- awful.layout.suit.corner.sw,
+    -- awful.layout.suit.corner.se,
+}
 -- Set default background
 gears.wallpaper.maximized("{{ AWESOME_CONFIG }}/background")
+
+-- Configure tags
+local taglist_buttons = gears.table.join(
+    awful.button({ }, 1, function(t) t:view_only() end),
+    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+)
+
+awful.screen.connect_for_each_screen(function(s)
+    -- Each screen has its own tag table.
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+
+    s.mytaglist = awful.widget.taglist {
+        screen  = s,
+        filter  = awful.widget.taglist.filter.all, -- ?
+        buttons = taglist_buttons,
+        color = "#ffffff", -- ?
+    }
+
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 32, border_width = 5, border_color = "#000000",})
+    s.mywibox:setup({
+        layout = wibox.layout.align.horizontal,
+        {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 10,
+            s.mytaglist,
+        },
+    })
+end)
 
 -- Set autostart applications
 {{#each autostartApplications}}
