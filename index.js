@@ -137,7 +137,7 @@ async function syncCaches() {
     await runCommand('sync')
 }
 
-async function exportRcLua() {
+function exportRcLua() {
     const content = getConfig(getOptions())
     const rcLua = new Blob([content], { type: "text/plain;charset=utf-8" })
     
