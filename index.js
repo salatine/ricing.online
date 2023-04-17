@@ -144,6 +144,10 @@ function exportRcLua() {
     saveAs(rcLua, "rc.lua")
 }
 
+function lockMouse() {
+    window.emulator.lock_mouse();
+}
+
 window.addEventListener("load", () => {
     const backgroundInput = document.getElementById("file")
     backgroundInput.addEventListener("change", changeBackground)
@@ -156,6 +160,16 @@ window.addEventListener("load", () => {
 
     const exportRcLuaButton = document.getElementById("exportRcLua")
     exportRcLuaButton.addEventListener("click", exportRcLua) 
+
+    const lockMouseButton = document.getElementById("lockMouse")
+    lockMouseButton.addEventListener("click", () => {
+        lockMouse();
+
+        // When we click the "lock mouse" button, the button stays focused
+        // after we lock the mouse into the emulator screen, therefore all keyboard
+        // input goes to the button. Remove its focus manually.
+        lockMouseButton.blur();
+    })
 })
 
 window.startRPCServer = startRPCServer
