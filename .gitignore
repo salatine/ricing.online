@@ -3,6 +3,9 @@ rc.lua
 theme.lua
 build
 
+# codespace server
+serve.sh
+
 # Logs
 logs
 *.log
