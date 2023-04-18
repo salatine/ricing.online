@@ -2,7 +2,7 @@ import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./rc.lua.hbs";
 import { saveAs } from "file-saver";
 
-const AWESOME_CONFIG = "/etc/xdg/awesome";
+const AWESOME_CONFIG = "/root/.config/awesome";
 
 function sendRequest(request) {
     return new Promise((resolve, reject) => {
