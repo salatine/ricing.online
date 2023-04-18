@@ -6,6 +6,7 @@ RUN apt update && \
     apt --yes --no-install-recommends install \
         linux-image-686 grub2 systemd \
         libterm-readline-perl-perl \
+        git \
         python \
         awesome \
         feh \
