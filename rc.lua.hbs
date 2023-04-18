@@ -108,12 +108,12 @@ awful.screen.connect_for_each_screen(function(s)
             spacing = 10,
             -- mykeyboardlayout,
             volume_widget{
-                widget_type = 'text_and_icon',
+                widget_type = "arc"
             },
             battery_widget{
                 show_current_level = true,
-                font = 'Sofia Pro Light 11'
             },
+            brightness_widget(),
             mytextclock,
             s.systray,
             systoggle,
