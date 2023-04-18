@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Battery 0: Discharging, 69%, 07:27:27 remaining"
+echo "Battery 0: design capacity 3684 mAh, last full capacity 3500 mAh = 95%"

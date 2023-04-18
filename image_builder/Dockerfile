@@ -70,6 +70,7 @@ COPY vm_rpc_server.py /root/vm_rpc_server.py
 RUN mkdir -p /root/.config/awesome/awesome-wm-widgets
 
 COPY awesome-wm-widgets/battery-widget /root/.config/awesome/awesome-wm-widgets/battery-widget
+COPY fake-acpi /usr/local/bin/acpi
 COPY awesome-wm-widgets/brightness-widget /root/.config/awesome/awesome-wm-widgets/brightness-widget
 COPY awesome-wm-widgets/volume-widget /root/.config/awesome/awesome-wm-widgets/volume-widget
 
