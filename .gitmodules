@@ -1,3 +1,8 @@
 [submodule "v86"]
 	path = v86
 	url = https://github.com/copy/v86.git
+
+
+[submodule "image_builder/awesome-wm-widgets"]
+	path = image_builder/awesome-wm-widgets
+	url = https://github.com/streetturtle/awesome-wm-widgets
