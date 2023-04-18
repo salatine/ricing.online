@@ -6,9 +6,14 @@ pcall(require, "luarocks.loader")
 local awful = require("awful")
 local beautiful = require("beautiful")
 local gears = require("gears")
-local wibox = require("wibox")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
+
+-- Widgets and layout library
+local wibox = require("wibox")
+local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
+local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
+local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
 
 -- Set theme
 local theme = {}
@@ -97,6 +102,23 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             spacing = 10,
             s.mytaglist,
+        },
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 10,
+            -- mykeyboardlayout,
+            volume_widget{
+                widget_type = 'text_and_icon',
+            },
+            battery_widget{
+                show_current_level = true,
+                font = 'Sofia Pro Light 11'
+            },
+            mytextclock,
+            s.systray,
+            systoggle,
+            s.mylayoutbox,
+            powermenu,
         },
     })
 end)
