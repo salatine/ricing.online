@@ -66,6 +66,12 @@ COPY vm_rpc_server.py /root/vm_rpc_server.py
 # COPY xorg.conf /etc/X11/
 # COPY networking.sh /root/
 
+RUN mkdir -p /etc/xdg/awesome/awesome-wm-widgets
+
+COPY awesome-wm-widgets/battery-widget /etc/xdg/awesome/awesome-wm-widgets/battery-widget
+COPY awesome-wm-widgets/brightness-widget /etc/xdg/awesome/awesome-wm-widgets/brightness-widget
+COPY awesome-wm-widgets/volume-widget /etc/xdg/awesome/awesome-wm-widgets/volume-widget 
+
 COPY boot-9p /etc/initramfs-tools/scripts/boot-9p
 
 # this needs to be commented out in order to boot from hdd
