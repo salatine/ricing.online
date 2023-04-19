@@ -1,6 +1,8 @@
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./rc.lua.hbs";
 import { saveAs } from "file-saver";
+import { createRoot } from "react-dom/client";
+import ReactApp from "./src/ReactApp";
 
 const AWESOME_CONFIG = "/root/.config/awesome";
 
@@ -170,6 +172,9 @@ window.addEventListener("load", () => {
         // input goes to the button. Remove its focus manually.
         lockMouseButton.blur();
     })
+
+    const reactApp = document.getElementById("reactApp");
+    createRoot(reactApp).render(<ReactApp />)
 })
 
 window.startRPCServer = startRPCServer
