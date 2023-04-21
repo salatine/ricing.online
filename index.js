@@ -3,112 +3,9 @@ import RcLuaTemplate from "bundle-text:./rc.lua.hbs";
 import { saveAs } from "file-saver";
 import { createRoot } from "react-dom/client";
 import ReactApp from "./src/ReactApp";
-
-const AWESOME_CONFIG = "/root/.config/awesome";
-
-function sendRequest(request) {
-    return new Promise((resolve, reject) => {
-        let capturedOutput = '';
-        let complete = false;
-        window.emulator.add_listener("serial0-output-char", function (char) {
-            if (complete) return;
-
-            capturedOutput += char;
-            const capturedOutputLines = capturedOutput.split('\n');
-
-            for (let i = 1; i < capturedOutputLines.length - 1; i++) {
-                const line = capturedOutputLines[i];
-                if (line.endsWith("\r")) {
-                    complete = true;
-
-                    resolve(JSON.parse(line));
-                }
-            }
-        });
-
-        window.emulator.serial0_send(JSON.stringify(request) + "\n");
-    });
-}
-
-
-function startRPCServer() {
-    const interval = setInterval(() => {
-        if (window.emulator.is_running()) {
-            window.emulator.serial0_send("python3 vm_rpc_server.py\n");
-
-            clearInterval(interval)
-        }
-    }, 500)
-}
-
-async function runCommand(command) {
-    const result = await sendRequest({
-        "jsonrpc": "2.0",
-        "method": "run_command",
-        "params": [command],
-        "id": 1
-    })
-
-    return result
-}
-
-async function readFileIntoUint8Array(file) {
-    const arrayBuffer = await file.arrayBuffer();
-
-    return new Uint8Array(arrayBuffer);
-}
-
-function readStringIntoUint8Array(string) {
-    const encoder = new TextEncoder();
-    return encoder.encode(string);
-}
-
-function readUint8ArrayIntoString(array) {
-    const decoder = new TextDecoder();
-    return decoder.decode(array);
-}
-
-async function changeBackground(event) {
-    const backgroundFile = event.target.files[0];
-    const backgroundFileContents = await readFileIntoUint8Array(backgroundFile);
-
-    await window.emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
-}
-
-function getTerminal() {
-    return document.getElementById("terminal").value;
-}
-
-function getOptions() {
-    const options = {
-        AWESOME_CONFIG: AWESOME_CONFIG,
-        autostartApplications: [
-            { commandLine: "fcitx &" },
-            { commandLine: "feh something" },
-        ],
-        terminal: getTerminal(),
-    }
-
-    return options
-}
-
-
-async function applyConfig() {
-    const options = getOptions()
-    const config = readStringIntoUint8Array(getConfig(options))
-    await window.emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
-}
-
-async function updatePreview() {
-    await applyConfig()
-    runCommand("DISPLAY=:0 awesome-client 'awesome.restart()'");
-}
-
-function getConfig(options) {
-    const renderTemplate = Handlebars.compile(RcLuaTemplate);
-
-    return renderTemplate(options)
-}
+import { AWESOME_CONFIG } from "./src/constants";
+import { runCommand, startRPCServer } from "./src/rpc";
+import { readFileIntoUint8Array, readStringIntoUint8Array, readUint8ArrayIntoString } from "./src/utils";
 
 async function updateAwesomeLogs() {
     const stdoutTextarea = document.getElementById('awesome_stdout')
@@ -139,39 +36,9 @@ async function syncCaches() {
     await runCommand('sync')
 }
 
-function exportRcLua() {
-    const content = getConfig(getOptions())
-    const rcLua = new Blob([content], { type: "text/plain;charset=utf-8" })
-    
-    saveAs(rcLua, "rc.lua")
-}
-
-function lockMouse() {
-    window.emulator.lock_mouse();
-}
-
 window.addEventListener("load", () => {
-    const backgroundInput = document.getElementById("file")
-    backgroundInput.addEventListener("change", changeBackground)
-
-    const updatePreviewButton = document.getElementById("updatePreview")
-    updatePreviewButton.addEventListener("click", updatePreview)
-
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", updateAwesomeLogs)
-
-    const exportRcLuaButton = document.getElementById("exportRcLua")
-    exportRcLuaButton.addEventListener("click", exportRcLua) 
-
-    const lockMouseButton = document.getElementById("lockMouse")
-    lockMouseButton.addEventListener("click", () => {
-        lockMouse();
-
-        // When we click the "lock mouse" button, the button stays focused
-        // after we lock the mouse into the emulator screen, therefore all keyboard
-        // input goes to the button. Remove its focus manually.
-        lockMouseButton.blur();
-    })
 
     const reactApp = document.getElementById("reactApp");
     createRoot(reactApp).render(<ReactApp />)

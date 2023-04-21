@@ -13,10 +13,12 @@
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.7",
     "react": "^18.2.0",
+    "react-client": "^1.0.1",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@parcel/transformer-inline-string": "^2.8.3",
+    "constants-browserify": "^1.0.0",
     "parcel": "^2.8.3",
     "process": "^0.11.10",
     "serve": "^14.2.0"
