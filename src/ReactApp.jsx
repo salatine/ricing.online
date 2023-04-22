@@ -72,8 +72,6 @@ export default function ReactApp({ emulator }) {
         emulator.lock_mouse();
     }
 
-    console.log(CustomKeybindsChooser)
-
     return (
         <div>
             <TerminalSelector terminal={options.terminal} onTerminalSelected={handleTerminalSelected}/>
