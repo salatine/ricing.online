@@ -197,6 +197,18 @@ globalkeys = gears.table.join(
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
+
+    -- Custom keybinds
+    {{#each customKeybinds}}
+        awful.key(
+            { 
+                {{#each modKeys}} "{{ . }}", {{/each}} 
+            },
+            "{{ normalKey }}",
+            function () awful.spawn("{{ command }}") end,
+            {description = "run '{{ command }}'", group = "custom"}
+        ),
+    {{/each}}
 )
 
 for i = 1, 9 do
@@ -316,7 +328,7 @@ end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
-    -- buttons for the titlebar
+    -- buttons for the titlebarkeybind.keys is undefined
     local buttons = gears.table.join(
         awful.button({ }, 1, function()
             c:emit_signal("request::activate", "titlebar", {raise = true})
@@ -339,8 +351,7 @@ client.connect_signal("request::titlebars", function(c)
                 align  = "center",
                 widget = awful.titlebar.widget.titlewidget(c)
             },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
+            buttons = buttons,keybind.keys is undefinedzontal
         },
         { -- Right
             awful.titlebar.widget.floatingbutton (c),

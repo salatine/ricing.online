@@ -6,31 +6,6 @@
 
     <script src="/build/v86/libv86.js"> </script>
     <script src="/build/index.js"> </script>
-    <script>
-        "use strict";
-        window.onload = function () {
-            window.emulator = new V86Starter({
-                wasm_path: "/build/v86/v86.wasm",
-                memory_size: 512 * 1024 * 1024,
-                vga_memory_size: 8 * 1024 * 1024,
-                screen_container: document.getElementById("screen_container"),
-                initial_state: { url: "/build/images/debian-state-base.bin.zst" },
-                filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
-                autostart: true,
-            });
-            
-            window.startRPCServer();
-
-            window.emulator.add_listener("serial0-output-char", function (char) {
-                if(char === "\r") {
-                    return;
-                }
-                    
-                document.getElementById("serial").value += char;
-            });
-
-        };
-    </script>
 </head>
 
 <body>

@@ -5,6 +5,7 @@ import RcLuaTemplate from "bundle-text:../rc.lua.hbs";
 import { runCommand } from "./rpc";
 import { saveAs } from "file-saver";
 import { readFileIntoUint8Array, readStringIntoUint8Array, readUint8ArrayIntoString } from './utils'
+import CustomKeybindsChooser from "./components/CustomKeybindsChooser";
 
 const DEFAULT_OPTIONS = {
     AWESOME_CONFIG: AWESOME_CONFIG,
@@ -12,10 +13,13 @@ const DEFAULT_OPTIONS = {
         { commandLine: "fcitx &" },
         { commandLine: "feh something" },
     ],
+    customKeybinds: [
+        { modKeys: ['Control', 'Shift'], normalKey: 'r', command: 'reload something idk' },
+    ],
     terminal: "kitty",
 };
 
-export default function ReactApp() {
+export default function ReactApp({ emulator }) {
     const [options, setOptions] = useState(DEFAULT_OPTIONS);
 
     function updateOption(name, value) {
@@ -34,7 +38,8 @@ export default function ReactApp() {
 
     async function applyConfig() {
         const config = readStringIntoUint8Array(getConfig(options))
-        await window.emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
+
+        await emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
     }
 
     function handleTerminalSelected(newTerminal) {
@@ -44,7 +49,11 @@ export default function ReactApp() {
     async function handleBackgroundSelected(backgroundFile) {
         const backgroundFileContents = await readFileIntoUint8Array(backgroundFile);
 
-        await window.emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
+        await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
+    }
+
+    function handleCustomKeybindsUpdated(newCustomKeybinds) {
+        updateOption('customKeybinds', newCustomKeybinds)
     }
 
     async function handleUpdatePreviewClicked() {
@@ -60,13 +69,16 @@ export default function ReactApp() {
     }
 
     function handleLockMouseClicked() {
-        window.emulator.lock_mouse();
+        emulator.lock_mouse();
     }
+
+    console.log(CustomKeybindsChooser)
 
     return (
         <div>
             <TerminalSelector terminal={options.terminal} onTerminalSelected={handleTerminalSelected}/>
             <BackgroundSelector onBackgroundSelected={handleBackgroundSelected}/>
+            <CustomKeybindsChooser customKeybinds={options.customKeybinds} onCustomKeybindsUpdated={handleCustomKeybindsUpdated}/>
             <UpdatePreviewButton onUpdateClicked={handleUpdatePreviewClicked}/>
             <ExportRcLuaButton onExportClicked={handleExportRcLuaClicked}/>
             <LockMouseButton onLockClicked={handleLockMouseClicked}/>
@@ -75,7 +87,7 @@ export default function ReactApp() {
 }
 
 function TerminalSelector({ terminal, onTerminalSelected }) {
-       return (
+    return (
         <select
             value={terminal}
             onChange={(e) => onTerminalSelected(e.target.value)}>

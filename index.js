@@ -40,9 +40,28 @@ window.addEventListener("load", () => {
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", updateAwesomeLogs)
 
+    window.emulator = new V86Starter({
+        wasm_path: "/build/v86/v86.wasm",
+        memory_size: 512 * 1024 * 1024,
+        vga_memory_size: 8 * 1024 * 1024,
+        screen_container: document.getElementById("screen_container"),
+        initial_state: { url: "/build/images/debian-state-base.bin.zst" },
+        filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
+        autostart: true,
+    });
+    
+    startRPCServer();
+
+    window.emulator.add_listener("serial0-output-char", function (char) {
+        if(char === "\r") {
+            return;
+        }
+
+        document.getElementById("serial").value += char;
+    });
+
     const reactApp = document.getElementById("reactApp");
-    createRoot(reactApp).render(<ReactApp />)
+    createRoot(reactApp).render(<ReactApp emulator={window.emulator}/>)
 })
 
-window.startRPCServer = startRPCServer
 window.runCommand = runCommand
