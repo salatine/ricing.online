@@ -4,7 +4,6 @@ pcall(require, "luarocks.loader")
 
 -- Standard awesome library
 local awful = require("awful")
-local beautiful = require("beautiful")
 local gears = require("gears")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
@@ -15,10 +14,22 @@ local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
 local brightness_widget = require("awesome-wm-widgets.brightness-widget.brightness")
 local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
 
+-- Theme library
+local beautiful = require("beautiful")
+local dpi = require("beautiful.xresources").apply_dpi
+
 -- Set theme
 local theme = {}
 -- theme.useless_gap = {{ gap }} or 0
 theme.bg_focus   = "#ff0000"
+
+-- Configure window border
+{{#with windowBorder}}
+theme.border_width = dpi({{ size }})
+theme.border_normal = '{{ normalColor }}'
+theme.border_focus = '{{ focusColor }}'
+theme.border_marked = '{{ markedColor }}'
+{{/with}}
 
 beautiful.init(theme)
 
@@ -196,7 +207,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+              {description = "show the menubar", group = "launcher"}){{#if customKeybinds}},{{/if}}
 
     -- Custom keybinds
     {{#each customKeybinds}}
@@ -207,7 +218,7 @@ globalkeys = gears.table.join(
             "{{ normalKey }}",
             function () awful.spawn("{{ command }}") end,
             {description = "run '{{ command }}'", group = "custom"}
-        ),
+        ){{#unless @last}},{{/unless}}
     {{/each}}
 )
 
@@ -300,6 +311,10 @@ root.keys(globalkeys)
 awful.rules.rules = {
     {   rule = { },
         properties = { 
+            border_width = beautiful.border_width,
+            border_color = beautiful.border_normal,
+            border_focus = beautiful.border_focus,
+            border_marked = beautiful.border_marked,
             focus = awful.client.focus.filter,
             raise = true,
             keys = clientkeys,
@@ -340,7 +355,7 @@ client.connect_signal("request::titlebars", function(c)
         end)
     )
 
-    awful.titlebar(c) : setup {
+    awful.titlebar(c):setup({
         { -- Left
         --  awful.titlebar.widget.iconwidget(c),
             buttons = buttons,
@@ -351,7 +366,7 @@ client.connect_signal("request::titlebars", function(c)
                 align  = "center",
                 widget = awful.titlebar.widget.titlewidget(c)
             },
-            buttons = buttons,keybind.keys is undefinedzontal
+            buttons = buttons,
         },
         { -- Right
             awful.titlebar.widget.floatingbutton (c),
@@ -362,7 +377,7 @@ client.connect_signal("request::titlebars", function(c)
             layout = wibox.layout.fixed.horizontal()
         },
         layout = wibox.layout.align.horizontal,
-    }
+    })
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.

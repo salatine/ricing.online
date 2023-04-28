@@ -17,6 +17,12 @@ const DEFAULT_OPTIONS = {
         { modKeys: ['Control', 'Shift'], normalKey: 'r', command: 'reload something idk' },
     ],
     terminal: "kitty",
+    windowBorder: {
+        size: 0,
+        normalColor: '#ffffff',
+        focusColor: '#ff0000',
+        markedColor: '#00ff00',
+    },
 };
 
 export default function ReactApp({ emulator }) {
@@ -72,11 +78,16 @@ export default function ReactApp({ emulator }) {
         emulator.lock_mouse();
     }
 
+    function handleWindowBorderUpdated(newWindowBorder) {
+        updateOption('windowBorder', newWindowBorder)
+    }
+
     return (
         <div>
             <TerminalSelector terminal={options.terminal} onTerminalSelected={handleTerminalSelected}/>
             <BackgroundSelector onBackgroundSelected={handleBackgroundSelected}/>
             <CustomKeybindsChooser customKeybinds={options.customKeybinds} onCustomKeybindsUpdated={handleCustomKeybindsUpdated}/>
+            <WindowBorderSizeChooser windowBorder={options.windowBorder} onWindowBorderUpdated={handleWindowBorderUpdated}/>
             <UpdatePreviewButton onUpdateClicked={handleUpdatePreviewClicked}/>
             <ExportRcLuaButton onExportClicked={handleExportRcLuaClicked}/>
             <LockMouseButton onLockClicked={handleLockMouseClicked}/>
@@ -133,5 +144,52 @@ function LockMouseButton({ onLockClicked }) {
             value="lock mouse"
             onClick={(e) => onLockClicked()}>
         </input>
+    );
+}
+
+function WindowBorderSizeChooser({ windowBorder, onWindowBorderUpdated }) {
+    function updateWindowBorder(fieldName, newValue) {
+        let newWindowBorder = {
+            ...windowBorder,
+        }
+        newWindowBorder[fieldName] = newValue;
+
+        onWindowBorderUpdated(newWindowBorder)
+    }
+
+    return (
+        <div>
+            <p>
+                Border size: 
+                <input type="number"
+                    value={windowBorder.size}
+                    onChange={(e) => updateWindowBorder('size', parseInt(e.target.value))}>
+                </input>
+            </p>
+
+            <p>
+                Border normal color:
+                <input type="color"
+                    value={windowBorder.normalColor}
+                    onChange={(e) => updateWindowBorder('normalColor', e.target.value)}>
+                </input>
+            </p>
+
+            <p>
+                Border focus color:
+                <input type="color"
+                    value={windowBorder.focusColor}
+                    onChange={(e) => updateWindowBorder('focusColor', e.target.value)}>
+                </input>
+            </p>
+
+            <p>
+                Border marked color:
+                <input type="color"
+                    value={windowBorder.markedColor}
+                    onChange={(e) => updateWindowBorder('markedColor', e.target.value)}>
+                </input>
+            </p>
+        </div>
     );
 }
