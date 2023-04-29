@@ -1,11 +1,6 @@
-import Handlebars from "handlebars";
-import RcLuaTemplate from "bundle-text:./rc.lua.hbs";
-import { saveAs } from "file-saver";
 import { createRoot } from "react-dom/client";
 import ReactApp from "./src/ReactApp";
-import { AWESOME_CONFIG } from "./src/constants";
 import { runCommand, startRPCServer } from "./src/rpc";
-import { readFileIntoUint8Array, readStringIntoUint8Array, readUint8ArrayIntoString } from "./src/utils";
 
 async function updateAwesomeLogs(emulator) {
     const stdoutTextarea = document.getElementById('awesome_stdout')

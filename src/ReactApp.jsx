@@ -4,7 +4,7 @@ import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:../rc.lua.hbs";
 import { runCommand } from "./rpc";
 import { saveAs } from "file-saver";
-import { readFileIntoUint8Array, readStringIntoUint8Array, readUint8ArrayIntoString } from './utils'
+import { readFileIntoUint8Array, readStringIntoUint8Array } from './utils'
 import CustomKeybindsChooser from "./components/CustomKeybindsChooser";
 
 const DEFAULT_OPTIONS = {
