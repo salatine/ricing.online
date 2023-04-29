@@ -36,7 +36,7 @@ async function syncCaches() {
     await runCommand('sync')
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", updateAwesomeLogs)
 
@@ -50,7 +50,7 @@ window.addEventListener("load", () => {
         autostart: true,
     });
     
-    startRPCServer();
+    await startRPCServer();
 
     window.emulator.add_listener("serial0-output-char", function (char) {
         if(char === "\r") {

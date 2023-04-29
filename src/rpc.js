@@ -1,11 +1,14 @@
 export function startRPCServer() {
-    const interval = setInterval(() => {
-        if (window.emulator.is_running()) {
-            window.emulator.serial0_send("python3 vm_rpc_server.py\n");
+    return new Promise((resolve, reject) => {
+        const interval = setInterval(() => {
+            if (window.emulator.is_running()) {
+                window.emulator.serial0_send("python3 vm_rpc_server.py\n");
+                clearInterval(interval)
 
-            clearInterval(interval)
-        }
-    }, 500)
+                resolve()
+            }
+        }, 500)
+    })
 }
 
 export async function runCommand(command) {
