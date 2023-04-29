@@ -11,15 +11,18 @@ export function startRPCServer(emulator) {
     })
 }
 
+/**
+ * @returns {Promise<string>}
+ */
 export async function runCommand(emulator, command) {
-    const result = await sendRequest(emulator, {
+    const response = await sendRequest(emulator, {
         "jsonrpc": "2.0",
         "method": "run_command",
         "params": [command],
         "id": 1
     })
 
-    return result
+    return response.result
 }
 
 function sendRequest(emulator, request) {

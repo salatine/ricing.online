@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import ReactApp from "./src/ReactApp";
 import { runCommand, startRPCServer } from "./src/rpc";
+import { getAvailableFonts } from "./src/fonts";
 
 async function updateAwesomeLogs(emulator) {
     const stdoutTextarea = document.getElementById('awesome_stdout')
@@ -56,7 +57,7 @@ window.addEventListener("load", async () => {
     updateAwesomeLogsButton.addEventListener("click", () => updateAwesomeLogs(emulator))
 
     const reactApp = document.getElementById("reactApp");
-    createRoot(reactApp).render(<ReactApp emulator={emulator}/>)
+    createRoot(reactApp).render(<ReactApp emulator={emulator}/>);
 })
 
 window.runCommand = runCommand

@@ -1,10 +1,11 @@
 import { AWESOME_CONFIG } from "./constants";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:../rc.lua.hbs";
 import { runCommand } from "./rpc";
 import { saveAs } from "file-saver";
 import { readFileIntoUint8Array, readStringIntoUint8Array } from './utils'
+import { getAvailableFontFamilies } from "./fonts";
 import CustomKeybindsChooser from "./components/CustomKeybindsChooser";
 
 const DEFAULT_OPTIONS = {
@@ -23,6 +24,10 @@ const DEFAULT_OPTIONS = {
         focusColor: '#ff0000',
         markedColor: '#00ff00',
     },
+    font: {
+        family: "Ubuntu Mono",
+        size: 12,
+    }, 
 };
 
 export default function ReactApp({ emulator }) {
@@ -82,10 +87,15 @@ export default function ReactApp({ emulator }) {
         updateOption('windowBorder', newWindowBorder)
     }
 
+    function handleFontUpdated(newFont) {
+        updateOption('font', newFont)
+    }
+
     return (
         <div>
             <TerminalSelector terminal={options.terminal} onTerminalSelected={handleTerminalSelected}/>
             <BackgroundSelector onBackgroundSelected={handleBackgroundSelected}/>
+            <FontSelector emulator={emulator} font={options.font} onFontUpdated={handleFontUpdated}/>
             <CustomKeybindsChooser customKeybinds={options.customKeybinds} onCustomKeybindsUpdated={handleCustomKeybindsUpdated}/>
             <WindowBorderSizeChooser windowBorder={options.windowBorder} onWindowBorderUpdated={handleWindowBorderUpdated}/>
             <UpdatePreviewButton onUpdateClicked={handleUpdatePreviewClicked}/>
@@ -117,6 +127,36 @@ function BackgroundSelector({ onBackgroundSelected }) {
             name="file"
             onChange={(e) => onBackgroundSelected(e.target.files[0])}>
         </input>
+    );
+}
+
+function FontSelector({ emulator, font, onFontUpdated }) {
+    const [availableFontFamilies, setAvailableFontFamilies] = useState([])
+    useEffect(() => {
+        async function loadAvailableFontFamilies() {
+            setAvailableFontFamilies(await getAvailableFontFamilies(emulator))
+        }
+
+        loadAvailableFontFamilies()
+    }, [])
+
+    function updateFont(fieldName, value) {
+        const newFont = { ...font }
+        newFont[fieldName] = value
+
+        onFontUpdated(newFont)
+    }
+
+    const fontFamilyOptions = availableFontFamilies.map(fontFamily => <option value={fontFamily}>{fontFamily}</option>);
+    return (
+        <>
+        <select
+            value={font.family}
+            onChange={(e) => updateFont('family', e.target.value)}>
+            {fontFamilyOptions}
+        </select>
+        <input min="6" max="72" type="number" value={font.size} onChange={(e) => updateFont('size', e.target.value)}></input>
+        </>
     );
 }
 

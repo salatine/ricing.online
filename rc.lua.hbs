@@ -31,6 +31,9 @@ theme.border_focus = '{{ focusColor }}'
 theme.border_marked = '{{ markedColor }}'
 {{/with}}
 
+{{#with font}}
+theme.font = "{{ family }} {{ size }}"
+{{/with}}
 beautiful.init(theme)
 
 -- Default modkey.
