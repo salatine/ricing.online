@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 # Buildar a imagem do v86, que irá conter os arquivos JS

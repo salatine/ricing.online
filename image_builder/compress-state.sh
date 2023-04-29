@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 set -veu
 
 IMAGES_OUTPUT="$(dirname "$0")"/../build/images
