@@ -64,7 +64,7 @@ export default function ReactApp({ emulator }) {
 
     async function handleUpdatePreviewClicked() {
         await applyConfig()
-        runCommand("DISPLAY=:0 awesome-client 'awesome.restart()'"); 
+        runCommand(emulator, "DISPLAY=:0 awesome-client 'awesome.restart()'"); 
     }
 
     function handleExportRcLuaClicked() {

@@ -1,8 +1,8 @@
-export function startRPCServer() {
+export function startRPCServer(emulator) {
     return new Promise((resolve, reject) => {
         const interval = setInterval(() => {
-            if (window.emulator.is_running()) {
-                window.emulator.serial0_send("python3 vm_rpc_server.py\n");
+            if (emulator.is_running()) {
+                emulator.serial0_send("python3 vm_rpc_server.py\n");
                 clearInterval(interval)
 
                 resolve()
@@ -11,8 +11,8 @@ export function startRPCServer() {
     })
 }
 
-export async function runCommand(command) {
-    const result = await sendRequest({
+export async function runCommand(emulator, command) {
+    const result = await sendRequest(emulator, {
         "jsonrpc": "2.0",
         "method": "run_command",
         "params": [command],
@@ -22,11 +22,11 @@ export async function runCommand(command) {
     return result
 }
 
-function sendRequest(request) {
+function sendRequest(emulator, request) {
     return new Promise((resolve, reject) => {
         let capturedOutput = '';
         let complete = false;
-        window.emulator.add_listener("serial0-output-char", function (char) {
+        emulator.add_listener("serial0-output-char", function (char) {
             if (complete) return;
 
             capturedOutput += char;
@@ -42,6 +42,6 @@ function sendRequest(request) {
             }
         });
 
-        window.emulator.serial0_send(JSON.stringify(request) + "\n");
+        emulator.serial0_send(JSON.stringify(request) + "\n");
     });
 }
