@@ -1,14 +1,7 @@
 import { useState } from 'react';
+import { MOD_KEYS } from '../constants';
 
-const MOD_KEYS = [
-    'Alt',
-    'Shift',
-    'Lock',
-    'Control',
-    'Mod4',
-];
-
-export default function CustomKeybindsChooser({ customKeybinds, onCustomKeybindsUpdated }) {
+export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsUpdated }) {
     const customKeybindList = customKeybinds.map((keybind, index) => {
         function handleKeybindEdited(newKeybind) {
             const newCustomKeybinds = [...customKeybinds];
