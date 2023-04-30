@@ -1,4 +1,11 @@
-export default function TerminalEditor({ terminal, onTerminalSelected }) {
+import React from 'react';
+
+type Props = {
+    terminal: string
+    onTerminalSelected: (terminal: string) => void
+}
+
+export default function TerminalEditor({ terminal, onTerminalSelected }: Props) {
     return (
         <select
             value={terminal}

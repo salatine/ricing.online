@@ -1,7 +1,5 @@
 import { AWESOME_CONFIG } from "./constants";
-import { useState } from 'react';
-import Handlebars from "handlebars";
-import RcLuaTemplate from "bundle-text:../rc.lua.hbs";
+import React, { useState } from 'react';
 import { runCommand } from "./rpc";
 import { saveAs } from "file-saver";
 import { readFileIntoUint8Array, readStringIntoUint8Array } from './utils'
@@ -14,47 +12,40 @@ import LockMouseButton from "./components/LockMouseButton";
 import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
 import { DEFAULT_OPTIONS } from "./constants";
+import { Options, getConfig, applyConfig, CustomKeybindOptions, WindowBorderOptions } from "./config";
 
+type Props = {
+    emulator: any
+}
 
-export default function ReactApp({ emulator }) {
-    const [options, setOptions] = useState(DEFAULT_OPTIONS);
+export default function ReactApp({ emulator }: Props) {
+    const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS);
 
-    function updateOption(name, value) {
-        // Duplicar o options
-        const newOptions = { ...options };
-        newOptions[name] = value;
+    function updateOption(newFields: Partial<Options>) {
+        const newOptions = {
+            ...options,
+            ...newFields,
+        };
 
         setOptions(newOptions);
     }
 
-    function getConfig(options) {
-        const renderTemplate = Handlebars.compile(RcLuaTemplate);
-    
-        return renderTemplate(options)
+    function handleTerminalSelected(newTerminal: string) {
+        updateOption({ terminal: newTerminal });
     }
 
-    async function applyConfig() {
-        const config = readStringIntoUint8Array(getConfig(options))
-
-        await emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
-    }
-
-    function handleTerminalSelected(newTerminal) {
-        updateOption('terminal', newTerminal);
-    }
-
-    async function handleBackgroundSelected(backgroundFile) {
+    async function handleBackgroundSelected(backgroundFile: File) {
         const backgroundFileContents = await readFileIntoUint8Array(backgroundFile);
 
         await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
     }
 
-    function handleCustomKeybindsUpdated(newCustomKeybinds) {
-        updateOption('customKeybinds', newCustomKeybinds)
+    function handleCustomKeybindsUpdated(newCustomKeybinds: CustomKeybindOptions[]) {
+        updateOption({ customKeybinds: newCustomKeybinds });
     }
 
     async function handleUpdatePreviewClicked() {
-        await applyConfig()
+        await applyConfig(emulator, options)
         runCommand(emulator, "DISPLAY=:0 awesome-client 'awesome.restart()'"); 
     }
 
@@ -69,12 +60,12 @@ export default function ReactApp({ emulator }) {
         emulator.lock_mouse();
     }
 
-    function handleWindowBorderUpdated(newWindowBorder) {
-        updateOption('windowBorder', newWindowBorder)
+    function handleWindowBorderUpdated(newWindowBorder: WindowBorderOptions) {
+        updateOption({ windowBorder: newWindowBorder })
     }
 
     function handleFontUpdated(newFont) {
-        updateOption('font', newFont)
+        updateOption({ font: newFont })
     }
 
     return (

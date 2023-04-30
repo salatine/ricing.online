@@ -1,7 +1,8 @@
-export const AWESOME_CONFIG = "/root/.config/awesome";
+import { Options } from "./config";
 
-export const DEFAULT_OPTIONS = {
-    AWESOME_CONFIG: AWESOME_CONFIG,
+export const AWESOME_CONFIG: string = "/root/.config/awesome";
+
+export const DEFAULT_OPTIONS: Options = {
     autostartApplications: [
         { commandLine: "fcitx &" },
         { commandLine: "feh something" },
