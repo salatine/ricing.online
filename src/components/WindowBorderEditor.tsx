@@ -1,9 +1,17 @@
-export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated }) {
-    function updateWindowBorder(fieldName, newValue) {
-        let newWindowBorder = {
+import React from 'react';
+import { WindowBorderOptions } from '../config';
+
+type Props = {
+    windowBorder: WindowBorderOptions,
+    onWindowBorderUpdated: (windowBorder: WindowBorderOptions) => void
+}
+
+export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated }: Props) {
+    function updateWindowBorder(newFields: Partial<WindowBorderOptions>) {
+        const newWindowBorder = {
             ...windowBorder,
+            ...newFields,
         }
-        newWindowBorder[fieldName] = newValue;
 
         onWindowBorderUpdated(newWindowBorder)
     }
@@ -14,7 +22,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
                 Border size: 
                 <input type="number"
                     value={windowBorder.size}
-                    onChange={(e) => updateWindowBorder('size', parseInt(e.target.value))}>
+                    onChange={(e) => updateWindowBorder({ size: parseInt(e.target.value) })}>
                 </input>
             </p>
 
@@ -22,7 +30,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
                 Border normal color:
                 <input type="color"
                     value={windowBorder.normalColor}
-                    onChange={(e) => updateWindowBorder('normalColor', e.target.value)}>
+                    onChange={(e) => updateWindowBorder({ normalColor: e.target.value })}>
                 </input>
             </p>
 
@@ -30,7 +38,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
                 Border focus color:
                 <input type="color"
                     value={windowBorder.focusColor}
-                    onChange={(e) => updateWindowBorder('focusColor', e.target.value)}>
+                    onChange={(e) => updateWindowBorder({ focusColor: e.target.value } )}>
                 </input>
             </p>
 
@@ -38,7 +46,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
                 Border marked color:
                 <input type="color"
                     value={windowBorder.markedColor}
-                    onChange={(e) => updateWindowBorder('markedColor', e.target.value)}>
+                    onChange={(e) => updateWindowBorder({ markedColor: e.target.value })}>
                 </input>
             </p>
         </div>

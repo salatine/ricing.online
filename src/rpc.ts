@@ -1,5 +1,18 @@
-export function startRPCServer(emulator) {
-    return new Promise((resolve, reject) => {
+type Request = {
+    jsonrpc: string,
+    method: string,
+    params: string[],
+    id: number
+}
+
+type Response = {
+    jsonrpc: string,
+    result: string,
+    id: number
+}
+
+export function startRPCServer(emulator: any): Promise<void> {
+    return new Promise((resolve) => {
         const interval = setInterval(() => {
             if (emulator.is_running()) {
                 emulator.serial0_send("python3 vm_rpc_server.py\n");
@@ -11,11 +24,8 @@ export function startRPCServer(emulator) {
     })
 }
 
-/**
- * @returns {Promise<string>}
- */
-export async function runCommand(emulator, command) {
-    const response = await sendRequest(emulator, {
+export async function runCommand(emulator: any, command: string): Promise<string> {
+    const response: Response = await sendRequest(emulator, {
         "jsonrpc": "2.0",
         "method": "run_command",
         "params": [command],
@@ -25,7 +35,7 @@ export async function runCommand(emulator, command) {
     return response.result
 }
 
-function sendRequest(emulator, request) {
+function sendRequest(emulator: any, request: Request): Promise<Response> {
     return new Promise((resolve, reject) => {
         let capturedOutput = '';
         let complete = false;

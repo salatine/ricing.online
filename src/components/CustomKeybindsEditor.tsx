@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { CustomKeybindOptions } from '../config';
 import { MOD_KEYS } from '../constants';
 
-export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsUpdated }) {
+type Props = {
+    customKeybinds: CustomKeybindOptions[]
+    onCustomKeybindsUpdated: (customKeybinds: CustomKeybindOptions[]) => void
+}
+
+export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsUpdated }: Props) {
     const customKeybindList = customKeybinds.map((keybind, index) => {
-        function handleKeybindEdited(newKeybind) {
+        function handleKeybindEdited(newKeybind: CustomKeybindOptions) {
             const newCustomKeybinds = [...customKeybinds];
             newCustomKeybinds[index] = newKeybind;
             
@@ -40,16 +46,22 @@ export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsU
     )
 }
 
-function CustomKeybind({ keybind, onKeybindEdited, onKeybindDeleted }) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editingKeys, setEditingKeys] = useState([]);
+type CustomKeybindProps = {
+    keybind: CustomKeybindOptions
+    onKeybindUpdated: (keybind: CustomKeybindOptions) => void
+    onKeybindDeleted: () => void
+}
 
-    function handleKeysFocus(e) {
+function CustomKeybind({ keybind, onKeybindUpdated, onKeybindDeleted }: CustomKeybindProps) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingKeys, setEditingKeys] = useState<string[]>([]);
+
+    function handleKeysFocus() {
         setIsEditing(true);
         setEditingKeys([]);
     }
 
-    function handleKeysKeyDown(e) {
+    function handleKeysKeyDown(e: React.KeyboardEvent) {
         const newKey = mapBrowserKeyToAwesomeKey(e.key);
         const newEditingKeys = [...editingKeys];
 
@@ -60,7 +72,7 @@ function CustomKeybind({ keybind, onKeybindEdited, onKeybindDeleted }) {
         setEditingKeys(newEditingKeys);
     }
 
-    function handleKeysBlur(e) {
+    function handleKeysBlur() {
         const modKeys = editingKeys.filter(isModKey);
         const normalKeys = editingKeys.filter((key) => !isModKey(key))
             .map((key) => key.toLowerCase());
@@ -76,7 +88,7 @@ function CustomKeybind({ keybind, onKeybindEdited, onKeybindDeleted }) {
                 normalKey,
             }
 
-            onKeybindEdited(newKeybind);
+            onKeybindUpdated(newKeybind);
         }
 
         setIsEditing(false);
@@ -89,7 +101,7 @@ function CustomKeybind({ keybind, onKeybindEdited, onKeybindDeleted }) {
             command: e.target.value,
         }
 
-        onKeybindEdited(newKeybind);
+        onKeybindUpdated(newKeybind);
     }
 
     const keys = isEditing
@@ -105,7 +117,7 @@ function CustomKeybind({ keybind, onKeybindEdited, onKeybindDeleted }) {
     )
 }
 
-function mapBrowserKeyToAwesomeKey(browserKey) {
+function mapBrowserKeyToAwesomeKey(browserKey: string): string {
     if (browserKey === 'OS') {
         return 'Mod4';
     }
@@ -113,6 +125,6 @@ function mapBrowserKeyToAwesomeKey(browserKey) {
     return browserKey;
 }
 
-function isModKey(key) {
+function isModKey(key: string): boolean {
     return MOD_KEYS.includes(key);
 }

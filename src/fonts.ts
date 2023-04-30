@@ -1,4 +1,4 @@
-import { runCommand } from "./rpc.js"
+import { runCommand } from "./rpc"
 
 export type FontFamily = string
 
