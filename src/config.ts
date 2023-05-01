@@ -1,7 +1,10 @@
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:../rc.lua.hbs";
-import { readStringIntoUint8Array } from "./utils";
+import ThemeLuaTemplate from "bundle-text:../theme.lua.hbs";
+import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
 import { AWESOME_CONFIG } from "./constants";
+import { saveAs } from "file-saver";
+import JSZip from "jszip";
 
 export type Color = string
 
@@ -35,18 +38,48 @@ export type Options = {
     font: FontOptions,
 }
 
-export function getConfig(options: Options): string {
-    const renderTemplate = Handlebars.compile(RcLuaTemplate);
+export type ConfigFile = {
+    path: string
+    contents: Blob
+}
+
+export function getConfigFiles(options: Options): ConfigFile[] {
+    const configTextFiles: Record<string, string> = {
+        ".config/awesome/rc.lua": render(options, RcLuaTemplate),
+        ".config/awesome/theme.lua": render(options, ThemeLuaTemplate),
+    }
+
+    const configFiles: ConfigFile[] = Object.entries(configTextFiles)
+        .map(([path, textContents]) => {
+            return { path, contents: makeBlobFromString(textContents) }
+        })
+
+    return configFiles
+}
+
+export async function applyConfigFiles(emulator: any, configFiles: ConfigFile[]): Promise<void> {
+    const emulatorHome = '/root/'; 
+    const promises = configFiles.map(async ({ path, contents }) => {
+        await emulator.create_file(emulatorHome + path, readBlobIntoUint8Array(contents))
+    })
+
+    await Promise.allSettled(promises)
+}
+
+export async function exportConfigFiles(configFiles: ConfigFile[]): Promise<void> {
+    const zip = new JSZip();
+    configFiles.forEach(({path, contents}) => zip.file(path, contents));
+
+    const rice = await zip.generateAsync({type: "blob"})
+    saveAs(rice, "rice.zip")
+}
+
+function render(options: Options, template: string): string {
+    const renderTemplate = Handlebars.compile(template);
     const templateContext = {
         ...options,
         AWESOME_CONFIG,
     }
 
     return renderTemplate(templateContext)
-}
-
-export async function applyConfig(emulator: any, options: Options): Promise<void> {
-    const config = readStringIntoUint8Array(getConfig(options))
-
-    await emulator.create_file(AWESOME_CONFIG + "/rc.lua", config);
 }

@@ -1,3 +1,4 @@
+/// <reference types="./parcel.d.ts" />
 import { createRoot } from "react-dom/client";
 import ReactApp from "./src/ReactApp";
 import { runCommand, startRPCServer } from "./src/rpc";

@@ -1,18 +1,17 @@
 import { AWESOME_CONFIG } from "./constants";
 import React, { useState } from 'react';
 import { runCommand } from "./rpc";
-import { saveAs } from "file-saver";
-import { readFileIntoUint8Array, readStringIntoUint8Array } from './utils'
+import { readBlobIntoUint8Array, readStringIntoUint8Array } from './utils'
 import TerminalEditor from "./components/TerminalEditor";
 import BackgroundEditor from "./components/BackgroundEditor";
 import CustomKeybindsEditor from "./components/CustomKeybindsEditor";
 import UpdatePreviewButton from "./components/UpdatePreviewButton";
-import ExportRcLuaButton from "./components/ExportRcLuaButton";
+import ExportConfigFilesButton from "./components/ExportConfigFilesButton";
 import LockMouseButton from "./components/LockMouseButton";
 import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
 import { DEFAULT_OPTIONS } from "./constants";
-import { Options, getConfig, applyConfig, CustomKeybindOptions, WindowBorderOptions } from "./config";
+import { Options, getConfigFiles, applyConfigFiles, CustomKeybindOptions, WindowBorderOptions, exportConfigFiles } from "./config";
 
 type Props = {
     emulator: any
@@ -35,7 +34,7 @@ export default function ReactApp({ emulator }: Props) {
     }
 
     async function handleBackgroundSelected(backgroundFile: File) {
-        const backgroundFileContents = await readFileIntoUint8Array(backgroundFile);
+        const backgroundFileContents = await readBlobIntoUint8Array(backgroundFile);
 
         await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
     }
@@ -45,15 +44,14 @@ export default function ReactApp({ emulator }: Props) {
     }
 
     async function handleUpdatePreviewClicked() {
-        await applyConfig(emulator, options)
+        const configFiles = getConfigFiles(options)
+        await applyConfigFiles(emulator, configFiles)
+
         runCommand(emulator, "DISPLAY=:0 awesome-client 'awesome.restart()'"); 
     }
 
-    function handleExportRcLuaClicked() {
-        const content = getConfig(options)
-        const rcLua = new Blob([content], { type: "text/plain;charset=utf-8" })
-        
-        saveAs(rcLua, "rc.lua")
+    async function handleExportConfigFilesClicked() {
+        await exportConfigFiles(getConfigFiles(options));
     }
 
     function handleLockMouseClicked() {
@@ -93,8 +91,8 @@ export default function ReactApp({ emulator }: Props) {
             <UpdatePreviewButton 
                 onUpdateClicked={handleUpdatePreviewClicked}/>
 
-            <ExportRcLuaButton 
-                onExportClicked={handleExportRcLuaClicked}/>
+            <ExportConfigFilesButton
+                onExportClicked={handleExportConfigFilesClicked}/>
 
             <LockMouseButton 
                 onLockClicked={handleLockMouseClicked}/>

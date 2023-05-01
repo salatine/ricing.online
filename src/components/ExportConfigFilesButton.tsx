@@ -4,10 +4,10 @@ type Props = {
     onExportClicked: () => void
 }
 
-export default function ExportRcLuaButton({ onExportClicked }: Props) {
+export default function ExportConfigFilesButton({ onExportClicked }: Props) {
     return (
         <input type="button"
-            value="export rc.lua"
+            value="export config files"
             onClick={(e) => onExportClicked()}>
         </input>
     );

@@ -16,24 +16,8 @@ local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
 
 -- Theme library
 local beautiful = require("beautiful")
-local dpi = require("beautiful.xresources").apply_dpi
+local theme = require("theme")
 
--- Set theme
-local theme = {}
--- theme.useless_gap = {{ gap }} or 0
-theme.bg_focus   = "#ff0000"
-
--- Configure window border
-{{#with windowBorder}}
-theme.border_width = dpi({{ size }})
-theme.border_normal = '{{ normalColor }}'
-theme.border_focus = '{{ focusColor }}'
-theme.border_marked = '{{ markedColor }}'
-{{/with}}
-
-{{#with font}}
-theme.font = "{{ family }} {{ size }}"
-{{/with}}
 beautiful.init(theme)
 
 -- Default modkey.
