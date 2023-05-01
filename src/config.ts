@@ -67,11 +67,16 @@ export async function applyConfigFiles(emulator: any, configFiles: ConfigFile[])
 }
 
 export async function exportConfigFiles(configFiles: ConfigFile[]): Promise<void> {
+    const rice = await zipConfigFiles(configFiles) 
+    saveAs(rice, "rice.zip")
+}
+
+async function zipConfigFiles(configFiles: ConfigFile[]): Promise<Blob> {
     const zip = new JSZip();
     configFiles.forEach(({path, contents}) => zip.file(path, contents));
-
     const rice = await zip.generateAsync({type: "blob"})
-    saveAs(rice, "rice.zip")
+
+    return rice
 }
 
 function render(options: Options, template: string): string {
