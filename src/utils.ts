@@ -19,3 +19,14 @@ export function readUint8ArrayIntoString(array: Uint8Array): string {
 export function makeBlobFromString(content: string): Blob {
     return new Blob([content], { type: "text/plain;charset=utf-8" });
 }
+
+export function partialUpdate<T>(original: T, newFields: Partial<T>) {  
+    return { ...original, ...newFields };
+}
+
+export function makePartialUpdater<T>(original: T, onUpdateCallback: (value: T) => void) {
+    return (newFields: Partial<T>) => {
+        const updated = partialUpdate(original, newFields);
+        onUpdateCallback(updated);
+    }
+}

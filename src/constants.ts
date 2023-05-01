@@ -21,6 +21,15 @@ export const DEFAULT_OPTIONS: Options = {
         family: "Ubuntu Mono",
         size: 12,
     }, 
+    statusBar: {
+        position: 'top',
+        height: 5,
+        borderWidth: 5,
+        color: '#ff0000',
+        widgets: [
+            { type: 'launcher', command: 'osu!.exe', iconPath: 'peppy-carequinha.png' },   
+        ]
+    }
 };
 
 export const MOD_KEYS = [

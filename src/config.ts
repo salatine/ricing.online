@@ -8,17 +8,17 @@ import JSZip from "jszip";
 
 export type Color = string
 
-export type CustomKeybindOptions = {
+export type CustomKeybind = {
     modKeys: string[],
     normalKey: string,
     command: string,
 }
 
-export type AutostartApplicationOptions = {
+export type AutostartApplication = {
     commandLine: string,
 }
 
-export type WindowBorderOptions = {
+export type WindowBorder = {
     size: number,
     normalColor: Color,
     focusColor:  Color,
@@ -30,12 +30,76 @@ export type FontOptions = {
     size: number,
 }
 
+export type StatusBarPosition = 'left' | 'top' | 'right' | 'bottom'
+
+export type LauncherWidget = {
+    type: 'launcher',
+    iconPath: string,
+    command: string,
+}
+
+export type SystrayWidget = {
+    type: 'systray',
+    // 👍 
+}
+
+export type ClockWidget = {
+    type: 'clock'
+}
+
+export type TagListButton = {
+    // 👍
+}
+
+export type TagListWidget = {
+    type: 'taglist',
+    buttons: TagListButton[],
+    color: Color
+}
+
+export type TaskListWidget = {
+    type: 'tasklist',
+    fontSize: number,
+}
+
+export type BrightnessWidget = {
+    type: 'brightness',
+}
+
+export type BatteryWidget = {
+    type: 'battery',
+}
+
+export type VolumeWidget = {
+    type: 'volume',
+}
+
+export type StatusBarWidget
+    = LauncherWidget | never 
+// TODO Implement
+/*  | SystrayWidget
+    | ClockWidget
+    | TagListWidget
+    | TaskListWidget
+    | BrightnessWidget
+    | BatteryWidget
+    | VolumeWidget */
+
+export type StatusBar = {
+    position: StatusBarPosition,
+    height: number,
+    borderWidth: number,
+    color: Color,
+    widgets: StatusBarWidget[],
+}
+
 export type Options = {
-    autostartApplications: AutostartApplicationOptions[],
-    customKeybinds: CustomKeybindOptions[],
+    autostartApplications: AutostartApplication[],
+    customKeybinds: CustomKeybind[],
     terminal: string,
-    windowBorder: WindowBorderOptions,
+    windowBorder: WindowBorder,
     font: FontOptions,
+    statusBar: StatusBar,
 }
 
 export type ConfigFile = {

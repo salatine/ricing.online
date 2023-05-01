@@ -1,20 +1,14 @@
 import React from 'react';
-import { WindowBorderOptions } from '../config';
+import { WindowBorder } from '../config';
+import { makePartialUpdater } from '../utils';
 
 type Props = {
-    windowBorder: WindowBorderOptions,
-    onWindowBorderUpdated: (windowBorder: WindowBorderOptions) => void
+    windowBorder: WindowBorder,
+    onWindowBorderUpdated: (windowBorder: WindowBorder) => void
 }
 
 export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated }: Props) {
-    function updateWindowBorder(newFields: Partial<WindowBorderOptions>) {
-        const newWindowBorder = {
-            ...windowBorder,
-            ...newFields,
-        }
-
-        onWindowBorderUpdated(newWindowBorder)
-    }
+    const updateWindowBorder = makePartialUpdater(windowBorder, onWindowBorderUpdated)
 
     return (
         <div>

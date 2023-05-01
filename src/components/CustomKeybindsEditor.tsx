@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { CustomKeybindOptions } from '../config';
+import { CustomKeybind } from '../config';
 import { MOD_KEYS } from '../constants';
 
 type Props = {
-    customKeybinds: CustomKeybindOptions[]
-    onCustomKeybindsUpdated: (customKeybinds: CustomKeybindOptions[]) => void
+    customKeybinds: CustomKeybind[]
+    onCustomKeybindsUpdated: (customKeybinds: CustomKeybind[]) => void
 }
 
 export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsUpdated }: Props) {
     const customKeybindList = customKeybinds.map((keybind, index) => {
-        function handleKeybindEdited(newKeybind: CustomKeybindOptions) {
+        function handleKeybindEdited(newKeybind: CustomKeybind) {
             const newCustomKeybinds = [...customKeybinds];
             newCustomKeybinds[index] = newKeybind;
             
@@ -23,7 +23,7 @@ export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsU
             onCustomKeybindsUpdated(newCustomKeybinds);
         }
         
-        return (<CustomKeybind key={index} keybind={keybind} onKeybindUpdated={handleKeybindEdited} onKeybindDeleted={handleKeybindDeleted}/>)
+        return (<CustomKeybindEditor key={index} keybind={keybind} onKeybindUpdated={handleKeybindEdited} onKeybindDeleted={handleKeybindDeleted}/>)
     })
 
     function handleNewKeybindClicked() {
@@ -47,12 +47,12 @@ export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsU
 }
 
 type CustomKeybindProps = {
-    keybind: CustomKeybindOptions
-    onKeybindUpdated: (keybind: CustomKeybindOptions) => void
+    keybind: CustomKeybind
+    onKeybindUpdated: (keybind: CustomKeybind) => void
     onKeybindDeleted: () => void
 }
 
-function CustomKeybind({ keybind, onKeybindUpdated, onKeybindDeleted }: CustomKeybindProps) {
+function CustomKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted }: CustomKeybindProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [editingKeys, setEditingKeys] = useState<string[]>([]);
 

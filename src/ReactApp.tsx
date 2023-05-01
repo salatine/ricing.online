@@ -10,8 +10,9 @@ import ExportConfigFilesButton from "./components/ExportConfigFilesButton";
 import LockMouseButton from "./components/LockMouseButton";
 import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
+import StatusBarEditor from "./components/StatusBarEditor";
 import { DEFAULT_OPTIONS } from "./constants";
-import { Options, getConfigFiles, applyConfigFiles, CustomKeybindOptions, WindowBorderOptions, exportConfigFiles } from "./config";
+import { Options, getConfigFiles, applyConfigFiles, CustomKeybind, WindowBorder, exportConfigFiles } from "./config";
 
 type Props = {
     emulator: any
@@ -39,7 +40,7 @@ export default function ReactApp({ emulator }: Props) {
         await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
     }
 
-    function handleCustomKeybindsUpdated(newCustomKeybinds: CustomKeybindOptions[]) {
+    function handleCustomKeybindsUpdated(newCustomKeybinds: CustomKeybind[]) {
         updateOption({ customKeybinds: newCustomKeybinds });
     }
 
@@ -58,7 +59,7 @@ export default function ReactApp({ emulator }: Props) {
         emulator.lock_mouse();
     }
 
-    function handleWindowBorderUpdated(newWindowBorder: WindowBorderOptions) {
+    function handleWindowBorderUpdated(newWindowBorder: WindowBorder) {
         updateOption({ windowBorder: newWindowBorder })
     }
 
@@ -96,6 +97,9 @@ export default function ReactApp({ emulator }: Props) {
 
             <LockMouseButton 
                 onLockClicked={handleLockMouseClicked}/>
+
+            <StatusBarEditor
+                statusBar={options.statusBar} onStatusBarUpdated={() => console.log("bimba")}/>
         </div>
     ); 
 }

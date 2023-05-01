@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontFamily, getAvailableFontFamilies } from "../fonts";
 import { FontOptions } from "../config"
+import { makePartialUpdater } from '../utils';
 
 type Props = {
     emulator: any
@@ -18,14 +19,7 @@ export default function FontEditor({ emulator, font, onFontUpdated }: Props) {
         loadAvailableFontFamilies();
     }, []);
 
-    function updateFont(newFields: Partial<FontOptions>) {
-        const newFont = { 
-            ...font,
-            ...newFields,
-        };
-
-        onFontUpdated(newFont);
-    }
+    const updateFont = makePartialUpdater(font, onFontUpdated)
 
     const fontFamilyOptions = availableFontFamilies.map(fontFamily => <option value={fontFamily}>{fontFamily}</option>);
     return (
