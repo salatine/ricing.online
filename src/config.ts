@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
-import RcLuaTemplate from "bundle-text:../rc.lua.hbs";
-import ThemeLuaTemplate from "bundle-text:../theme.lua.hbs";
+import RcLuaTemplate from "bundle-text:./templates/rc.lua.hbs";
+import ThemeLuaTemplate from "bundle-text:./templates/theme.lua.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
 import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
