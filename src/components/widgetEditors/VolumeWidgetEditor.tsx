@@ -1,20 +1,10 @@
-import React from 'react'
 import { VolumeWidget } from '../../config'
-import { makePartialUpdater } from '../../utils'
+import { NoOptionsWidgetEditor } from './NoOptionsWidgetEditor'
 
 type Props = {
     widget: VolumeWidget
-    onWidgetUpdated: (newWidget: VolumeWidget) => void
 }
 
-export function VolumeWidgetEditor({ widget, onWidgetUpdated }: Props) {
-    const updateWidget = makePartialUpdater(widget, onWidgetUpdated)
+export const VolumeWidgetEditor: ({widget}: Props) => JSX.Element = NoOptionsWidgetEditor
 
-    return (
-        <div>
-            <p>
-                👍 
-            </p>
-        </div>
-    )
-}
+

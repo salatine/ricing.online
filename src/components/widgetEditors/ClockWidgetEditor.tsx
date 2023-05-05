@@ -1,20 +1,9 @@
-import React from 'react'
 import { ClockWidget } from '../../config'
-import { makePartialUpdater } from '../../utils'
+import { NoOptionsWidgetEditor } from './NoOptionsWidgetEditor'
 
 type Props = {
     widget: ClockWidget
-    onWidgetUpdated: (newWidget: ClockWidget) => void
 }
 
-export function ClockWidgetEditor({ widget, onWidgetUpdated }: Props) {
-    const updateWidget = makePartialUpdater(widget, onWidgetUpdated)
+export const ClockWidgetEditor: ({widget}: Props) => JSX.Element = NoOptionsWidgetEditor
 
-    return (
-        <div>
-            <p>
-                👍 
-            </p>
-        </div>
-    )
-}

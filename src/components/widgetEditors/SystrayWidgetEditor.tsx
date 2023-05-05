@@ -1,20 +1,9 @@
-import React from 'react'
 import { SystrayWidget } from '../../config'
-import { makePartialUpdater } from '../../utils'
+import { NoOptionsWidgetEditor } from './NoOptionsWidgetEditor'
 
 type Props = {
     widget: SystrayWidget
-    onWidgetUpdated: (newWidget: SystrayWidget) => void
 }
 
-export function SystrayWidgetEditor({ widget, onWidgetUpdated }: Props) {
-    const updateWidget = makePartialUpdater(widget, onWidgetUpdated)
+export const SystrayWidgetEditor: ({widget}: Props) => JSX.Element = NoOptionsWidgetEditor
 
-    return (
-        <div>
-            <p>
-                👍
-            </p>
-        </div>
-    )
-}

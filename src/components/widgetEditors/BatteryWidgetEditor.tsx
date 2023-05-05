@@ -1,20 +1,9 @@
-import React from 'react'
 import { BatteryWidget } from '../../config'
-import { makePartialUpdater } from '../../utils'
+import { NoOptionsWidgetEditor } from './NoOptionsWidgetEditor'
 
 type Props = {
     widget: BatteryWidget
-    onWidgetUpdated: (newWidget: BatteryWidget) => void
 }
 
-export function BatteryWidgetEditor({ widget, onWidgetUpdated }: Props) {
-    const updateWidget = makePartialUpdater(widget, onWidgetUpdated)
+export const BatteryWidgetEditor: ({widget}: Props) => JSX.Element = NoOptionsWidgetEditor
 
-    return (
-        <div>
-            <p>
-                👍
-            </p>
-        </div>
-    )
-}
