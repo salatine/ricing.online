@@ -75,15 +75,14 @@ export type VolumeWidget = {
 }
 
 export type StatusBarWidget
-    = LauncherWidget | never 
-// TODO Implement
-/*  | SystrayWidget
+    = LauncherWidget 
+    | SystrayWidget
     | ClockWidget
     | TagListWidget
     | TaskListWidget
     | BrightnessWidget
     | BatteryWidget
-    | VolumeWidget */
+    | VolumeWidget 
 
 export type StatusBar = {
     position: StatusBarPosition,
