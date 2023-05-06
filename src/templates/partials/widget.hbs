@@ -1,0 +1,104 @@
+{{#if (eq type "launcher")}}
+awful.widget.launcher({
+    image = "{{image}}",
+    command = "{{command}}",
+    screen = s
+})
+{{/if}}
+
+{{#if (eq type "taglist")}}
+awful.widget.taglist({
+    screen = s,
+    filter = awful.widget.taglist.filter.all,
+    buttons = {}, -- #TODO
+    color = "{{color}}"
+})
+{{/if}}
+
+{{#if (eq type "tasklist")}}
+mytasklist {
+    screen  = s,
+    filter  = awful.widget.tasklist.filter.currenttags,
+    buttons = gears.table.join(
+        awful.button({}, 1, function(c)
+            if c == client.focus then
+                c.minimized = true
+            else
+                c:emit_signal(
+                    "request::activate",
+                    "tasklist",
+                    { raise = true }
+                )
+            end
+        end),
+        awful.button({}, 3, function()
+            awful.menu.client_list({ theme = { width = 250 } })
+        end),
+        awful.button({}, 4, function()
+            awful.client.focus.byidx(1)
+        end),
+        awful.button({}, 5, function()
+            awful.client.focus.byidx(-1)
+        end)
+    ),
+    style   = {
+        align = "center"
+    },
+}
+{{/if}}
+
+{{#if (eq type "volume")}}
+volume_widget{
+    widget_type = "arc"
+}
+{{/if}}
+
+{{#if (eq type "battery")}}
+battery_widget{
+    show_current_level = true,
+}
+{{/if}}
+
+{{#if (eq type "brightness")}}
+brightness_widget()
+{{/if}}
+
+{{#if (eq type "clock")}}
+(function()
+    mytextclock = wibox.widget.textclock()
+    local cw = calendar_widget({
+        placement = 'top_right',
+        start_sunday = true,
+        radius = 0,
+        previous_month_button = 1,
+        next_month_button = 3,
+    })
+
+    mytextclock:connect_signal("button::press",
+        function(_, _, _, button)
+            if button == 1 then cw.toggle() end
+        end
+    )
+
+    return mytextclock
+end)()
+{{/if}}
+
+{{#if (eq type "systray")}}
+(function()
+    s.systray = wibox.widget.systray()
+    s.systray.visible = false
+
+    -- Create a systray toggle widget
+    local systoggle = wibox.widget {
+        text = "ᐸ",
+        font = "{{ font.family }} {{ font.size}}",
+        widget = wibox.widget.textbox
+    }
+    systoggle:connect_signal("button::press",
+        function() awful.screen.focused().systray.visible = not awful.screen.focused().systray.visible end
+    )
+
+    return systoggle
+end)()
+{{/if}}

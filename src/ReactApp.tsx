@@ -66,6 +66,10 @@ export default function ReactApp({ emulator }: Props) {
     function handleFontUpdated(newFont) {
         updateOption({ font: newFont })
     }
+    
+    function handleStatusBarUpdated(newStatusBar) {
+        updateOption({ statusBar: newStatusBar })
+    }
 
     return (
         <div>
@@ -99,7 +103,7 @@ export default function ReactApp({ emulator }: Props) {
                 onLockClicked={handleLockMouseClicked}/>
 
             <StatusBarEditor
-                statusBar={options.statusBar} onStatusBarUpdated={() => console.log("bimba")}/>
+                statusBar={options.statusBar} onStatusBarUpdated={handleStatusBarUpdated}/> 
         </div>
     ); 
 }

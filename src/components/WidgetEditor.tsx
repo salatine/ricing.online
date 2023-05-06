@@ -25,6 +25,8 @@ export default function WidgetEditor({ widget, onWidgetUpdated }: Props) {
             return <TaskListWidgetEditor widget={widget} onWidgetUpdated={onWidgetUpdated} />
         
         // No options' editors
+        case 'volume':
+            return <VolumeWidgetEditor widget={widget} />
         case 'battery':
             return <BatteryWidgetEditor widget={widget}/>
         case 'brightness':
@@ -33,8 +35,6 @@ export default function WidgetEditor({ widget, onWidgetUpdated }: Props) {
             return <ClockWidgetEditor widget={widget} />
         case 'systray':
             return <SystrayWidgetEditor widget={widget} />
-        case 'volume':
-            return <VolumeWidgetEditor widget={widget} />
 
         default:
             assertNever(widget)

@@ -93,32 +93,19 @@ awful.screen.connect_for_each_screen(function(s)
         color = "#ffffff", -- ?
     }
 
+    {{#with statusBar}}
     s.mywibox = awful.wibar({ position = "top", screen = s, height = 32, border_width = 5, border_color = "#000000",})
     s.mywibox:setup({
         layout = wibox.layout.align.horizontal,
         {
             layout = wibox.layout.fixed.horizontal,
             spacing = 10,
-            s.mytaglist,
-        },
-        { -- Right widgets!
-            layout = wibox.layout.fixed.horizontal,
-            spacing = 10,
-            -- mykeyboardlayout,
-            volume_widget{
-                widget_type = "arc"
-            },
-            battery_widget{
-                show_current_level = true,
-            },
-            brightness_widget(),
-            -- mytextclock,
-            -- s.systray,
-            -- systoggle,
-            -- s.mylayoutbox,
-            -- powermenu,
+            {{#each widgets}}
+                {{> widget }},
+            {{/each}}
         },
     })
+    {{/with}}
 end)
 
 -- Global keys

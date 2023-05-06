@@ -1,10 +1,15 @@
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./templates/rc.lua.hbs";
 import ThemeLuaTemplate from "bundle-text:./templates/theme.lua.hbs";
+import WidgetPartial from "bundle-text:./templates/partials/widget.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
 import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
+
+// handlebars sucks 👍
+Handlebars.registerHelper('eq', (a, b) => a === b) 
+Handlebars.registerPartial('widget', WidgetPartial)
 
 export type Color = string
 
@@ -75,14 +80,14 @@ export type VolumeWidget = {
 }
 
 export type StatusBarWidget
-    = LauncherWidget 
-    | SystrayWidget
-    | ClockWidget
+    = LauncherWidget
     | TagListWidget
     | TaskListWidget
-    | BrightnessWidget
-    | BatteryWidget
     | VolumeWidget 
+    | BatteryWidget
+    | BrightnessWidget
+    | ClockWidget
+    | SystrayWidget
 
 export type StatusBar = {
     position: StatusBarPosition,

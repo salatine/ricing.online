@@ -27,7 +27,14 @@ export const DEFAULT_OPTIONS: Options = {
         borderWidth: 5,
         color: '#ff0000',
         widgets: [
-            { type: 'launcher', command: 'osu!.exe', iconPath: 'peppy-carequinha.png' },   
+            { type: 'launcher', command: 'osu!.exe', iconPath: 'peppy-carequinha.png' },
+            { type: 'taglist', buttons: [], color: '#00ff00' },
+            { type: 'tasklist', fontSize: 12 },
+            { type: 'volume' },
+            { type: 'battery' },
+            { type: 'brightness' },
+            { type: 'clock' },
+            { type: 'systray' },
         ]
     }
 };
