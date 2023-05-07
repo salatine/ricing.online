@@ -96,7 +96,7 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     {{#with statusBar}}
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 32, border_width = 5, border_color = "#000000",})
+    s.mywibox = awful.wibar({ position = "{{ position }}", screen = s, height = {{ height }}, border_width = {{ borderWidth }}, border_color = "{{ color }}",})
     s.mywibox:setup({
         layout = wibox.layout.align.horizontal,
         {
