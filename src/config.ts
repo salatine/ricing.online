@@ -1,5 +1,6 @@
 import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./templates/rc.lua.hbs";
+import MyTasklistLuaTemplate from "bundle-text:./templates/mytasklist.lua.hbs";
 import ThemeLuaTemplate from "bundle-text:./templates/theme.lua.hbs";
 import WidgetPartial from "bundle-text:./templates/partials/widget.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
@@ -113,6 +114,7 @@ export type ConfigFile = {
 
 export function getConfigFiles(options: Options): ConfigFile[] {
     const configTextFiles: Record<string, string> = {
+        ".config/awesome/mytasklist.lua": render(options, MyTasklistLuaTemplate),
         ".config/awesome/rc.lua": render(options, RcLuaTemplate),
         ".config/awesome/theme.lua": render(options, ThemeLuaTemplate),
     }
