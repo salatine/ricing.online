@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { StatusBar, StatusBarPosition, StatusBarWidget, IdentifiableStatusBarWidget } from '../config'
+import { StatusBar, StatusBarPosition, StatusBarWidget, IdentifiableStatusBarWidget, StatusBarWidgetGroups } from '../config'
 import { makePartialUpdater } from '../utils';
+import { findWidget } from '../widgets';
 import StatusBarPreview from './StatusBarPreview';
 import WidgetEditor from './WidgetEditor';
 
@@ -13,12 +14,12 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
     const updateStatusBar = makePartialUpdater(statusBar, onStatusBarUpdated)
     const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
 
-    const selectedWidgetIndex = selectedWidgetId !== null
-        ? statusBar.widgets.findIndex((widget) => widget.id === selectedWidgetId)
+    const selectedWidgetPosition = selectedWidgetId !== null
+        ? findWidget(statusBar.widgetGroups, selectedWidgetId)
         : null;
 
-    const selectedWidget = selectedWidgetIndex !== null
-        ? statusBar.widgets[selectedWidgetIndex]
+    const selectedWidget = selectedWidgetPosition !== null
+        ? statusBar.widgetGroups[selectedWidgetPosition.group][selectedWidgetPosition.index]
         : null;
     
     function onWidgetSelected(widget: IdentifiableStatusBarWidget) {
@@ -26,17 +27,17 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
     }
 
     function onWidgetUpdated(widget: StatusBarWidget) {
-        if (selectedWidgetId === null || selectedWidgetIndex === null) {
+        if (selectedWidgetId === null || selectedWidgetPosition === null) {
             return
         }
 
-        const newWidgets = [...statusBar.widgets]
-        newWidgets[selectedWidgetIndex] = {
+        const newWidgetGroups = structuredClone(statusBar.widgetGroups) as StatusBarWidgetGroups
+        newWidgetGroups[selectedWidgetPosition.group][selectedWidgetPosition.index] = {
             id: selectedWidgetId,
             ...widget
         }
 
-        updateStatusBar({ widgets: newWidgets })
+        updateStatusBar({ widgetGroups: newWidgetGroups })
     }
 
     function onWidgetUnselected() {
@@ -50,7 +51,7 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
     return (
         <div>
             <StatusBarPreview
-                widgets={statusBar.widgets}
+                widgetGroups={statusBar.widgetGroups}
                 selectedWidget={selectedWidget}
                 onWidgetSelected={onWidgetSelected}
                 onWidgetUnselected={onWidgetUnselected}/>

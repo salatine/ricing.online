@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
-import { IdentifiableStatusBarWidget } from '../config'
+import { IdentifiableStatusBarWidget, StatusBarWidgetGroups } from '../config'
 
 type Props = {
-    widgets: IdentifiableStatusBarWidget[]
+    widgetGroups: StatusBarWidgetGroups
     selectedWidget: IdentifiableStatusBarWidget | null 
     onWidgetSelected: (widget: IdentifiableStatusBarWidget) => void
     onWidgetUnselected: (widget: IdentifiableStatusBarWidget) => void
 }
 
-export default function StatusBarPreview({ widgets, selectedWidget, onWidgetSelected, onWidgetUnselected }: Props): JSX.Element {
+
+export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidgetSelected, onWidgetUnselected }: Props): JSX.Element {
+    const orderedGroupNames: (keyof StatusBarWidgetGroups)[] = ['left', 'middle', 'right'] 
+    const widgets = orderedGroupNames.flatMap((groupName) => widgetGroups[groupName])
+    
     const widgetButtons = widgets.map((widget) => {
         const isSelectedWidget = selectedWidget !== null && widget.id === selectedWidget.id
 
