@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
-import { StatusBarWidget } from '../config'
+import { IdentifiableStatusBarWidget } from '../config'
 
 type Props = {
-    widgets: StatusBarWidget[]
-    selectedWidget: StatusBarWidget | null 
-    onWidgetSelected: (widget: StatusBarWidget) => void
-    onWidgetUnselected: (widget: StatusBarWidget) => void
+    widgets: IdentifiableStatusBarWidget[]
+    selectedWidget: IdentifiableStatusBarWidget | null 
+    onWidgetSelected: (widget: IdentifiableStatusBarWidget) => void
+    onWidgetUnselected: (widget: IdentifiableStatusBarWidget) => void
 }
 
-export default function StatusBarPreview({widgets, selectedWidget, onWidgetSelected, onWidgetUnselected }: Props): JSX.Element {
+export default function StatusBarPreview({ widgets, selectedWidget, onWidgetSelected, onWidgetUnselected }: Props): JSX.Element {
     const widgetButtons = widgets.map((widget) => {
-        const buttonStyle = widget === selectedWidget
+        const isSelectedWidget = selectedWidget !== null && widget.id === selectedWidget.id
+
+        const buttonStyle = isSelectedWidget
             ? { backgroundColor: 'green' }
             : {}
         
-        const clickCallback = widget === selectedWidget
+        const clickCallback = isSelectedWidget
             ? onWidgetUnselected
             : onWidgetSelected
 

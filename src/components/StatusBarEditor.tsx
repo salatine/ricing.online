@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StatusBar, StatusBarPosition, StatusBarWidget } from '../config'
+import { StatusBar, StatusBarPosition, StatusBarWidget, IdentifiableStatusBarWidget } from '../config'
 import { makePartialUpdater } from '../utils';
 import StatusBarPreview from './StatusBarPreview';
 import WidgetEditor from './WidgetEditor';
@@ -11,23 +11,36 @@ type Props = {
 
 export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props) {
     const updateStatusBar = makePartialUpdater(statusBar, onStatusBarUpdated)
-    const [selectedWidget, setSelectedWidget] = useState<StatusBarWidget | null>(null);
+    const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
+
+    const selectedWidgetIndex = selectedWidgetId !== null
+        ? statusBar.widgets.findIndex((widget) => widget.id === selectedWidgetId)
+        : null;
+
+    const selectedWidget = selectedWidgetIndex !== null
+        ? statusBar.widgets[selectedWidgetIndex]
+        : null;
     
-    function onWidgetSelected(widget: StatusBarWidget) {
-        setSelectedWidget(widget)
+    function onWidgetSelected(widget: IdentifiableStatusBarWidget) {
+        setSelectedWidgetId(widget.id)
     }
 
     function onWidgetUpdated(widget: StatusBarWidget) {
-        const updatedWidgetIndex = statusBar.widgets.findIndex((other) => other.type === widget.type)
+        if (selectedWidgetId === null || selectedWidgetIndex === null) {
+            return
+        }
+
         const newWidgets = [...statusBar.widgets]
-        newWidgets[updatedWidgetIndex] = widget
+        newWidgets[selectedWidgetIndex] = {
+            id: selectedWidgetId,
+            ...widget
+        }
 
         updateStatusBar({ widgets: newWidgets })
-        setSelectedWidget(widget)
     }
 
-    function onWidgetUnselected(widget: StatusBarWidget) {
-        setSelectedWidget(null)
+    function onWidgetUnselected() {
+        setSelectedWidgetId(null)
     }
 
     const selectedWidgetEditor = selectedWidget !== null
