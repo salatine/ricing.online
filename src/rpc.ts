@@ -11,7 +11,12 @@ type Response = {
     id: number
 }
 
-export function startRPCServer(emulator: any): Promise<void> {
+export async function startRPCServer(emulator: any): Promise<void> {
+    await waitUntilEmulatorStarts(emulator)
+    await ping(emulator)
+}
+
+function waitUntilEmulatorStarts(emulator: any): Promise<void> {
     return new Promise((resolve) => {
         const interval = setInterval(() => {
             if (emulator.is_running()) {
@@ -33,6 +38,19 @@ export async function runCommand(emulator: any, command: string): Promise<string
     })
 
     return response.result
+}
+
+async function ping(emulator: any): Promise<void> {
+    const response = await sendRequest(emulator, {
+        "jsonrpc": "2.0",
+        "method": "ping",
+        "params": [],
+        "id": 1
+    })
+
+    if (response.result !== 'pong') {
+        throw new Error('failed to ping RPC server')
+    }
 }
 
 function sendRequest(emulator: any, request: Request): Promise<Response> {

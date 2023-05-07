@@ -43,8 +43,6 @@ window.addEventListener("load", async () => {
         filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
         autostart: true,
     });
-    
-    await startRPCServer(emulator);
 
     emulator.add_listener("serial0-output-char", function (char) {
         if(char === "\r") {
@@ -53,6 +51,8 @@ window.addEventListener("load", async () => {
 
         document.getElementById("serial").value += char;
     });
+
+    await startRPCServer(emulator);
 
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", () => updateAwesomeLogs(emulator))

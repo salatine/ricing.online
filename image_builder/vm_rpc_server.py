@@ -1,12 +1,16 @@
 import json
 import subprocess
 
+def ping():
+    return 'pong'
+
 def run_command(command_line: str):
     result = subprocess.run(command_line, shell=True, capture_output=True, text=True)
     return result.stdout or result.stderr
 
 def execute_request(request):
     available_methods = {
+        "ping": ping,
         "run_command": run_command
     }
 
