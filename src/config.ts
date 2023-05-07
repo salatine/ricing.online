@@ -128,7 +128,7 @@ export function getConfigFiles(options: Options): ConfigFile[] {
 export async function applyConfigFiles(emulator: any, configFiles: ConfigFile[]): Promise<void> {
     const emulatorHome = '/root/'; 
     const promises = configFiles.map(async ({ path, contents }) => {
-        await emulator.create_file(emulatorHome + path, readBlobIntoUint8Array(contents))
+        await emulator.create_file(emulatorHome + path, await readBlobIntoUint8Array(contents))
     })
 
     await Promise.allSettled(promises)
