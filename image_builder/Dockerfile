@@ -69,10 +69,8 @@ COPY vm_rpc_server.py /root/vm_rpc_server.py
 
 RUN mkdir -p /root/.config/awesome/awesome-wm-widgets
 
-COPY awesome-wm-widgets/battery-widget /root/.config/awesome/awesome-wm-widgets/battery-widget
+COPY awesome-wm-widgets /root/.config/awesome/awesome-wm-widgets
 COPY fake-acpi /usr/local/bin/acpi
-COPY awesome-wm-widgets/brightness-widget /root/.config/awesome/awesome-wm-widgets/brightness-widget
-COPY awesome-wm-widgets/volume-widget /root/.config/awesome/awesome-wm-widgets/volume-widget
 
 RUN { \
     git clone https://github.com/horst3180/arc-icon-theme --depth 1 && cd arc-icon-theme; \
