@@ -44,6 +44,10 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
         setSelectedWidgetId(null)
     }
 
+    function onWidgetGroupsUpdated(newWidgetGroups: StatusBarWidgetGroups) {
+        updateStatusBar({ widgetGroups: newWidgetGroups })
+    }
+
     const selectedWidgetEditor = selectedWidget !== null
         ? <WidgetEditor widget={selectedWidget} onWidgetUpdated={onWidgetUpdated}/>
         : <Editor statusBar={statusBar} updateStatusBar={updateStatusBar}/>
@@ -54,7 +58,8 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
                 widgetGroups={statusBar.widgetGroups}
                 selectedWidget={selectedWidget}
                 onWidgetSelected={onWidgetSelected}
-                onWidgetUnselected={onWidgetUnselected}/>
+                onWidgetUnselected={onWidgetUnselected}
+                onWidgetGroupsUpdated={onWidgetGroupsUpdated}/>
 
             {selectedWidgetEditor}
         </div>
