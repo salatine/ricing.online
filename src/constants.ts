@@ -3,7 +3,7 @@ import { createIdentifiableWidget } from "./widgets";
 
 export const AWESOME_CONFIG: string = "/root/.config/awesome";
 
-const DEFAULT_WIDGETS: Record<keyof StatusBarWidgetGroups, StatusBarWidget[]> = {
+export const DEFAULT_WIDGETS: Record<keyof StatusBarWidgetGroups, StatusBarWidget[]> = {
     left: [
         { type: 'launcher', command: 'osu!.exe', iconPath: 'peppy-carequinha.png' },
         { type: 'taglist', buttons: [], color: '#00ff00' },

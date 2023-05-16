@@ -8,10 +8,11 @@ type Props = {
     onWidgetSelected: (widget: IdentifiableStatusBarWidget) => void
     onWidgetUnselected: (widget: IdentifiableStatusBarWidget) => void
     onWidgetGroupsUpdated: (newWidgetGroups: StatusBarWidgetGroups) => void
+    onWidgetDeleted: (widget: IdentifiableStatusBarWidget) => void
 }
 
 
-export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidgetSelected, onWidgetUnselected, onWidgetGroupsUpdated }: Props): JSX.Element {
+export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidgetSelected, onWidgetUnselected, onWidgetGroupsUpdated, onWidgetDeleted }: Props): JSX.Element {
     const orderedGroupNames: (keyof StatusBarWidgetGroups)[] = ['left', 'middle', 'right'] 
     /*
     const widgets = orderedGroupNames.flatMap((groupName) => widgetGroups[groupName])
@@ -67,15 +68,16 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
                             style={buttonStyle}>
                             {widget.type}
                         </div>
+                        <button onClick={(e) => onWidgetDeleted(widget)}>X</button>
                     </div>
                 )}
             </Draggable>)
         })
 
         const droppableBackgroundColor = {
-            'left': 'pink', // s ata pera
-            'middle': 'purple', // s ata pera
-            'right': 'blue', // s ata pera
+            'left': 'pink',
+            'middle': 'purple',
+            'right': 'blue',
         }
 
         return (

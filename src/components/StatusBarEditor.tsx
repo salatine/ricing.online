@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { StatusBar, StatusBarPosition, StatusBarWidget, IdentifiableStatusBarWidget, StatusBarWidgetGroups } from '../config'
 import { makePartialUpdater } from '../utils';
-import { findWidget } from '../widgets';
+import { createIdentifiableWidget, findWidget } from '../widgets';
 import StatusBarPreview from './StatusBarPreview';
 import WidgetEditor from './WidgetEditor';
+import { DEFAULT_WIDGETS } from '../constants' 
 
 type Props = {
     statusBar: StatusBar
@@ -40,6 +41,34 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
         updateStatusBar({ widgetGroups: newWidgetGroups })
     }
 
+    function onWidgetDeleted(widget: IdentifiableStatusBarWidget) {
+        const widgetPosition = findWidget(statusBar.widgetGroups, widget.id)
+        if (widgetPosition === null) {
+            return
+        }
+
+        const newWidgetGroups = structuredClone(statusBar.widgetGroups)
+        newWidgetGroups[widgetPosition.group].splice(widgetPosition.index, 1)
+        
+        updateStatusBar({ widgetGroups: newWidgetGroups })
+    }
+
+    function onWidgetAdded(widgetType: keyof StatusBarWidget) {
+        const newWidgetGroups = structuredClone(statusBar.widgetGroups)
+
+        for (const groupName of Object.keys(DEFAULT_WIDGETS)) {
+            const group = DEFAULT_WIDGETS[groupName]
+            let widget = group.find((w) => w.type === widgetType as string)
+            if (widget !== undefined) {
+                widget = createIdentifiableWidget(widget) 
+                newWidgetGroups[groupName].push(widget as IdentifiableStatusBarWidget)
+                break
+            }
+        }
+
+       updateStatusBar({ widgetGroups: newWidgetGroups }) 
+    }
+
     function onWidgetUnselected() {
         setSelectedWidgetId(null)
     }
@@ -59,17 +88,61 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
                 selectedWidget={selectedWidget}
                 onWidgetSelected={onWidgetSelected}
                 onWidgetUnselected={onWidgetUnselected}
-                onWidgetGroupsUpdated={onWidgetGroupsUpdated}/>
+                onWidgetGroupsUpdated={onWidgetGroupsUpdated}
+                onWidgetDeleted={onWidgetDeleted}/>
+            <WidgetAdder onWidgetAdded={onWidgetAdded} />
 
             {selectedWidgetEditor}
         </div>
     )
 }
 
+type WidgetAdderProps = {
+    onWidgetAdded: (widgetType: keyof StatusBarWidget) => void
+}
+
+function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
+
+    const [isWidgetAdderSelected, setIsWidgetAdderSelected] = useState(false)
+
+    const widgetTypes = Object.keys(DEFAULT_WIDGETS).map((groupName) => {
+        const group = DEFAULT_WIDGETS[groupName]
+        return group.map((widget: StatusBarWidget) => widget.type)
+    }).flat()
+
+    const plusButton = (
+        <button 
+            onClick={(e) => setIsWidgetAdderSelected(true)}>
+                +
+        </button>
+    )
+
+    const widgetItems = (
+        <select 
+            onChange={(e) => { 
+                onWidgetAdded(e.target.value as keyof StatusBarWidget) 
+                setIsWidgetAdderSelected(false)
+                } 
+            }
+
+            onBlur={(e) => setIsWidgetAdderSelected(false)}>
+            {widgetTypes.map((widgetType) => 
+                <option 
+                    value={widgetType}>
+                        {widgetType}
+                </option>
+            )}
+        </select>
+    )
+
+    return isWidgetAdderSelected ? widgetItems : plusButton
+}
+
 type EditorProps = {
     statusBar: StatusBar
     updateStatusBar: (newFields: Partial<StatusBar>) => void
 }
+
 
 function Editor({ statusBar, updateStatusBar }: EditorProps) {
     return (
