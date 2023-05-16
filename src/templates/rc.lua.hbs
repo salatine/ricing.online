@@ -99,13 +99,29 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox = awful.wibar({ position = "{{ position }}", screen = s, height = {{ height }}, border_width = {{ borderWidth }}, border_color = "{{ color }}",})
     s.mywibox:setup({
         layout = wibox.layout.align.horizontal,
+        {{#with widgetGroups}}
         {
             layout = wibox.layout.fixed.horizontal,
             spacing = 10,
-            {{#each widgets}}
+            {{#each left}}
                 {{> widget }},
             {{/each}}
         },
+        {
+            layout = wibox.layout.flex.horizontal,
+            spacing = 10,
+            {{#each middle}}
+                {{> widget }},
+            {{/each}}
+        },
+        {
+            layout = wibox.layout.fixed.horizontal,
+            spacing = 10,
+            {{#each right}}
+                {{> widget }},
+            {{/each}}
+        },
+        {{/with}}
     })
     {{/with}}
 end)

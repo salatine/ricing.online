@@ -90,12 +90,22 @@ export type StatusBarWidget
     | ClockWidget
     | SystrayWidget
 
+export type IdentifiableStatusBarWidget = StatusBarWidget & {
+    id: string
+}
+
+export type StatusBarWidgetGroups = {
+    left: IdentifiableStatusBarWidget[],
+    middle: IdentifiableStatusBarWidget[],
+    right: IdentifiableStatusBarWidget[],
+}
+
 export type StatusBar = {
     position: StatusBarPosition,
     height: number,
     borderWidth: number,
     color: Color,
-    widgets: StatusBarWidget[],
+    widgetGroups: StatusBarWidgetGroups,
 }
 
 export type Options = {
