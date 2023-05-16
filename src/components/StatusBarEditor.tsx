@@ -58,10 +58,10 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
 
         for (const groupName of Object.keys(DEFAULT_WIDGETS)) {
             const group = DEFAULT_WIDGETS[groupName]
-            let widget = group.find((w) => w.type === widgetType as string)
+            const widget = group.find((w) => w.type === widgetType as string)
             if (widget !== undefined) {
-                widget = createIdentifiableWidget(widget) 
-                newWidgetGroups[groupName].push(widget as IdentifiableStatusBarWidget)
+                const identifiableWidget = createIdentifiableWidget(widget) 
+                newWidgetGroups[groupName].push(identifiableWidget)
                 break
             }
         }
@@ -117,7 +117,7 @@ function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
         </button>
     )
 
-    const widgetItems = (
+    const widgetChooser = (
         <select 
             onChange={(e) => { 
                 onWidgetAdded(e.target.value as keyof StatusBarWidget) 
@@ -135,7 +135,7 @@ function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
         </select>
     )
 
-    return isWidgetAdderSelected ? widgetItems : plusButton
+    return isWidgetAdderSelected ? widgetChooser : plusButton
 }
 
 type EditorProps = {
