@@ -16,6 +16,10 @@ export type Color = string
 
 export type CustomCommand = string
 
+export type MainModKey = 'Mod1' | 'Mod2' | 'Mod3' | 'Mod4' | 'Mod5'
+
+export type ModKey = 'Alt' | 'Shift' | 'Lock' | 'Control' | MainModKey
+
 export type CustomCommandKeybind = {
     modKeys: string[],
     normalKey: string,
@@ -127,6 +131,7 @@ export type Options = {
     autostartApplications: AutostartApplication[],
     defaultCommandKeybinds: DefaultCommandKeybind[],
     customCommandKeybinds: CustomCommandKeybind[],
+    mainModKey: MainModKey,
     terminal: string,
     windowBorder: WindowBorder,
     font: FontOptions,

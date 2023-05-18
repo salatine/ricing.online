@@ -11,7 +11,7 @@ import LockMouseButton from "./components/LockMouseButton";
 import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
 import StatusBarEditor from "./components/StatusBarEditor";
-import { DEFAULT_OPTIONS } from "./constants";
+import { DEFAULT_OPTIONS, updateMainModKeyInModKeys } from "./constants";
 import { Options, getConfigFiles, applyConfigFiles, CustomCommandKeybind, WindowBorder, exportConfigFiles } from "./config";
 
 type Props = {
@@ -71,6 +71,11 @@ export default function ReactApp({ emulator }: Props) {
         updateOption({ statusBar: newStatusBar })
     }
 
+    function handleMainModKeyUpdated(newMainModKey) {
+        updateOption({ mainModKey: newMainModKey })
+        updateMainModKeyInModKeys(newMainModKey)
+    }
+
     return (
         <div>
             <TerminalEditor 
@@ -87,7 +92,9 @@ export default function ReactApp({ emulator }: Props) {
             
             <CustomCommandKeybindsEditor
                 customCommandKeybinds={options.customCommandKeybinds} 
-                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}/>
+                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}
+                mainModKey={options.mainModKey}
+                onMainModKeyUpdated={handleMainModKeyUpdated}/>
 
             <WindowBorderEditor
                 windowBorder={options.windowBorder} 

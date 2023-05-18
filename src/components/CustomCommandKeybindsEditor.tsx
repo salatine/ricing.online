@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { CustomCommandKeybind } from '../config';
-import { MOD_KEYS } from '../constants';
+import { CustomCommandKeybind, ModKey, MainModKey } from '../config';
+import { MOD_KEYS, MAIN_MOD_OPTIONS } from '../constants';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
     onCustomCommandKeybindsUpdated: (customCommandKeybinds: CustomCommandKeybind[]) => void
+    mainModKey: MainModKey
+    onMainModKeyUpdated: (mainModKey: MainModKey) => void
 }
 
-export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated }: Props) {
+export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated, mainModKey, onMainModKeyUpdated }: Props) {
     const customCommandKeybindList = customCommandKeybinds.map((keybind, index) => {
         function handleKeybindEdited(newKeybind: CustomCommandKeybind) {
             const newCustomKeybinds = [...customCommandKeybinds];
@@ -23,7 +25,7 @@ export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onC
             onCustomCommandKeybindsUpdated(newCustomKeybinds);
         }
         
-        return (<CustomCommandKeybindEditor key={index} keybind={keybind} onKeybindUpdated={handleKeybindEdited} onKeybindDeleted={handleKeybindDeleted}/>)
+        return (<CustomCommandKeybindEditor key={index} keybind={keybind} onKeybindUpdated={handleKeybindEdited} onKeybindDeleted={handleKeybindDeleted} mainModKey={mainModKey}/>)
     })
 
     function handleNewKeybindClicked() {
@@ -38,11 +40,16 @@ export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onC
     }
 
     return (
-        <div>
-            <h1>teste keybinds</h1>
-            <button onClick={handleNewKeybindClicked}>New keybind</button>
-            {customCommandKeybindList}
-        </div>
+        <>
+            <div>
+                <MainModKeyChooser mainModKey={mainModKey} onMainModKeyUpdated={onMainModKeyUpdated} />
+            </div>
+            <div>
+                <h1>teste keybinds</h1>
+                <button onClick={handleNewKeybindClicked}>New keybind</button>
+                {customCommandKeybindList}
+            </div>
+        </>
     )
 }
 
@@ -50,11 +57,12 @@ type CustomCommandKeybindProps = {
     keybind: CustomCommandKeybind
     onKeybindUpdated: (keybind: CustomCommandKeybind) => void
     onKeybindDeleted: () => void
+    mainModKey: MainModKey
 }
 
-function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted }: CustomCommandKeybindProps) {
+function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted, mainModKey }: CustomCommandKeybindProps) {
     const [isEditing, setIsEditing] = useState(false);
-    const [editingKeys, setEditingKeys] = useState<string[]>([]);
+    const [editingKeys, setEditingKeys] = useState<ModKey[]>([]);
 
     function handleKeysFocus() {
         setIsEditing(true);
@@ -62,7 +70,7 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
     }
 
     function handleKeysKeyDown(e: React.KeyboardEvent) {
-        const newKey = mapBrowserKeyToAwesomeKey(e.key);
+        const newKey = mapBrowserKeyToAwesomeKey(e.key, mainModKey);
         const newEditingKeys = [...editingKeys];
 
         if (!newEditingKeys.includes(newKey)) {
@@ -117,14 +125,33 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
     )
 }
 
-function mapBrowserKeyToAwesomeKey(browserKey: string): string {
-    if (browserKey === 'OS') {
-        return 'Mod4';
-    }
-
-    return browserKey;
+type MainModKeyChooserProps = {
+    mainModKey: MainModKey
+    onMainModKeyUpdated: (mainModKey: MainModKey) => void
 }
 
-function isModKey(key: string): boolean {
+function MainModKeyChooser({mainModKey, onMainModKeyUpdated}: MainModKeyChooserProps) {
+    const mainModOptions = MAIN_MOD_OPTIONS.map((modKey) => {
+        return (
+            <option value={modKey}>{modKey}</option>
+        )
+    })
+
+    return (
+        <select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
+            {mainModOptions}
+        </select>
+    )
+}
+
+function mapBrowserKeyToAwesomeKey(browserKey: string | ModKey, mainModKey: MainModKey): ModKey {
+    if (browserKey === 'OS') {
+        return mainModKey;
+    }
+
+    return browserKey as ModKey;
+}
+
+function isModKey(key: ModKey): boolean {
     return MOD_KEYS.includes(key);
 }
