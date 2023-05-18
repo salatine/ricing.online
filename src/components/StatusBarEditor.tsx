@@ -117,6 +117,18 @@ function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
         </button>
     )
 
+    function handleOnMouseLeave(e: React.MouseEvent<HTMLSelectElement, MouseEvent>) {
+        if (e.target === document.activeElement) {
+            return
+        }
+
+        console.log('bimba insana')
+        console.log(e.target)
+        console.log(document.activeElement)
+
+        setIsWidgetAdderSelected(false)
+    }
+
     const widgetChooser = (
         <select 
             onChange={(e) => { 
@@ -125,7 +137,8 @@ function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
                 } 
             }
 
-            onBlur={(e) => setIsWidgetAdderSelected(false)}>
+            onBlur={(e) => setIsWidgetAdderSelected(false)}
+            onMouseLeave={handleOnMouseLeave}>
             {widgetTypes.map((widgetType) => 
                 <option 
                     value={widgetType}>
