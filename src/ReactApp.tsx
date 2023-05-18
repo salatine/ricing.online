@@ -4,7 +4,7 @@ import { runCommand } from "./rpc";
 import { readBlobIntoUint8Array, readStringIntoUint8Array } from './utils'
 import TerminalEditor from "./components/TerminalEditor";
 import BackgroundEditor from "./components/BackgroundEditor";
-import CustomKeybindsEditor from "./components/CustomKeybindsEditor";
+import CustomCommandKeybindsEditor from "./components/CustomCommandKeybindsEditor";
 import UpdatePreviewButton from "./components/UpdatePreviewButton";
 import ExportConfigFilesButton from "./components/ExportConfigFilesButton";
 import LockMouseButton from "./components/LockMouseButton";
@@ -12,7 +12,7 @@ import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
 import StatusBarEditor from "./components/StatusBarEditor";
 import { DEFAULT_OPTIONS } from "./constants";
-import { Options, getConfigFiles, applyConfigFiles, CustomKeybind, WindowBorder, exportConfigFiles } from "./config";
+import { Options, getConfigFiles, applyConfigFiles, CustomCommandKeybind, WindowBorder, exportConfigFiles } from "./config";
 
 type Props = {
     emulator: any
@@ -40,8 +40,8 @@ export default function ReactApp({ emulator }: Props) {
         await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
     }
 
-    function handleCustomKeybindsUpdated(newCustomKeybinds: CustomKeybind[]) {
-        updateOption({ customKeybinds: newCustomKeybinds });
+    function handleCustomCommandKeybindsUpdated(newCustomCommandKeybinds: CustomCommandKeybind[]) {
+        updateOption({ customCommandKeybinds: newCustomCommandKeybinds });
     }
 
     async function handleUpdatePreviewClicked() {
@@ -85,9 +85,9 @@ export default function ReactApp({ emulator }: Props) {
                 font={options.font} 
                 onFontUpdated={handleFontUpdated}/>
             
-            <CustomKeybindsEditor
-                customKeybinds={options.customKeybinds} 
-                onCustomKeybindsUpdated={handleCustomKeybindsUpdated}/>
+            <CustomCommandKeybindsEditor
+                customCommandKeybinds={options.customCommandKeybinds} 
+                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}/>
 
             <WindowBorderEditor
                 windowBorder={options.windowBorder} 

@@ -14,10 +14,12 @@ Handlebars.registerPartial('widget', WidgetPartial)
 
 export type Color = string
 
-export type CustomKeybind = {
+export type CustomCommand = string
+
+export type CustomCommandKeybind = {
     modKeys: string[],
     normalKey: string,
-    command: string,
+    command: CustomCommand,
 }
 
 export type AutostartApplication = {
@@ -108,9 +110,23 @@ export type StatusBar = {
     widgetGroups: StatusBarWidgetGroups,
 }
 
+export type DefaultCommand = {
+    id: string
+    type: 'global' | 'client'
+    name: string
+    description: string
+}
+
+export type DefaultCommandKeybind = {
+    modKeys: string[],
+    normalKey: string,
+    command: DefaultCommand,
+}
+
 export type Options = {
     autostartApplications: AutostartApplication[],
-    customKeybinds: CustomKeybind[],
+    defaultCommandKeybinds: DefaultCommandKeybind[],
+    customCommandKeybinds: CustomCommandKeybind[],
     terminal: string,
     windowBorder: WindowBorder,
     font: FontOptions,

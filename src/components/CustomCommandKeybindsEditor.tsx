@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
-import { CustomKeybind } from '../config';
+import { CustomCommandKeybind } from '../config';
 import { MOD_KEYS } from '../constants';
 
 type Props = {
-    customKeybinds: CustomKeybind[]
-    onCustomKeybindsUpdated: (customKeybinds: CustomKeybind[]) => void
+    customCommandKeybinds: CustomCommandKeybind[]
+    onCustomCommandKeybindsUpdated: (customCommandKeybinds: CustomCommandKeybind[]) => void
 }
 
-export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsUpdated }: Props) {
-    const customKeybindList = customKeybinds.map((keybind, index) => {
-        function handleKeybindEdited(newKeybind: CustomKeybind) {
-            const newCustomKeybinds = [...customKeybinds];
+export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated }: Props) {
+    const customCommandKeybindList = customCommandKeybinds.map((keybind, index) => {
+        function handleKeybindEdited(newKeybind: CustomCommandKeybind) {
+            const newCustomKeybinds = [...customCommandKeybinds];
             newCustomKeybinds[index] = newKeybind;
             
-            onCustomKeybindsUpdated(newCustomKeybinds);
+            onCustomCommandKeybindsUpdated(newCustomKeybinds);
         }
 
         function handleKeybindDeleted() {
             // Remover a keybind com o nosso indice
-            const newCustomKeybinds = customKeybinds.filter((_, i) => i != index);
+            const newCustomKeybinds = customCommandKeybinds.filter((_, i) => i != index);
 
-            onCustomKeybindsUpdated(newCustomKeybinds);
+            onCustomCommandKeybindsUpdated(newCustomKeybinds);
         }
         
-        return (<CustomKeybindEditor key={index} keybind={keybind} onKeybindUpdated={handleKeybindEdited} onKeybindDeleted={handleKeybindDeleted}/>)
+        return (<CustomCommandKeybindEditor key={index} keybind={keybind} onKeybindUpdated={handleKeybindEdited} onKeybindDeleted={handleKeybindDeleted}/>)
     })
 
     function handleNewKeybindClicked() {
@@ -32,27 +32,27 @@ export default function CustomKeybindsEditor({ customKeybinds, onCustomKeybindsU
             normalKey: '',
             command: '',
         }
-        const newCustomKeybinds = [...customKeybinds, newKeybind];
+        const newCustomCommandKeybinds = [...customCommandKeybinds, newKeybind];
 
-        onCustomKeybindsUpdated(newCustomKeybinds);
+        onCustomCommandKeybindsUpdated(newCustomCommandKeybinds);
     }
 
     return (
         <div>
             <h1>teste keybinds</h1>
             <button onClick={handleNewKeybindClicked}>New keybind</button>
-            {customKeybindList}
+            {customCommandKeybindList}
         </div>
     )
 }
 
-type CustomKeybindProps = {
-    keybind: CustomKeybind
-    onKeybindUpdated: (keybind: CustomKeybind) => void
+type CustomCommandKeybindProps = {
+    keybind: CustomCommandKeybind
+    onKeybindUpdated: (keybind: CustomCommandKeybind) => void
     onKeybindDeleted: () => void
 }
 
-function CustomKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted }: CustomKeybindProps) {
+function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted }: CustomCommandKeybindProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [editingKeys, setEditingKeys] = useState<string[]>([]);
 
