@@ -71,6 +71,10 @@ export default function ReactApp({ emulator }: Props) {
         updateOption({ statusBar: newStatusBar })
     }
 
+    function handleMainModKeyUpdated(newMainModKey) {
+        updateOption({ mainModKey: newMainModKey })
+    }
+
     return (
         <div>
             <TerminalEditor 
@@ -87,7 +91,9 @@ export default function ReactApp({ emulator }: Props) {
             
             <CustomCommandKeybindsEditor
                 customCommandKeybinds={options.customCommandKeybinds} 
-                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}/>
+                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}
+                mainModKey={options.mainModKey}
+                onMainModKeyUpdated={handleMainModKeyUpdated}/>
 
             <WindowBorderEditor
                 windowBorder={options.windowBorder} 

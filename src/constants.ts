@@ -1,4 +1,4 @@
-import { Options, StatusBarWidget, StatusBarWidgetGroups, DefaultCommand, DefaultCommandKeybind } from "./config";
+import { Options, StatusBarWidget, StatusBarWidgetGroups, DefaultCommand, DefaultCommandKeybind, ModKey, MainModKey } from "./config";
 import { createIdentifiableWidget } from "./widgets";
 
 export const AWESOME_CONFIG: string = "/root/.config/awesome";
@@ -195,6 +195,7 @@ export const DEFAULT_OPTIONS: Options = {
     customCommandKeybinds: [
         { modKeys: ['Control', 'Shift'], normalKey: 'r', command: 'reload something idk' },
     ],
+    mainModKey: "Mod4",
     terminal: "kitty",
     windowBorder: {
         size: 0,
@@ -226,10 +227,21 @@ function makeDefaultCommands<K extends string>(commandFieldsById: Record<K, Omit
     ) as Record<K, DefaultCommand>
 }
 
-export const MOD_KEYS = [
-    'Alt',
-    'Shift',
-    'Lock',
-    'Control',
+export function getModKeys(mainModKey: MainModKey) {
+    return [
+        'Alt',
+        'Shift',
+        'Lock',
+        'Control',
+        mainModKey,
+    ];
+}
+
+export const MAIN_MOD_OPTIONS: MainModKey[] = [
+    'Mod1',
+    'Mod2',
+    'Mod3',
     'Mod4',
+    'Mod5',
 ];
+
