@@ -227,23 +227,15 @@ function makeDefaultCommands<K extends string>(commandFieldsById: Record<K, Omit
     ) as Record<K, DefaultCommand>
 }
 
-export function updateMainModKeyInModKeys(newMainModKey: MainModKey) {
-    for (const mainModOption of MAIN_MOD_OPTIONS) {
-        if (MOD_KEYS.includes(mainModOption)) {
-            MOD_KEYS.splice(MOD_KEYS.indexOf(mainModOption), 1);
-        }
-    }
-
-    MOD_KEYS.push(newMainModKey);
+export function getModKeys(mainModKey: MainModKey) {
+    return [
+        'Alt',
+        'Shift',
+        'Lock',
+        'Control',
+        mainModKey,
+    ];
 }
-
-export const MOD_KEYS: ModKey[] = [
-    'Alt',
-    'Shift',
-    'Lock',
-    'Control',
-    DEFAULT_OPTIONS.mainModKey,
-];
 
 export const MAIN_MOD_OPTIONS: MainModKey[] = [
     'Mod1',

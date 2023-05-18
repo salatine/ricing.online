@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CustomCommandKeybind, ModKey, MainModKey } from '../config';
-import { MOD_KEYS, MAIN_MOD_OPTIONS } from '../constants';
+import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
@@ -81,8 +81,8 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
     }
 
     function handleKeysBlur() {
-        const modKeys = editingKeys.filter(isModKey);
-        const normalKeys = editingKeys.filter((key) => !isModKey(key))
+        const modKeys = editingKeys.filter((key) => isModKey(key, mainModKey));
+        const normalKeys = editingKeys.filter((key) => !isModKey(key, mainModKey))
             .map((key) => key.toLowerCase());
 
         if (normalKeys.length != 1) {
@@ -152,6 +152,6 @@ function mapBrowserKeyToAwesomeKey(browserKey: string | ModKey, mainModKey: Main
     return browserKey as ModKey;
 }
 
-function isModKey(key: ModKey): boolean {
-    return MOD_KEYS.includes(key);
+function isModKey(key: ModKey, mainModKey: MainModKey): boolean {
+    return getModKeys(mainModKey).includes(key);
 }
