@@ -11,8 +11,9 @@ import LockMouseButton from "./components/LockMouseButton";
 import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
 import StatusBarEditor from "./components/StatusBarEditor";
+import DefaultCommandKeybindsEditor from "./components/DefaultCommandKeybindsEditor";
 import { DEFAULT_OPTIONS } from "./constants";
-import { Options, getConfigFiles, applyConfigFiles, CustomCommandKeybind, WindowBorder, exportConfigFiles } from "./config";
+import { Options, getConfigFiles, applyConfigFiles, CustomCommandKeybind, DefaultCommandKeybind, WindowBorder, exportConfigFiles } from "./config";
 
 type Props = {
     emulator: any
@@ -42,6 +43,10 @@ export default function ReactApp({ emulator }: Props) {
 
     function handleCustomCommandKeybindsUpdated(newCustomCommandKeybinds: CustomCommandKeybind[]) {
         updateOption({ customCommandKeybinds: newCustomCommandKeybinds });
+    }
+
+    function handleDefaultCommandKeybindsUpdated(newDefaultCommandKeybinds: DefaultCommandKeybind[]) {
+        updateOption({ defaultCommandKeybinds: newDefaultCommandKeybinds });
     }
 
     async function handleUpdatePreviewClicked() {
@@ -88,6 +93,11 @@ export default function ReactApp({ emulator }: Props) {
                 emulator={emulator} 
                 font={options.font} 
                 onFontUpdated={handleFontUpdated}/>
+            
+            <DefaultCommandKeybindsEditor
+                defaultCommandKeybinds={options.defaultCommandKeybinds}
+                onDefaultCommandKeybindsUpdated={handleDefaultCommandKeybindsUpdated}
+                mainModKey={options.mainModKey}/>
             
             <CustomCommandKeybindsEditor
                 customCommandKeybinds={options.customCommandKeybinds} 

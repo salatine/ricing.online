@@ -168,29 +168,29 @@ export const DEFAULT_OPTIONS: Options = {
         { commandLine: "feh something" },
     ],
     defaultCommandKeybinds: [
-        { modKeys: ["Mod4"], normalKey: "b", command: DEFAULT_COMMANDS.openBrowser },
-        { modKeys: ["Mod4"], normalKey: "e", command: DEFAULT_COMMANDS.openFileManager },
-        { modKeys: ["Mod4"], normalKey: "f", command: DEFAULT_COMMANDS.fullscreen },
-        { modKeys: ["Mod4"], normalKey: "j", command: DEFAULT_COMMANDS.focusNextClient },
-        { modKeys: ["Mod4"], normalKey: "k", command: DEFAULT_COMMANDS.focusPreviousClient },
-        { modKeys: ["Mod4"], normalKey: "m", command: DEFAULT_COMMANDS.toggleMaximize },
-        { modKeys: ["Mod4"], normalKey: "n", command: DEFAULT_COMMANDS.minimize },
-        { modKeys: ["Mod4"], normalKey: "o", command: DEFAULT_COMMANDS.moveToScreen },
-        { modKeys: ["Mod4"], normalKey: "p", command: DEFAULT_COMMANDS.showMenubar },
-        { modKeys: ["Mod4"], normalKey: "q", command: DEFAULT_COMMANDS.closeWindow },
-        { modKeys: ["Mod4"], normalKey: "t", command: DEFAULT_COMMANDS.toggleFloating },
-        { modKeys: ["Mod4"], normalKey: "s", command: DEFAULT_COMMANDS.toggleKeepOnTop },
-        { modKeys: ["Mod4"], normalKey: "Left", command: DEFAULT_COMMANDS.previousTag },
-        { modKeys: ["Mod4"], normalKey: "Return", command: DEFAULT_COMMANDS.openTerminal },
-        { modKeys: ["Mod4"], normalKey: "Right", command: DEFAULT_COMMANDS.nextTag },
-        { modKeys: ["Mod4"], normalKey: "space", command: DEFAULT_COMMANDS.selectNextLayout },
-        { modKeys: ["Mod4", "Control"], normalKey: "n", command: DEFAULT_COMMANDS.unminimize },
-        { modKeys: ["Mod4", "Control"], normalKey: "r", command: DEFAULT_COMMANDS.restart },
-        { modKeys: ["Mod4", "Shift"], normalKey: "j", command: DEFAULT_COMMANDS.swapWithNextClient },
-        { modKeys: ["Mod4", "Shift"], normalKey: "k", command: DEFAULT_COMMANDS.swapWithPreviousClient },
-        { modKeys: ["Mod4", "Shift"], normalKey: "q", command: DEFAULT_COMMANDS.quit },
-        { modKeys: ["Mod4", "Shift"], normalKey: "space", command: DEFAULT_COMMANDS.selectPreviousLayout },
-        { modKeys: ["Mod4", "Shift"], normalKey: "v", command: DEFAULT_COMMANDS.toggleWibarVisibility },
+        { modKeys: ["MainModKey"], normalKey: "b", command: DEFAULT_COMMANDS.openBrowser },
+        { modKeys: ["MainModKey"], normalKey: "e", command: DEFAULT_COMMANDS.openFileManager },
+        { modKeys: ["MainModKey"], normalKey: "f", command: DEFAULT_COMMANDS.fullscreen },
+        { modKeys: ["MainModKey"], normalKey: "j", command: DEFAULT_COMMANDS.focusNextClient },
+        { modKeys: ["MainModKey"], normalKey: "k", command: DEFAULT_COMMANDS.focusPreviousClient },
+        { modKeys: ["MainModKey"], normalKey: "m", command: DEFAULT_COMMANDS.toggleMaximize },
+        { modKeys: ["MainModKey"], normalKey: "n", command: DEFAULT_COMMANDS.minimize },
+        { modKeys: ["MainModKey"], normalKey: "o", command: DEFAULT_COMMANDS.moveToScreen },
+        { modKeys: ["MainModKey"], normalKey: "p", command: DEFAULT_COMMANDS.showMenubar },
+        { modKeys: ["MainModKey"], normalKey: "q", command: DEFAULT_COMMANDS.closeWindow },
+        { modKeys: ["MainModKey"], normalKey: "t", command: DEFAULT_COMMANDS.toggleFloating },
+        { modKeys: ["MainModKey"], normalKey: "s", command: DEFAULT_COMMANDS.toggleKeepOnTop },
+        { modKeys: ["MainModKey"], normalKey: "Left", command: DEFAULT_COMMANDS.previousTag },
+        { modKeys: ["MainModKey"], normalKey: "Return", command: DEFAULT_COMMANDS.openTerminal },
+        { modKeys: ["MainModKey"], normalKey: "Right", command: DEFAULT_COMMANDS.nextTag },
+        { modKeys: ["MainModKey"], normalKey: "space", command: DEFAULT_COMMANDS.selectNextLayout },
+        { modKeys: ["MainModKey", "Control"], normalKey: "n", command: DEFAULT_COMMANDS.unminimize },
+        { modKeys: ["MainModKey", "Control"], normalKey: "r", command: DEFAULT_COMMANDS.restart },
+        { modKeys: ["MainModKey", "Shift"], normalKey: "j", command: DEFAULT_COMMANDS.swapWithNextClient },
+        { modKeys: ["MainModKey", "Shift"], normalKey: "k", command: DEFAULT_COMMANDS.swapWithPreviousClient },
+        { modKeys: ["MainModKey", "Shift"], normalKey: "q", command: DEFAULT_COMMANDS.quit },
+        { modKeys: ["MainModKey", "Shift"], normalKey: "space", command: DEFAULT_COMMANDS.selectPreviousLayout },
+        { modKeys: ["MainModKey", "Shift"], normalKey: "v", command: DEFAULT_COMMANDS.toggleWibarVisibility },
     ],
     customCommandKeybinds: [
         { modKeys: ['Control', 'Shift'], normalKey: 'r', command: 'reload something idk' },
@@ -227,13 +227,13 @@ function makeDefaultCommands<K extends string>(commandFieldsById: Record<K, Omit
     ) as Record<K, DefaultCommand>
 }
 
-export function getModKeys(mainModKey: MainModKey) {
+export function getModKeys(): ModKey[] {
     return [
         'Alt',
         'Shift',
         'Lock',
         'Control',
-        mainModKey,
+        'MainModKey',
     ];
 }
 

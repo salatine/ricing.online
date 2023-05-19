@@ -2,6 +2,7 @@ import Handlebars from "handlebars";
 import RcLuaTemplate from "bundle-text:./templates/rc.lua.hbs";
 import MyTasklistLuaTemplate from "bundle-text:./templates/mytasklist.lua.hbs";
 import ThemeLuaTemplate from "bundle-text:./templates/theme.lua.hbs";
+import DefaultCommandPartial from "bundle-text:./templates/partials/defaultCommand.hbs";
 import WidgetPartial from "bundle-text:./templates/partials/widget.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
 import { AWESOME_CONFIG } from "./constants";
@@ -10,6 +11,20 @@ import JSZip from "jszip";
 
 // handlebars sucks 👍
 Handlebars.registerHelper('eq', (a, b) => a === b) 
+Handlebars.registerHelper('formatModkeysAsLuaArray', (modKeys: ModKey[], mainModKey: MainModKey) => {
+    const luaModKeys = modKeys.map(modKey => {
+        if (modKey === 'MainModKey') {
+            // use the modkey variable, which contains the MainModKey
+            return 'modkey'
+        } 
+
+        // use a string literal containing the mod key
+        return `"${modKey}"`
+    })
+
+    return new Handlebars.SafeString(`{ ${luaModKeys.join(', ')} }`)
+})
+Handlebars.registerPartial('defaultCommand', DefaultCommandPartial)
 Handlebars.registerPartial('widget', WidgetPartial)
 
 export type Color = string
@@ -18,10 +33,10 @@ export type CustomCommand = string
 
 export type MainModKey = 'Mod1' | 'Mod2' | 'Mod3' | 'Mod4' | 'Mod5'
 
-export type ModKey = 'Alt' | 'Shift' | 'Lock' | 'Control' | MainModKey
+export type ModKey = 'Alt' | 'Shift' | 'Lock' | 'Control' | 'MainModKey'
 
 export type CustomCommandKeybind = {
-    modKeys: string[],
+    modKeys: ModKey[],
     normalKey: string,
     command: CustomCommand,
 }
@@ -122,7 +137,7 @@ export type DefaultCommand = {
 }
 
 export type DefaultCommandKeybind = {
-    modKeys: string[],
+    modKeys: ModKey[],
     normalKey: string,
     command: DefaultCommand,
 }

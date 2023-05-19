@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CustomCommandKeybind, ModKey, MainModKey } from '../config';
 import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
+import KeybindInput from './KeybindInput';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
@@ -61,48 +62,6 @@ type CustomCommandKeybindProps = {
 }
 
 function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted, mainModKey }: CustomCommandKeybindProps) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editingKeys, setEditingKeys] = useState<ModKey[]>([]);
-
-    function handleKeysFocus() {
-        setIsEditing(true);
-        setEditingKeys([]);
-    }
-
-    function handleKeysKeyDown(e: React.KeyboardEvent) {
-        const newKey = mapBrowserKeyToAwesomeKey(e.key, mainModKey);
-        const newEditingKeys = [...editingKeys];
-
-        if (!newEditingKeys.includes(newKey)) {
-            newEditingKeys.push(newKey);
-        }
-
-        setEditingKeys(newEditingKeys);
-    }
-
-    function handleKeysBlur() {
-        const modKeys = editingKeys.filter((key) => isModKey(key, mainModKey));
-        const normalKeys = editingKeys.filter((key) => !isModKey(key, mainModKey))
-            .map((key) => key.toLowerCase());
-
-        if (normalKeys.length != 1) {
-            // FIXME crime
-            alert('Exactly one non-modifier key is needed');
-        } else {
-            const normalKey = normalKeys[0];
-            const newKeybind = {
-                ...keybind,
-                modKeys,
-                normalKey,
-            }
-
-            onKeybindUpdated(newKeybind);
-        }
-
-        setIsEditing(false);
-        setEditingKeys([]);
-    } 
-
     function handleCommandChange(e) {
         const newKeybind = {
             ...keybind,
@@ -112,15 +71,36 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
         onKeybindUpdated(newKeybind);
     }
 
-    const keys = isEditing
-        ? editingKeys
-        : [...keybind.modKeys, keybind.normalKey];
+    const inputKeybind = {
+        modKeys: keybind.modKeys as ModKey[],
+        normalKey: keybind.normalKey,
+    }
+
+    function handleKeybindInputUpdated(inputKeybind) {
+        const newKeybind = {
+            ...keybind,
+            modKeys: inputKeybind.modKeys,
+            normalKey: inputKeybind.normalKey,
+        }
+
+        onKeybindUpdated(newKeybind);
+    }
 
     return (
         <div>
-            <input type="text" value={keys.join('+')} onFocus={handleKeysFocus} onKeyDown={handleKeysKeyDown} onBlur={handleKeysBlur} readOnly></input>
-            <input type="text" value={keybind.command} onChange={handleCommandChange}></input>
-            <button onClick={onKeybindDeleted}>X</button>
+            <KeybindInput 
+                keybind={inputKeybind} 
+                onKeybindUpdated={handleKeybindInputUpdated} 
+                mainModKey={mainModKey} />
+            <input 
+                type="text" 
+                value={keybind.command} 
+                onChange={handleCommandChange}>
+            </input>
+            <button 
+                onClick={onKeybindDeleted}>
+                X
+            </button>
         </div>
     )
 }
@@ -130,7 +110,7 @@ type MainModKeyChooserProps = {
     onMainModKeyUpdated: (mainModKey: MainModKey) => void
 }
 
-function MainModKeyChooser({mainModKey, onMainModKeyUpdated}: MainModKeyChooserProps) {
+function MainModKeyChooser({ mainModKey, onMainModKeyUpdated }: MainModKeyChooserProps) {
     const mainModOptions = MAIN_MOD_OPTIONS.map((modKey) => {
         return (
             <option value={modKey}>{modKey}</option>
@@ -144,14 +124,3 @@ function MainModKeyChooser({mainModKey, onMainModKeyUpdated}: MainModKeyChooserP
     )
 }
 
-function mapBrowserKeyToAwesomeKey(browserKey: string | ModKey, mainModKey: MainModKey): ModKey {
-    if (browserKey === 'OS') {
-        return mainModKey;
-    }
-
-    return browserKey as ModKey;
-}
-
-function isModKey(key: ModKey, mainModKey: MainModKey): boolean {
-    return getModKeys(mainModKey).includes(key);
-}
