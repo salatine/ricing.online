@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Nav from 'react-bootstrap/Nav';
 import { runCommand } from "./rpc";
 import UpdatePreviewButton from "./components/UpdatePreviewButton";
 import ExportConfigFilesButton from "./components/ExportConfigFilesButton";
@@ -63,10 +64,14 @@ export default function ReactApp({ emulator }: Props) {
     }
 
     const tabItems = Object.entries(tabs).map(([tabId, tab]) => {
-        return (<li><a onClick={(e) => setSelectedTabId(tabId as TabId)}>{tab.name}</a></li>)
+        return (<Nav.Item>
+            <Nav.Link eventKey={tabId}>{tab.name}</Nav.Link>
+        </Nav.Item>)
     })
 
-    const navigationTabs = (<nav><ul>{tabItems}</ul></nav>)
+    const navigationTabs = (<Nav activeKey={selectedTabId} onSelect={(newTabId) => setSelectedTabId(newTabId as TabId)}>
+        {tabItems}
+    </Nav>)
 
     async function handleUpdatePreviewClicked() {
         const configFiles = getConfigFiles(options)

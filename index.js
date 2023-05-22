@@ -4,6 +4,8 @@ import ReactApp from "./src/ReactApp";
 import { runCommand, startRPCServer } from "./src/rpc";
 import { getAvailableFonts } from "./src/fonts";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 async function updateAwesomeLogs(emulator) {
     const stdoutTextarea = document.getElementById('awesome_stdout')
     const stderrTextarea = document.getElementById('awesome_stderr')
