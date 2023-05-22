@@ -12,8 +12,12 @@ import WindowBorderEditor from "./components/WindowBorderEditor";
 import FontEditor from "./components/FontEditor";
 import StatusBarEditor from "./components/StatusBarEditor";
 import DefaultCommandKeybindsEditor from "./components/DefaultCommandKeybindsEditor";
+import AppearanceTab from "./components/tabs/AppearanceTab"
+import StatusBarTab from "./components/tabs/StatusBarTab"
 import { DEFAULT_OPTIONS } from "./constants";
 import { Options, getConfigFiles, applyConfigFiles, CustomCommandKeybind, DefaultCommandKeybind, WindowBorder, exportConfigFiles } from "./config";
+import KeybindsTab from "./components/tabs/KeybindsTab";
+import DefaultApplicationsTab from "./components/tabs/DefaultApplicationsTab";
 
 type Props = {
     emulator: any
@@ -21,33 +25,6 @@ type Props = {
 
 export default function ReactApp({ emulator }: Props) {
     const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS);
-
-    function updateOption(newFields: Partial<Options>) {
-        const newOptions = {
-            ...options,
-            ...newFields,
-        };
-
-        setOptions(newOptions);
-    }
-
-    function handleTerminalSelected(newTerminal: string) {
-        updateOption({ terminal: newTerminal });
-    }
-
-    async function handleBackgroundSelected(backgroundFile: File) {
-        const backgroundFileContents = await readBlobIntoUint8Array(backgroundFile);
-
-        await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
-    }
-
-    function handleCustomCommandKeybindsUpdated(newCustomCommandKeybinds: CustomCommandKeybind[]) {
-        updateOption({ customCommandKeybinds: newCustomCommandKeybinds });
-    }
-
-    function handleDefaultCommandKeybindsUpdated(newDefaultCommandKeybinds: DefaultCommandKeybind[]) {
-        updateOption({ defaultCommandKeybinds: newDefaultCommandKeybinds });
-    }
 
     async function handleUpdatePreviewClicked() {
         const configFiles = getConfigFiles(options)
@@ -64,50 +41,29 @@ export default function ReactApp({ emulator }: Props) {
         emulator.lock_mouse();
     }
 
-    function handleWindowBorderUpdated(newWindowBorder: WindowBorder) {
-        updateOption({ windowBorder: newWindowBorder })
-    }
-
-    function handleFontUpdated(newFont) {
-        updateOption({ font: newFont })
-    }
-    
-    function handleStatusBarUpdated(newStatusBar) {
-        updateOption({ statusBar: newStatusBar })
-    }
-
-    function handleMainModKeyUpdated(newMainModKey) {
-        updateOption({ mainModKey: newMainModKey })
+    function handleOptionsUpdated(newOptions: Options) {
+        setOptions(newOptions)
     }
 
     return (
         <div>
-            <TerminalEditor 
-                terminal={options.terminal} 
-                onTerminalSelected={handleTerminalSelected}/>
-
-            <BackgroundEditor 
-                onBackgroundSelected={handleBackgroundSelected}/>
-
-            <FontEditor 
-                emulator={emulator} 
-                font={options.font} 
-                onFontUpdated={handleFontUpdated}/>
+            <AppearanceTab
+                emulator={emulator}
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>
             
-            <DefaultCommandKeybindsEditor
-                defaultCommandKeybinds={options.defaultCommandKeybinds}
-                onDefaultCommandKeybindsUpdated={handleDefaultCommandKeybindsUpdated}
-                mainModKey={options.mainModKey}/>
-            
-            <CustomCommandKeybindsEditor
-                customCommandKeybinds={options.customCommandKeybinds} 
-                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}
-                mainModKey={options.mainModKey}
-                onMainModKeyUpdated={handleMainModKeyUpdated}/>
+            <StatusBarTab
+                emulator={emulator}
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>
 
-            <WindowBorderEditor
-                windowBorder={options.windowBorder} 
-                onWindowBorderUpdated={handleWindowBorderUpdated}/>
+            <KeybindsTab
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>
+            
+            <DefaultApplicationsTab
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>
 
             <UpdatePreviewButton 
                 onUpdateClicked={handleUpdatePreviewClicked}/>
@@ -116,10 +72,7 @@ export default function ReactApp({ emulator }: Props) {
                 onExportClicked={handleExportConfigFilesClicked}/>
 
             <LockMouseButton 
-                onLockClicked={handleLockMouseClicked}/>
-
-            <StatusBarEditor
-                statusBar={options.statusBar} onStatusBarUpdated={handleStatusBarUpdated}/> 
+                onLockClicked={handleLockMouseClicked}/> 
         </div>
     ); 
 }

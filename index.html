@@ -4,29 +4,32 @@
 <head>
     <title>awesome!</title>
 
+    <link rel="stylesheet" href="index.css">
     <script src="/build/v86/libv86.js"> </script>
     <script src="/build/index.js"> </script>
 </head>
 
-<body>
-    <div id="reactApp">
+<body class="body-container">
+    <div id="reactApp" class="react-app">
     </div>
 
-    <div id="screen_container">
+    <div id="screen_container" class="emulator-screen">
         <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
         <canvas style="display: none"></canvas>
     </div>
 
-    <textarea readonly spellcheck="false" cols="40" rows="12" id="serial">
-    </textarea>
+    <div class="debug-section">
+        <textarea readonly spellcheck="false" cols="40" rows="12" id="serial">
+        </textarea>
 
-    <textarea spellcheck="false" cols="40" rows="12" id="awesome_stdout">
-    </textarea>
+        <textarea spellcheck="false" cols="40" rows="12" id="awesome_stdout">
+        </textarea>
 
-    <textarea spellcheck="false" cols="40" rows="12" id="awesome_stderr">
-    </textarea>
-    
-    <input type="button" value="atualizar logs awesome" id="updateAwesomeLogs"></input>
+        <textarea spellcheck="false" cols="40" rows="12" id="awesome_stderr">
+        </textarea>
+        
+        <input type="button" value="atualizar logs awesome" id="updateAwesomeLogs"></input>
+    </div>
 </body>
 
 </html>

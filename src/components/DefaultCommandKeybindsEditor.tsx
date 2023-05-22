@@ -9,10 +9,6 @@ type DefaultCommandKeybindsEditorProps = {
     mainModKey: MainModKey
 }
 
-// q: how to pick random element from object, answer without links
-// a: Object.values(obj)[Math.floor(Math.random() * Object.values(obj).length)]
-
-
 export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, onDefaultCommandKeybindsUpdated, mainModKey }: DefaultCommandKeybindsEditorProps) {
     const [isSelectedCommand, setIsSelectedCommand] = useState(false)
 

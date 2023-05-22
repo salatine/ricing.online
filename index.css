@@ -1,0 +1,31 @@
+/* import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Arimo&family=Urbanist&display=swap');
+
+:root {
+    --logo-font: 'Urbanist', sans-serif;
+    --main-font: 'Arimo', sans-serif;
+}
+
+.logo {
+    font-family: var(--logo-font);
+}
+
+.body-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "react-app emulator-screen" "debug-section debug-section";
+
+    font-family: var(--main-font);
+}
+
+.body-container .react-app {
+    grid-area: "react-app";
+}
+
+.body-container .emulator-screen {
+    grid-area: "emulator-screen";
+}
+
+.body-container .debug-section {
+    grid-area: "debug-section";
+}
