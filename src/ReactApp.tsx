@@ -1,5 +1,5 @@
 import { AWESOME_CONFIG } from "./constants";
-import React, { useState } from 'react';
+import React, { ReactComponentElement, useState } from 'react';
 import { runCommand } from "./rpc";
 import { readBlobIntoUint8Array, readStringIntoUint8Array } from './utils'
 import TerminalEditor from "./components/TerminalEditor";
@@ -23,8 +23,36 @@ type Props = {
     emulator: any
 }
 
+type Tab
+    = 'appearance'
+    | 'status-bar'
+    | 'default-applications'
+    | 'keybinds'
+
 export default function ReactApp({ emulator }: Props) {
     const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS);
+    const [selectedTab, setSelectedTab] = useState<Tab>('appearance');
+
+    const tabComponents: Record<Tab, JSX.Element> = {
+        'appearance': 
+            <AppearanceTab
+                emulator={emulator}
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>,
+        'status-bar': 
+            <StatusBarTab
+                emulator={emulator}
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>,
+        'default-applications': 
+            <DefaultApplicationsTab
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>,
+        'keybinds': 
+            <KeybindsTab
+                options={options}
+                onOptionsUpdated={handleOptionsUpdated}/>,
+    }
 
     async function handleUpdatePreviewClicked() {
         const configFiles = getConfigFiles(options)
@@ -47,24 +75,16 @@ export default function ReactApp({ emulator }: Props) {
 
     return (
         <div>
-            <AppearanceTab
-                emulator={emulator}
-                options={options}
-                onOptionsUpdated={handleOptionsUpdated}/>
+            <nav>
+                <ul>
+                    <li><a onClick={(e) => setSelectedTab('appearance')}>Appearance</a></li>
+                    <li><a onClick={(e) => setSelectedTab('status-bar')}>Status Bar</a></li>
+                    <li><a onClick={(e) => setSelectedTab('default-applications')}>Default Applications</a></li>
+                    <li><a onClick={(e) => setSelectedTab('keybinds')}>Keybinds</a></li>
+                </ul>
+            </nav>
             
-            <StatusBarTab
-                emulator={emulator}
-                options={options}
-                onOptionsUpdated={handleOptionsUpdated}/>
-
-            <KeybindsTab
-                options={options}
-                onOptionsUpdated={handleOptionsUpdated}/>
-            
-            <DefaultApplicationsTab
-                options={options}
-                onOptionsUpdated={handleOptionsUpdated}/>
-
+            {tabComponents[selectedTab]}
             <UpdatePreviewButton 
                 onUpdateClicked={handleUpdatePreviewClicked}/>
 

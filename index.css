@@ -24,6 +24,7 @@
 
 .body-container .emulator-screen {
     grid-area: "emulator-screen";
+    overflow: hidden; /* FIXME ekrime */
 }
 
 .body-container .debug-section {
