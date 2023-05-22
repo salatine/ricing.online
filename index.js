@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import ReactApp from "./src/ReactApp";
 import { runCommand, startRPCServer } from "./src/rpc";
 import { getAvailableFonts } from "./src/fonts";
+import NullEmulator from "./src/NullEmulator";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -36,7 +37,9 @@ async function syncCaches(emulator) {
 }
 
 window.addEventListener("load", async () => {
-    const emulator = new V86Starter({
+    const emulatorClass = NullEmulator // NullEmulator or V86Starter
+
+    const emulator = new emulatorClass({
         wasm_path: "/build/v86/v86.wasm",
         memory_size: 512 * 1024 * 1024,
         vga_memory_size: 8 * 1024 * 1024,
