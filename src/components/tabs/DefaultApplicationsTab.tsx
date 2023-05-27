@@ -2,6 +2,7 @@ import React from "react";
 import { Options } from "../../config";
 import TerminalEditor from "../TerminalEditor";
 import { makePartialUpdater } from "../../utils";
+import Container from "react-bootstrap/Container";
 
 type Props = {
     options: Options
@@ -12,6 +13,8 @@ export default function DefaultApplicationsTab({ options, onOptionsUpdated }: Pr
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
 
     return (
-        <TerminalEditor terminal={options.terminal} onTerminalSelected={(terminal) => updateOptions({ terminal })} /> 
+        <Container>
+            <TerminalEditor terminal={options.terminal} onTerminalSelected={(terminal) => updateOptions({ terminal })} /> 
+        </Container>
     )
 }

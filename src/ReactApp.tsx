@@ -69,7 +69,7 @@ export default function ReactApp({ emulator }: Props) {
         </Nav.Item>)
     })
 
-    const navigationTabs = (<Nav activeKey={selectedTabId} onSelect={(newTabId) => setSelectedTabId(newTabId as TabId)}>
+    const navigationTabs = (<Nav fill variant='pills' activeKey={selectedTabId} onSelect={(newTabId) => setSelectedTabId(newTabId as TabId)}>
         {tabItems}
     </Nav>)
 

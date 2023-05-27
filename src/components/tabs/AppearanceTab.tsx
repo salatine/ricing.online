@@ -1,10 +1,15 @@
 import { AWESOME_CONFIG } from "../../constants";
 import React from 'react'
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import { Options } from '../../config'
 import { makePartialUpdater, readBlobIntoUint8Array, readStringIntoUint8Array } from '../../utils';
 import BackgroundEditor from "../BackgroundEditor";
 import FontEditor from "../FontEditor";
 import WindowBorderEditor from "../WindowBorderEditor";
+
+import './AppearanceTab.scss';
 
 type Props = {
     emulator: any
@@ -23,18 +28,28 @@ export default function AppearanceTab({ emulator, options, onOptionsUpdated }: P
     }
 
     return (
-        <>
-            <BackgroundEditor 
-                onBackgroundSelected={handleBackgroundSelected}/>
+        <Container>
+            <Row>
+                <Col>
+                    <BackgroundEditor 
+                        onBackgroundSelected={handleBackgroundSelected}/>
+                </Col>
 
-            <FontEditor 
-                emulator={emulator} 
-                font={options.font} 
-                onFontUpdated={(font) => updateOptions({ font })}/>
+                <Col>
+                    <FontEditor 
+                        emulator={emulator} 
+                        font={options.font} 
+                        onFontUpdated={(font) => updateOptions({ font })}/>
+                </Col>
+            </Row>
             
-            <WindowBorderEditor
-                windowBorder={options.windowBorder} 
-                onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
-        </>
+            <Row>
+                <Col>
+                    <WindowBorderEditor
+                        windowBorder={options.windowBorder} 
+                        onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
+                </Col>
+            </Row>
+        </Container>
     )
 }

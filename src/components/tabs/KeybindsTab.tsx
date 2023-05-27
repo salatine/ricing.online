@@ -1,8 +1,9 @@
-import React from 'react'
-import { CustomCommandKeybind, DefaultCommandKeybind, Options } from '../../config'
-import DefaultCommandKeybindsEditor from '../DefaultCommandKeybindsEditor'
-import { makePartialUpdater } from '../../utils'
-import CustomCommandKeybindsEditor from '../CustomCommandKeybindsEditor'
+import React from 'react';
+import { CustomCommandKeybind, DefaultCommandKeybind, Options } from '../../config';
+import DefaultCommandKeybindsEditor from '../DefaultCommandKeybindsEditor';
+import { makePartialUpdater } from '../../utils';
+import CustomCommandKeybindsEditor from '../CustomCommandKeybindsEditor';
+import Container from 'react-bootstrap/Container';
 
 type Props = {
     options: Options
@@ -14,7 +15,7 @@ export default function KeybindsTab({ options, onOptionsUpdated }: Props) {
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
 
     return (
-    <>
+    <Container>
         <DefaultCommandKeybindsEditor
             defaultCommandKeybinds={options.defaultCommandKeybinds}
             onDefaultCommandKeybindsUpdated={(defaultCommandKeybinds) => updateOptions({ defaultCommandKeybinds })}
@@ -24,7 +25,7 @@ export default function KeybindsTab({ options, onOptionsUpdated }: Props) {
             onCustomCommandKeybindsUpdated={(customCommandKeybinds) => updateOptions({ customCommandKeybinds })}
             mainModKey={options.mainModKey}
             onMainModKeyUpdated={(mainModKey) => updateOptions({ mainModKey })}/>
-    </>
+    </Container>
     )
 }
 

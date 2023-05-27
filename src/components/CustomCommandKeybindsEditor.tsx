@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { CustomCommandKeybind, ModKey, MainModKey } from '../config';
 import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
 import KeybindInput from './KeybindInput';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
@@ -47,7 +49,7 @@ export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onC
             </div>
             <div>
                 <h1>teste keybinds</h1>
-                <button onClick={handleNewKeybindClicked}>New keybind</button>
+                <Button onClick={handleNewKeybindClicked}>New keybind</Button>
                 {customCommandKeybindList}
             </div>
         </>
@@ -92,15 +94,15 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
                 keybind={inputKeybind} 
                 onKeybindUpdated={handleKeybindInputUpdated} 
                 mainModKey={mainModKey} />
-            <input 
+            <Form.Control 
                 type="text" 
                 value={keybind.command} 
                 onChange={handleCommandChange}>
-            </input>
-            <button 
+            </Form.Control>
+            <Button
                 onClick={onKeybindDeleted}>
                 X
-            </button>
+            </Button>
         </div>
     )
 }
@@ -118,9 +120,9 @@ function MainModKeyChooser({ mainModKey, onMainModKeyUpdated }: MainModKeyChoose
     })
 
     return (
-        <select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
+        <Form.Select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
             {mainModOptions}
-        </select>
+        </Form.Select>
     )
 }
 

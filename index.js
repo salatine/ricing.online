@@ -5,7 +5,7 @@ import { runCommand, startRPCServer } from "./src/rpc";
 import { getAvailableFonts } from "./src/fonts";
 import NullEmulator from "./src/NullEmulator";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './src/customBootstrap.scss';
 
 async function updateAwesomeLogs(emulator) {
     const stdoutTextarea = document.getElementById('awesome_stdout')

@@ -2,6 +2,13 @@ import React, { useState } from 'react'
 import { DefaultCommandKeybind, MainModKey, ModKey } from '../config'
 import { DEFAULT_COMMANDS } from '../constants'
 import KeybindInput from './KeybindInput'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
+import { Dropdown } from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 type DefaultCommandKeybindsEditorProps = {
     defaultCommandKeybinds: DefaultCommandKeybind[]
@@ -10,23 +17,22 @@ type DefaultCommandKeybindsEditorProps = {
 }
 
 export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, onDefaultCommandKeybindsUpdated, mainModKey }: DefaultCommandKeybindsEditorProps) {
-    const [isSelectedCommand, setIsSelectedCommand] = useState(false)
-
-    const addCommandButton = (
-        <button 
-            onClick={(e) => setIsSelectedCommand(true)}>
-            +
-        </button>
-    )
-    
     const commandOptions = Object.values(DEFAULT_COMMANDS).map(command => {
         return (
-            <option 
+            <Dropdown.Item
                 title={command.description} 
-                value={command.id}>{command.name}
-            </option>
+                eventKey={command.id}>{command.name}
+            </Dropdown.Item>
         )    
     })
+
+    const addCommandButton = (
+        <DropdownButton
+            title="+"
+            onSelect={(key, e) => handleCommandChange(key as keyof typeof DEFAULT_COMMANDS)}>
+            {commandOptions}
+        </DropdownButton>
+    )
 
     function handleCommandChange(id: keyof typeof DEFAULT_COMMANDS) {
         const newDefaultCommandKeybinds = [...defaultCommandKeybinds]
@@ -40,16 +46,6 @@ export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, o
 
         onDefaultCommandKeybindsUpdated(newDefaultCommandKeybinds)
     }
-
-    const commandChooser = (
-        <select 
-            onChange={(e) => {
-                handleCommandChange(e.target.value as keyof typeof DEFAULT_COMMANDS)
-                setIsSelectedCommand(false)
-                }}>
-            {commandOptions}
-        </select>
-    )
 
     const keybindsList = defaultCommandKeybinds.map((keybind, index) => {
         function handleKeybindUpdated(newKeybind: DefaultCommandKeybind) {
@@ -78,11 +74,11 @@ export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, o
     return (
         <>
             <div>
-                {isSelectedCommand ? commandChooser : addCommandButton}
+                {addCommandButton}
             </div>
-            <div>
+            <Form>
                 {keybindsList}
-            </div>
+            </Form>
         </>
     )
 }
@@ -120,16 +116,21 @@ function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelet
     }
 
     return (
-        <div>
-            <label>{keybind.command.name}</label>
-            <KeybindInput 
-                keybind={inputKeybind} 
-                onKeybindUpdated={handleKeybindInputUpdated} 
-                mainModKey={mainModKey} />
-            <button 
-                onClick={onKeybindDeleted}>
-                X
-            </button>
-        </div>
+        <Form.Group as={Row} className='g-1'>
+            <Form.Label column xs={4}>{keybind.command.name}</Form.Label>
+
+            <Col>
+                <InputGroup>
+                    <KeybindInput 
+                        keybind={inputKeybind} 
+                        onKeybindUpdated={handleKeybindInputUpdated} 
+                        mainModKey={mainModKey} />
+                    <Button
+                        onClick={onKeybindDeleted}>
+                        X
+                    </Button>
+                </InputGroup>
+            </Col>
+        </Form.Group>
     )
 }

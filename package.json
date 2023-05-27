@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@parcel/transformer-inline-string": "^2.8.3",
+    "@parcel/transformer-sass": "^2.8.3",
     "@types/file-saver": "^2.0.5",
     "@types/handlebars-helpers": "^0.5.3",
     "@types/react": "^18.2.0",

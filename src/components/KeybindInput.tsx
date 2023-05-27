@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ModKey, MainModKey, } from '../config'
 import { getModKeys } from '../constants'
+import Form from 'react-bootstrap/Form'
 
 export type Keybind = {
     modKeys: ModKey[],
@@ -68,7 +69,13 @@ export default function KeybindInput({ keybind, mainModKey, onKeybindUpdated }: 
         return key
     })
 
-    return (<input type="text" value={displayedKeys.join('+')} onFocus={handleKeysFocus} onKeyDown={handleKeysKeyDown} onBlur={handleKeysBlur} readOnly></input>)
+    return <Form.Control
+        type="text"
+        value={displayedKeys.join('+')}
+        onFocus={handleKeysFocus}
+        onKeyDown={handleKeysKeyDown}
+        onBlur={handleKeysBlur}
+        readOnly/>
 }
 
 function mapBrowserKeyToAwesomeKey(browserKey: string | ModKey): string | ModKey {

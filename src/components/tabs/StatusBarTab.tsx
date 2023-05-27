@@ -1,5 +1,6 @@
 import { AWESOME_CONFIG } from "../../constants";
 import React from 'react'
+import Container from 'react-bootstrap/Container'
 import { Options } from '../../config'
 import { makePartialUpdater, readBlobIntoUint8Array, readStringIntoUint8Array } from '../../utils';
 import StatusBarEditor from "../StatusBarEditor";
@@ -14,8 +15,10 @@ export default function StatusBarTab({ emulator, options, onOptionsUpdated }: Pr
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
 
     return (
-        <StatusBarEditor
-            statusBar={options.statusBar}
-            onStatusBarUpdated={(statusBar) => updateOptions({ statusBar })}/> 
+        <Container>
+            <StatusBarEditor
+                statusBar={options.statusBar}
+                onStatusBarUpdated={(statusBar) => updateOptions({ statusBar })}/> 
+        </Container>
     )
 }

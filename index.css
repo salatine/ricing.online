@@ -1,6 +1,3 @@
-/* import fonts */
-@import url('https://fonts.googleapis.com/css2?family=Arimo&family=Urbanist&display=swap');
-
 :root {
     --logo-font: 'Urbanist', sans-serif;
     --main-font: 'Arimo', sans-serif;
@@ -12,10 +9,8 @@
 
 .body-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 0; /* FIXME ekrime */
     grid-template-areas: "react-app emulator-screen" "debug-section debug-section";
-
-    font-family: var(--main-font);
 }
 
 .body-container .react-app {
