@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Arimo&family=Urbanist&display=swap');
 
-$logo-font: 'Urbanist';
-$main-font: 'Arimo';
+@import "./variables.scss";
 
 // These are the defaults, but you can override any values
 $font-family-sans-serif: $main-font, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;

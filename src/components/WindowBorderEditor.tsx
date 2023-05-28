@@ -17,7 +17,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
     const updateWindowBorder = makePartialUpdater(windowBorder, onWindowBorderUpdated)
 
     return (
-        <Stack>
+        <Stack gap={2}>
             <h2>Border</h2>
             <InputGroup>
                 <InputGroup.Text>Size</InputGroup.Text>
@@ -27,41 +27,37 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
                 </Form.Control>
             </InputGroup>
 
-            <h4>Colors</h4>
+            <Row className='justify-content-between'>
+                <Col sm={12} md={4} lg={3}>
+                    <InputGroup>
+                        <InputGroup.Text>Normal</InputGroup.Text>
+                        <Form.Control type="color"
+                            value={windowBorder.normalColor}
+                            onChange={(e) => updateWindowBorder({ normalColor: e.target.value })}>
+                        </Form.Control>
+                    </InputGroup>
+                </Col>
 
-            <Container>
-                <Row className='justify-content-around'>
-                    <Col sm={12} md={4} lg={3}>
-                        <InputGroup>
-                            <InputGroup.Text>Normal</InputGroup.Text>
-                            <Form.Control type="color"
-                                value={windowBorder.normalColor}
-                                onChange={(e) => updateWindowBorder({ normalColor: e.target.value })}>
-                            </Form.Control>
-                        </InputGroup>
-                    </Col>
+                <Col sm={12} md={4} lg={3}>
+                    <InputGroup>
+                        <InputGroup.Text>Focus</InputGroup.Text>
+                        <Form.Control type="color"
+                            value={windowBorder.focusColor}
+                            onChange={(e) => updateWindowBorder({ focusColor: e.target.value } )}>
+                        </Form.Control>
+                    </InputGroup>
+                </Col>
 
-                    <Col sm={12} md={4} lg={3}>
-                        <InputGroup>
-                            <InputGroup.Text>Focus</InputGroup.Text>
-                            <Form.Control type="color"
-                                value={windowBorder.focusColor}
-                                onChange={(e) => updateWindowBorder({ focusColor: e.target.value } )}>
-                            </Form.Control>
-                        </InputGroup>
-                    </Col>
-
-                    <Col sm={12} md={4} lg={3}>
-                        <InputGroup>
-                            <InputGroup.Text>Marked</InputGroup.Text>
-                            <Form.Control type="color"
-                                value={windowBorder.markedColor}
-                                onChange={(e) => updateWindowBorder({ markedColor: e.target.value })}>
-                            </Form.Control>
-                        </InputGroup>
-                    </Col>
-                </Row>
-            </Container>
+                <Col sm={12} md={4} lg={3}>
+                    <InputGroup>
+                        <InputGroup.Text>Marked</InputGroup.Text>
+                        <Form.Control type="color"
+                            value={windowBorder.markedColor}
+                            onChange={(e) => updateWindowBorder({ markedColor: e.target.value })}>
+                        </Form.Control>
+                    </InputGroup>
+                </Col>
+            </Row>
         </Stack>
     );
 }

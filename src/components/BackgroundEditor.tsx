@@ -16,7 +16,7 @@ export default function BackgroundEditor({ onBackgroundSelected }) {
     }
 
     return (
-        <Stack>
+        <Stack gap={2}>
             <h2>Background</h2>
 
             <Form.Control 

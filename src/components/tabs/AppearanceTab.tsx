@@ -8,6 +8,7 @@ import { makePartialUpdater, readBlobIntoUint8Array, readStringIntoUint8Array } 
 import BackgroundEditor from "../BackgroundEditor";
 import FontEditor from "../FontEditor";
 import WindowBorderEditor from "../WindowBorderEditor";
+import Stack from 'react-bootstrap/Stack';
 
 import './AppearanceTab.scss';
 
@@ -29,27 +30,29 @@ export default function AppearanceTab({ emulator, options, onOptionsUpdated }: P
 
     return (
         <Container>
-            <Row>
-                <Col>
-                    <BackgroundEditor 
-                        onBackgroundSelected={handleBackgroundSelected}/>
-                </Col>
+            <Stack gap={3}>
+                <Row>
+                    <Col>
+                        <BackgroundEditor 
+                            onBackgroundSelected={handleBackgroundSelected}/>
+                    </Col>
 
-                <Col>
-                    <FontEditor 
-                        emulator={emulator} 
-                        font={options.font} 
-                        onFontUpdated={(font) => updateOptions({ font })}/>
-                </Col>
-            </Row>
-            
-            <Row>
-                <Col>
-                    <WindowBorderEditor
-                        windowBorder={options.windowBorder} 
-                        onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
-                </Col>
-            </Row>
+                    <Col>
+                        <FontEditor 
+                            emulator={emulator} 
+                            font={options.font} 
+                            onFontUpdated={(font) => updateOptions({ font })}/>
+                    </Col>
+                </Row>
+                
+                <Row>
+                    <Col>
+                        <WindowBorderEditor
+                            windowBorder={options.windowBorder} 
+                            onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
+                    </Col>
+                </Row>
+            </Stack>
         </Container>
     )
 }

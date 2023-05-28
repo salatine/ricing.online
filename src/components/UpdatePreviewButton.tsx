@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 type Props = {
     onUpdateClicked: () => void
@@ -6,9 +7,9 @@ type Props = {
 
 export default function UpdatePreviewButton({ onUpdateClicked }: Props) {
     return (
-        <input type="button"
-            value="teste restart"
+        <Button
             onClick={(e) => onUpdateClicked()}>
-        </input>
+            Update preview
+        </Button>
     );
 }

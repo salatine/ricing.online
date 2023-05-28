@@ -4,6 +4,7 @@ import DefaultCommandKeybindsEditor from '../DefaultCommandKeybindsEditor';
 import { makePartialUpdater } from '../../utils';
 import CustomCommandKeybindsEditor from '../CustomCommandKeybindsEditor';
 import Container from 'react-bootstrap/Container';
+import Stack from 'react-bootstrap/Stack';
 
 type Props = {
     options: Options
@@ -16,15 +17,17 @@ export default function KeybindsTab({ options, onOptionsUpdated }: Props) {
 
     return (
     <Container>
-        <DefaultCommandKeybindsEditor
-            defaultCommandKeybinds={options.defaultCommandKeybinds}
-            onDefaultCommandKeybindsUpdated={(defaultCommandKeybinds) => updateOptions({ defaultCommandKeybinds })}
-            mainModKey={options.mainModKey}/>
-        <CustomCommandKeybindsEditor
-            customCommandKeybinds={options.customCommandKeybinds}
-            onCustomCommandKeybindsUpdated={(customCommandKeybinds) => updateOptions({ customCommandKeybinds })}
-            mainModKey={options.mainModKey}
-            onMainModKeyUpdated={(mainModKey) => updateOptions({ mainModKey })}/>
+        <Stack gap={4}>
+            <DefaultCommandKeybindsEditor
+                defaultCommandKeybinds={options.defaultCommandKeybinds}
+                onDefaultCommandKeybindsUpdated={(defaultCommandKeybinds) => updateOptions({ defaultCommandKeybinds })}
+                mainModKey={options.mainModKey}
+                onMainModKeyUpdated={(mainModKey) => updateOptions({ mainModKey })}/>
+            <CustomCommandKeybindsEditor
+                customCommandKeybinds={options.customCommandKeybinds}
+                onCustomCommandKeybindsUpdated={(customCommandKeybinds) => updateOptions({ customCommandKeybinds })}
+                mainModKey={options.mainModKey}/>
+        </Stack>
     </Container>
     )
 }

@@ -28,31 +28,30 @@ export default function FontEditor({ emulator, font, onFontUpdated }: Props) {
 
     const fontFamilyOptions = availableFontFamilies.map(fontFamily => <option value={fontFamily}>{fontFamily}</option>);
     return (
-        <Stack>
+        <Stack gap={2}>
             <h2>Font</h2>
 
-            <InputGroup>
-                <InputGroup.Text>Family</InputGroup.Text>
-                <Form.Select
-                    value={font.family}
-                    onChange={(e) => updateFont({ family: e.target.value })}>
-                    {fontFamilyOptions}
-                </Form.Select>
-            </InputGroup>
-            <Form.Group as={Row}>
-                <Col sm={10}>
-                    <InputGroup>
-                        <InputGroup.Text>Size</InputGroup.Text>
-                        <Form.Control
-                            min="6"
-                            max="72"
-                            type="number"
-                            value={font.size}
-                            onChange={(e) => updateFont({ size: parseInt(e.target.value) })}>
-                        </Form.Control>
-                    </InputGroup>
-                </Col>
-            </Form.Group>
+            <Stack direction='horizontal' gap={2}> 
+                <InputGroup>
+                    <InputGroup.Text>Family</InputGroup.Text>
+                    <Form.Select
+                        value={font.family}
+                        onChange={(e) => updateFont({ family: e.target.value })}>
+                        {fontFamilyOptions}
+                    </Form.Select>
+                </InputGroup>
+
+                <InputGroup>
+                    <InputGroup.Text>Size</InputGroup.Text>
+                    <Form.Control
+                        min="6"
+                        max="72"
+                        type="number"
+                        value={font.size}
+                        onChange={(e) => updateFont({ size: parseInt(e.target.value) })}>
+                    </Form.Control>
+                </InputGroup>
+            </Stack>
         </Stack>
     );
 }

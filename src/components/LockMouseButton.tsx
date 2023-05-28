@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 type Props = {
     onLockClicked: () => void
@@ -6,9 +7,9 @@ type Props = {
 
 export default function LockMouseButton({ onLockClicked }: Props) {
     return (
-        <input type="button"
-            value="lock mouse"
+        <Button 
             onClick={(e) => onLockClicked()}>
-        </input>
+            Lock mouse
+        </Button>
     );
 }

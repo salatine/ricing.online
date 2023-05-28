@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { DefaultCommandKeybind, MainModKey, ModKey } from '../config'
+import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
 import { DEFAULT_COMMANDS } from '../constants'
 import KeybindInput from './KeybindInput'
 import Button from 'react-bootstrap/Button'
@@ -9,14 +10,16 @@ import Col from 'react-bootstrap/Col'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { Dropdown } from 'react-bootstrap';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 type DefaultCommandKeybindsEditorProps = {
     defaultCommandKeybinds: DefaultCommandKeybind[]
     onDefaultCommandKeybindsUpdated: (newDefaultCommandKeybinds: DefaultCommandKeybind[]) => void
     mainModKey: MainModKey
+    onMainModKeyUpdated: (newMainModKey: MainModKey) => void
 }
 
-export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, onDefaultCommandKeybindsUpdated, mainModKey }: DefaultCommandKeybindsEditorProps) {
+export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, onDefaultCommandKeybindsUpdated, mainModKey, onMainModKeyUpdated }: DefaultCommandKeybindsEditorProps) {
     const commandOptions = Object.values(DEFAULT_COMMANDS).map(command => {
         return (
             <Dropdown.Item
@@ -73,9 +76,19 @@ export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, o
 
     return (
         <>
-            <div>
-                {addCommandButton}
-            </div>
+            <Row className="align-items-center">
+                <Col xs='auto'>
+                    <h2>Default commands</h2>
+                </Col>
+
+                <Col xs='auto' className='ms-auto'>
+                    <MainModKeyChooser mainModKey={mainModKey} onMainModKeyUpdated={onMainModKeyUpdated}></MainModKeyChooser>
+                </Col>
+
+                <Col xs='auto'>
+                    {addCommandButton}
+                </Col>
+            </Row>
             <Form>
                 {keybindsList}
             </Form>
@@ -90,7 +103,7 @@ type DefaultCommandKeybindEditorProps = {
     mainModKey: MainModKey
 }
 
-function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted, mainModKey }: DefaultCommandKeybindEditorProps) {
+function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted, mainModKey}: DefaultCommandKeybindEditorProps) {
     function handleCommandChange(e) {
         const newKeybind = {
             ...keybind,
@@ -116,10 +129,10 @@ function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelet
     }
 
     return (
-        <Form.Group as={Row} className='g-1'>
+        <Form.Group as={Row} className='mt-2'>
             <Form.Label column xs={4}>{keybind.command.name}</Form.Label>
 
-            <Col>
+            <Col xs='auto' className='flex-grow-1'>
                 <InputGroup>
                     <KeybindInput 
                         keybind={inputKeybind} 
@@ -134,3 +147,25 @@ function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelet
         </Form.Group>
     )
 }
+
+type MainModKeyChooserProps = {
+    mainModKey: MainModKey
+    onMainModKeyUpdated: (mainModKey: MainModKey) => void
+}
+
+function MainModKeyChooser({ mainModKey, onMainModKeyUpdated }: MainModKeyChooserProps) {
+    const mainModOptions = MAIN_MOD_OPTIONS.map((modKey) => {
+        return (
+            <option value={modKey}>{modKey}</option>
+        )
+    })
+
+    return (
+        <FloatingLabel label="Mod key">
+            <Form.Select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
+                {mainModOptions}
+            </Form.Select>
+        </FloatingLabel>
+    )
+}
+

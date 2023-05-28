@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 type Props = {
     onExportClicked: () => void
@@ -6,9 +7,9 @@ type Props = {
 
 export default function ExportConfigFilesButton({ onExportClicked }: Props) {
     return (
-        <input type="button"
-            value="export config files"
+        <Button
             onClick={(e) => onExportClicked()}>
-        </input>
+            Export configuration
+        </Button>
     );
 }

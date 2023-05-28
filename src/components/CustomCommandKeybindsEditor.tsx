@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { CustomCommandKeybind, ModKey, MainModKey } from '../config';
-import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
 import KeybindInput from './KeybindInput';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
     onCustomCommandKeybindsUpdated: (customCommandKeybinds: CustomCommandKeybind[]) => void
     mainModKey: MainModKey
-    onMainModKeyUpdated: (mainModKey: MainModKey) => void
 }
 
-export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated, mainModKey, onMainModKeyUpdated }: Props) {
+export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated, mainModKey}: Props) {
     const customCommandKeybindList = customCommandKeybinds.map((keybind, index) => {
         function handleKeybindEdited(newKeybind: CustomCommandKeybind) {
             const newCustomKeybinds = [...customCommandKeybinds];
@@ -43,16 +44,18 @@ export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onC
     }
 
     return (
-        <>
-            <div>
-                <MainModKeyChooser mainModKey={mainModKey} onMainModKeyUpdated={onMainModKeyUpdated} />
-            </div>
-            <div>
-                <h1>teste keybinds</h1>
-                <Button onClick={handleNewKeybindClicked}>New keybind</Button>
-                {customCommandKeybindList}
-            </div>
-        </>
+        <div>
+            <Row>
+                <Col xs='auto'>
+                    <h2>Custom commands</h2>
+                </Col>
+                <Col xs='auto' className='ms-auto'>
+                    <Button onClick={handleNewKeybindClicked}>+</Button>
+                </Col>
+            </Row>
+
+            {customCommandKeybindList}
+        </div>
     )
 }
 
@@ -89,40 +92,27 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
     }
 
     return (
-        <div>
-            <KeybindInput 
-                keybind={inputKeybind} 
-                onKeybindUpdated={handleKeybindInputUpdated} 
-                mainModKey={mainModKey} />
-            <Form.Control 
-                type="text" 
-                value={keybind.command} 
-                onChange={handleCommandChange}>
-            </Form.Control>
-            <Button
-                onClick={onKeybindDeleted}>
-                X
-            </Button>
-        </div>
+        <Row>
+            <Col xs={8}>
+                <Form.Control 
+                    type="text" 
+                    value={keybind.command} 
+                    onChange={handleCommandChange}>
+                </Form.Control>
+            </Col>
+
+            <Col xs='auto' className='flex-grow-1'>
+                <InputGroup>
+                    <KeybindInput 
+                        keybind={inputKeybind} 
+                        onKeybindUpdated={handleKeybindInputUpdated} 
+                        mainModKey={mainModKey} />
+                    <Button
+                        onClick={onKeybindDeleted}>
+                        X
+                    </Button>
+                </InputGroup>
+            </Col>
+        </Row>
     )
 }
-
-type MainModKeyChooserProps = {
-    mainModKey: MainModKey
-    onMainModKeyUpdated: (mainModKey: MainModKey) => void
-}
-
-function MainModKeyChooser({ mainModKey, onMainModKeyUpdated }: MainModKeyChooserProps) {
-    const mainModOptions = MAIN_MOD_OPTIONS.map((modKey) => {
-        return (
-            <option value={modKey}>{modKey}</option>
-        )
-    })
-
-    return (
-        <Form.Select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
-            {mainModOptions}
-        </Form.Select>
-    )
-}
-
