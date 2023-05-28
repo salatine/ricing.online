@@ -13,6 +13,8 @@ import { Col } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import { Dropdown } from 'react-bootstrap';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     statusBar: StatusBar
@@ -142,7 +144,7 @@ type EditorProps = {
 function Editor({ statusBar, updateStatusBar }: EditorProps) {
     return (
         <Stack className='justify-content-between'>
-                <Row>
+                <Row className='align-items-center'>
                     <InputGroup>
                         <Form.Label column="lg" sm={11}>Position</Form.Label>
                         <Col>
@@ -150,16 +152,16 @@ function Editor({ statusBar, updateStatusBar }: EditorProps) {
                                 size="sm"
                                 value={statusBar.position}
                                 onChange={(e) => updateStatusBar({position: e.target.value as StatusBarPosition})}>
-                                <option value="top">top</option>
-                                <option value="bottom">bottom</option>
-                                <option value="left">left</option>
-                                <option value="right">right</option>
+                                <option value="top">Top</option>
+                                <option value="bottom">Bottom</option>
+                                <option value="left">Left</option>
+                                <option value="right">Right</option>
                             </Form.Select>
                         </Col>
                     </InputGroup>
                 </Row>
 
-                <Row>
+                <Row className='align-items-center'>
                     <InputGroup>
                         <Form.Label column="lg" sm={11}>Height</Form.Label>
                         <Col>
@@ -175,7 +177,7 @@ function Editor({ statusBar, updateStatusBar }: EditorProps) {
                     </InputGroup>
                 </Row>
 
-                <Row>
+                <Row className='align-items-center'>
                     <InputGroup>
                         <Form.Label column="lg" sm={11}>Width</Form.Label>
                         <Col>
@@ -191,7 +193,7 @@ function Editor({ statusBar, updateStatusBar }: EditorProps) {
                     </InputGroup>
                 </Row>
 
-                <Row>
+                <Row className='align-items-center'>
                     <InputGroup>
                         <Form.Label column="lg" sm={11}>Color</Form.Label>
                         <Col>

@@ -4,6 +4,8 @@ import { IdentifiableStatusBarWidget, StatusBarWidgetGroups } from '../config'
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Stack from 'react-bootstrap/Stack'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     widgetGroups: StatusBarWidgetGroups
@@ -42,7 +44,9 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
                                 variant={buttonVariant}>
                                 {widget.type}
                             </Button>
-                            <Button onClick={(e) => onWidgetDeleted(widget)} variant={buttonVariant}>X</Button>
+                            <Button onClick={(e) => onWidgetDeleted(widget)} variant={buttonVariant}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </Button>
                         </ButtonGroup>
                     </div>
                 )}

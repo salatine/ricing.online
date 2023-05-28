@@ -6,6 +6,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import InputGroup from 'react-bootstrap/InputGroup'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
@@ -90,6 +92,13 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
 
         onKeybindUpdated(newKeybind);
     }
+    const KeybindInputComponents = KeybindInput(
+        {
+            keybind: inputKeybind, 
+            onKeybindUpdated: handleKeybindInputUpdated, 
+            mainModKey: mainModKey
+        }
+    );
 
     return (
         <Row>
@@ -103,14 +112,15 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
 
             <Col xs='auto' className='flex-grow-1'>
                 <InputGroup>
-                    <KeybindInput 
-                        keybind={inputKeybind} 
-                        onKeybindUpdated={handleKeybindInputUpdated} 
-                        mainModKey={mainModKey} />
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faKeyboard} />
+                    </InputGroup.Text>
+                    {KeybindInputComponents.input}
                     <Button
                         onClick={onKeybindDeleted}>
-                        X
+                        <FontAwesomeIcon icon={faTrash} />
                     </Button>
+                    {KeybindInputComponents.feedback}
                 </InputGroup>
             </Col>
         </Row>

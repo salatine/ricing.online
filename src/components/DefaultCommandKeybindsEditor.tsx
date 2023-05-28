@@ -11,6 +11,8 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import { Dropdown } from 'react-bootstrap';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type DefaultCommandKeybindsEditorProps = {
     defaultCommandKeybinds: DefaultCommandKeybind[]
@@ -128,20 +130,27 @@ function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelet
         onKeybindUpdated(newKeybind);
     }
 
+    const { input, feedback } = KeybindInput({
+        keybind: inputKeybind,
+        onKeybindUpdated: handleKeybindInputUpdated,
+        mainModKey,
+    })
+
     return (
         <Form.Group as={Row} className='mt-2'>
             <Form.Label column xs={4}>{keybind.command.name}</Form.Label>
 
             <Col xs='auto' className='flex-grow-1'>
-                <InputGroup>
-                    <KeybindInput 
-                        keybind={inputKeybind} 
-                        onKeybindUpdated={handleKeybindInputUpdated} 
-                        mainModKey={mainModKey} />
+                <InputGroup hasValidation>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faKeyboard} />
+                    </InputGroup.Text>
+                    {input}
                     <Button
                         onClick={onKeybindDeleted}>
-                        X
+                        <FontAwesomeIcon icon={faTrash} />
                     </Button>
+                    {feedback}
                 </InputGroup>
             </Col>
         </Form.Group>

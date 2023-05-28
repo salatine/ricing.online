@@ -14,7 +14,7 @@ export default function TerminalEditor({ terminal, onTerminalSelected }: Props) 
     return (
         <>
             <Row>
-                <InputGroup>
+                <InputGroup className="align-items-center">
                     <Form.Label column="lg" lg={11} >Terminal</Form.Label>
                     <Col>
                     <Form.Select

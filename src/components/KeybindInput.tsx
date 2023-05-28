@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ModKey, MainModKey, } from '../config'
 import { getModKeys } from '../constants'
 import Form from 'react-bootstrap/Form'
+import assertNever from 'assert-never'
 
 export type Keybind = {
     modKeys: ModKey[],
@@ -14,9 +15,23 @@ type Props = {
     onKeybindUpdated: (newKeybind: Keybind) => void
 }
 
-export default function KeybindInput({ keybind, mainModKey, onKeybindUpdated }: Props) {
+type ReturnedComponents = {
+    input: JSX.Element
+    feedback: JSX.Element
+}
+
+enum InvalidKeybindReason {
+    EMPTY,
+    NOT_EXACTLY_ONE_NON_NORMAL_KEY,
+}
+
+export default function KeybindInput({ keybind, mainModKey, onKeybindUpdated }: Props): ReturnedComponents {
     const [isEditing, setIsEditing] = useState(false);
     const [editingKeys, setEditingKeys] = useState<(string | ModKey)[]>([]);
+
+    const editingModKeys = editingKeys.filter((key) => isModKey(key)) as ModKey[];
+    const editingNormalKeys = editingKeys.filter((key) => !isModKey(key))
+            .map((key) => key.toLowerCase());
 
     function handleKeysFocus() {
         setIsEditing(true);
@@ -34,25 +49,56 @@ export default function KeybindInput({ keybind, mainModKey, onKeybindUpdated }: 
         setEditingKeys(newEditingKeys);
     }
 
-    function handleKeysBlur() {
-        const modKeys = editingKeys.filter((key) => isModKey(key)) as ModKey[];
-        const normalKeys = editingKeys.filter((key) => !isModKey(key))
-            .map((key) => key.toLowerCase());
+    function getInvalidKeybindReason(): InvalidKeybindReason | null {
+        if (!isEditing) {
+            return null;
+        }
 
-        if (normalKeys.length != 1) {
-            // FIXME crime
-            alert('Exactly one non-modifier key is needed');
-        } else {
-            const normalKey = normalKeys[0];
+        if (editingKeys.length === 0) {
+            return InvalidKeybindReason.EMPTY;
+        }
+
+        if (editingNormalKeys.length !== 1) {
+            return InvalidKeybindReason.NOT_EXACTLY_ONE_NON_NORMAL_KEY;
+        }
+
+        return null;
+    }
+
+    function isKeybindInvalid() {
+        return getInvalidKeybindReason() !== null;
+    }
+
+    function formatInvalidKeybindReason(): JSX.Element {
+        const reason = getInvalidKeybindReason()
+        if (reason === null) {
+            return <></>
+        }
+
+        switch (reason) {
+        case InvalidKeybindReason.EMPTY:
+            return <>Keybind cannot be empty.</>;
+
+        case InvalidKeybindReason.NOT_EXACTLY_ONE_NON_NORMAL_KEY:
+            return <>There must be <b>exactly</b> one non-modifier key.</>;
+        
+        default:
+            return assertNever(reason);
+        }
+    }
+
+    function handleKeysBlur() {
+        if (!isKeybindInvalid()) {
+            const normalKey = editingNormalKeys[0];
             const newKeybind = {
                 ...keybind,
-                modKeys,
+                modKeys: editingModKeys,
                 normalKey,
             }
 
             onKeybindUpdated(newKeybind);
         }
-
+        
         setIsEditing(false);
         setEditingKeys([]);
     } 
@@ -69,13 +115,19 @@ export default function KeybindInput({ keybind, mainModKey, onKeybindUpdated }: 
         return key
     })
 
-    return <Form.Control
-        type="text"
-        value={displayedKeys.join('+')}
-        onFocus={handleKeysFocus}
-        onKeyDown={handleKeysKeyDown}
-        onBlur={handleKeysBlur}
-        readOnly/>
+    return {
+        input: <Form.Control
+                type="text"
+                value={displayedKeys.join('+')}
+                onFocus={handleKeysFocus}
+                onKeyDown={handleKeysKeyDown}
+                onBlur={handleKeysBlur}
+                readOnly
+                isInvalid={isKeybindInvalid()}/>,
+        feedback: <Form.Control.Feedback type="invalid">
+            {formatInvalidKeybindReason()}
+        </Form.Control.Feedback>
+    }
 }
 
 function mapBrowserKeyToAwesomeKey(browserKey: string | ModKey): string | ModKey {
