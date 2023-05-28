@@ -2,10 +2,5 @@
 
 @import "./variables.scss";
 
-// These are the defaults, but you can override any values
-$font-family-sans-serif: $main-font, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
-$font-family-serif: $logo-font, Georgia, "Times New Roman", Times, serif !default;
-$font-family-monospace: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
-$font-family-base: $font-family-sans-serif !default;
-
+// Reimport Bootstrap, with our overriden defaults.
 @import "~bootstrap/scss/bootstrap";

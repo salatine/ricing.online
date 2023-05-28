@@ -14,7 +14,7 @@ import Row from 'react-bootstrap/Row';
 import { Dropdown } from 'react-bootstrap';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
+import { faKeyboard, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     statusBar: StatusBar
@@ -119,9 +119,11 @@ function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
         return group.map((widget: StatusBarWidget) => widget.type)
     }).flat()
 
+    const plusIcon = <FontAwesomeIcon icon={faPlus} />
+
     const addWidgetButton = (
         <DropdownButton 
-            title="+"
+            title={plusIcon}
             onSelect={(key, e) => onWidgetAdded(key as keyof StatusBarWidget)}>
                 {widgetTypes.map((widgetType) => 
                 <Dropdown.Item

@@ -1,5 +1,17 @@
 @import "../variables.scss";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
 
 .logoTitle {
     font-family: $logo-font;
+}
+
+.header {
+    background-color: $header-color;
+}
+
+@include color-mode(light) {
+    .header {
+        background-color: $header-color-light;
+    }
 }

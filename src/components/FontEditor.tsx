@@ -7,6 +7,8 @@ import Stack from 'react-bootstrap/Stack';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { InputGroup } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFont, faTextHeight } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     emulator: any
@@ -33,7 +35,10 @@ export default function FontEditor({ emulator, font, onFontUpdated }: Props) {
 
             <Stack direction='horizontal' gap={2}> 
                 <InputGroup>
-                    <InputGroup.Text>Family</InputGroup.Text>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faFont}/>
+                    </InputGroup.Text>
+
                     <Form.Select
                         value={font.family}
                         onChange={(e) => updateFont({ family: e.target.value })}>
@@ -42,7 +47,10 @@ export default function FontEditor({ emulator, font, onFontUpdated }: Props) {
                 </InputGroup>
 
                 <InputGroup>
-                    <InputGroup.Text>Size</InputGroup.Text>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faTextHeight}/>
+                    </InputGroup.Text>
+
                     <Form.Control
                         min="6"
                         max="72"

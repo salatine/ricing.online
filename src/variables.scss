@@ -1,2 +1,17 @@
+@import "~bootstrap/scss/functions";
+
 $logo-font: 'Urbanist';
 $main-font: 'Arimo';
+
+// Some Bootstrap overrides
+$font-family-sans-serif: $main-font, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$font-family-serif: $logo-font, Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$font-family-base: $font-family-sans-serif !default;
+
+$header-color: shade-color(#212529, 15%);
+$header-color-light: shade-color(#fff, 15%);
+$pink:    #d63384 !default;
+$primary: $pink;
+
+$color-mode-type: data;

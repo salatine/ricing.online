@@ -12,7 +12,7 @@ import { Dropdown } from 'react-bootstrap';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type DefaultCommandKeybindsEditorProps = {
     defaultCommandKeybinds: DefaultCommandKeybind[]
@@ -33,8 +33,8 @@ export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, o
 
     const addCommandButton = (
         <DropdownButton
-            title="+"
-            onSelect={(key, e) => handleCommandChange(key as keyof typeof DEFAULT_COMMANDS)}>
+            onSelect={(key, e) => handleCommandChange(key as keyof typeof DEFAULT_COMMANDS)}
+            title={<FontAwesomeIcon icon={faPlus}/>}>
             {commandOptions}
         </DropdownButton>
     )

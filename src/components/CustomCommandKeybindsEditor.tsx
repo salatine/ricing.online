@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import InputGroup from 'react-bootstrap/InputGroup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
@@ -52,7 +52,9 @@ export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onC
                     <h2>Custom commands</h2>
                 </Col>
                 <Col xs='auto' className='ms-auto'>
-                    <Button onClick={handleNewKeybindClicked}>+</Button>
+                    <Button onClick={handleNewKeybindClicked}>
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </Button>
                 </Col>
             </Row>
 
