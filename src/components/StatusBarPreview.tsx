@@ -7,7 +7,6 @@ import Stack from 'react-bootstrap/Stack'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import * as styles from './StatusBarPreview.module.scss';
-import './StatusBarPreview.scss';
 
 type Props = {
     widgetGroups: StatusBarWidgetGroups
