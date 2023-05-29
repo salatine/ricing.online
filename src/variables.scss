@@ -9,9 +9,14 @@ $font-family-serif: $logo-font, Georgia, "Times New Roman", Times, serif !defaul
 $font-family-monospace: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base: $font-family-sans-serif !default;
 
-$header-color: shade-color(#212529, 15%);
-$header-color-light: shade-color(#fff, 15%);
 $pink:    #d63384 !default;
 $primary: $pink;
+
+$header-color: shade-color(#212529, 15%);
+$header-color-light: shade-color(#fff, 15%);
+
+$left-widget-group-color: $pink;
+$middle-widget-group-color: #6f42c1;
+$right-widget-group-color: #0d6efd;
 
 $color-mode-type: data;

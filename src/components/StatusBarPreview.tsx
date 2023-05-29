@@ -6,6 +6,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Stack from 'react-bootstrap/Stack'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import * as styles from './StatusBarPreview.module.scss';
 
 type Props = {
     widgetGroups: StatusBarWidgetGroups
@@ -38,10 +39,14 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        style={{ display: 'flex', ...provided.draggableProps.style }}>
-                        <ButtonGroup>
-                            <Button as="a" onClick={(e) => clickCallback(widget)}
-                                variant={buttonVariant}>
+                        style={{ ...provided.draggableProps.style }}
+                        className={'d-flex'}>
+                        <ButtonGroup className={'mx-2'}>
+                            <Button 
+                                as="a" 
+                                onClick={(e) => clickCallback(widget)}
+                                variant={buttonVariant}
+                                className={`${styles[groupName+"WidgetButton"]}`}>
                                 {widget.type}
                             </Button>
                             <Button onClick={(e) => onWidgetDeleted(widget)} variant={buttonVariant}>
@@ -53,17 +58,12 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
             </Draggable>)
         })
 
-        const droppableBackgroundColor = {
-            'left': 'pink',
-            'middle': 'purple',
-            'right': 'blue',
-        }
-
         return (
             <Droppable droppableId={groupName} key={groupName} direction='horizontal'>
                 {(provided, snapshot) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}
-                        style={{ display: 'flex', backgroundColor: droppableBackgroundColor[groupName], padding: '1rem' }}>
+                    <div 
+                        ref={provided.innerRef} {...provided.droppableProps}
+                        className={`d-flex p-2 ${styles[groupName+'Widgets']} ${styles.widgetGroup}`}>
                         {draggables}
                         {provided.placeholder}
                     </div>

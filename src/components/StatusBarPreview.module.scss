@@ -1,0 +1,27 @@
+@import "../variables.scss";
+
+.leftWidgets {
+    background-color: $left-widget-group-color;
+}
+
+.leftWidgetButton {
+    background-color: shade-color($left-widget-group-color, 25%) !important;
+}
+
+.middleWidgets {
+    background-color: $middle-widget-group-color;
+}
+
+.middleWidgetButton {
+    background-color: shade-color($middle-widget-group-color, 25%) !important;
+}
+
+.rightWidgets {
+    background-color: $right-widget-group-color;
+}
+
+.rightWidgetButton {
+    background-color: shade-color($right-widget-group-color, 25%) !important;
+}
+
+@import "../variables.scss";
