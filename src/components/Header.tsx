@@ -9,7 +9,7 @@ import Stack from 'react-bootstrap/Stack'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './Header.module.scss';
+import * as styles from './Header.module.scss';
 
 type Props = {
     handleUpdatePreviewClicked: () => void
@@ -19,7 +19,7 @@ type Props = {
 
 export default function Header({handleUpdatePreviewClicked, handleExportConfigFilesClicked, handleLockMouseClicked}: Props) {
     return (
-        <Row className={`mt-4 align-items-center ${styles.header}`}>
+        <Row className={`p-3 mb-4 align-items-center ${styles.header}`}>
             <Col xs='auto'>
                 <h1 className={styles.logoTitle}>ricing.online</h1>
             </Col>

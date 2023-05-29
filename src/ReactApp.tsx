@@ -96,15 +96,17 @@ export default function ReactApp({ emulator }: Props) {
     }
 
     return (
-        <Container>
-            <Stack gap={4}>
-                <Header
-                    handleUpdatePreviewClicked={handleUpdatePreviewClicked} 
-                    handleExportConfigFilesClicked={handleExportConfigFilesClicked}
-                    handleLockMouseClicked={handleLockMouseClicked}/>
-                {navigationTabs}
-                {tabs[selectedTabId].component}
-            </Stack>
-        </Container>
+        <>
+            <Header
+                handleUpdatePreviewClicked={handleUpdatePreviewClicked} 
+                handleExportConfigFilesClicked={handleExportConfigFilesClicked}
+                handleLockMouseClicked={handleLockMouseClicked}/>
+            <Container>
+                <Stack gap={4}>
+                    {navigationTabs}
+                    {tabs[selectedTabId].component}
+                </Stack>
+            </Container>
+        </>
     ); 
 }
