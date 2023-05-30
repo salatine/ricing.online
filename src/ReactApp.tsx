@@ -67,7 +67,7 @@ export default function ReactApp({ emulator }: Props) {
     }
 
     const tabItems = Object.entries(tabs).map(([tabId, tab]) => {
-        return (<Nav.Item>
+        return (<Nav.Item key={tabId}>
             <Nav.Link eventKey={tabId}>{tab.name}</Nav.Link>
         </Nav.Item>)
     })
