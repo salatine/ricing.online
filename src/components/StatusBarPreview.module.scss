@@ -18,6 +18,8 @@ $left-widget-button-color: shade-color($left-widget-group-color, 25%);
 $middle-widget-button-color: shade-color($middle-widget-group-color, 25%);
 $right-widget-button-color: shade-color($right-widget-group-color, 25%);
 
+$widget-button-border-color: rgba(0, 0, 0, 0.4);
+
 $widget-button-colors: (
     "left": $left-widget-button-color,
     "middle": $middle-widget-button-color,
@@ -34,11 +36,11 @@ $widget-button-colors: (
     .#{$group}Widgets :global(.btn.btn-#{$group}Widget) {
         @include button-variant(
             $color,
-            $color,
+            $widget-button-border-color,
             $hover-background: shade-color($color, $btn-hover-bg-shade-amount),
-            $hover-border: shade-color($color, $btn-hover-border-shade-amount),
+            $hover-border: $widget-button-border-color,
             $active-background: shade-color($color, $btn-active-bg-shade-amount),
-            $active-border: shade-color($color, $btn-active-border-shade-amount)
+            $active-border: $widget-button-border-color
         );
     }
 }
