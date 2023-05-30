@@ -33,6 +33,9 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
                 ? onWidgetUnselected
                 : onWidgetSelected
             
+            const borderStyle = {
+                'borderColor': 'rgba(0, 0, 0, 0.4)'
+            }
             return (<Draggable draggableId={'widget-' + groupName + index} index={index} key={index}>
                 {(provided, snapshot) => (
                     <div
@@ -45,10 +48,11 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
                             <Button 
                                 as="a" 
                                 onClick={(e) => clickCallback(widget)}
-                                variant={`${groupName}Widget`}>
+                                variant={`${groupName}Widget`}
+                                style={ borderStyle }>
                                 {widget.type}
                             </Button>
-                            <Button onClick={(e) => onWidgetDeleted(widget)} variant={buttonVariant}>
+                            <Button onClick={(e) => onWidgetDeleted(widget)} variant={`${groupName}Widget`} style={ borderStyle }>
                                 <FontAwesomeIcon icon={faTrash} />
                             </Button>
                         </ButtonGroup>

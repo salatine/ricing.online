@@ -93,17 +93,20 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
 
     return (
         <>
+            <h2>Properties</h2>
             <Editor statusBar={statusBar} updateStatusBar={updateStatusBar}/>
-
-            <StatusBarPreview
-                widgetGroups={statusBar.widgetGroups}
-                selectedWidget={selectedWidget}
-                onWidgetSelected={onWidgetSelected}
-                onWidgetUnselected={onWidgetUnselected}
-                onWidgetGroupsUpdated={onWidgetGroupsUpdated}
-                onWidgetDeleted={onWidgetDeleted}/>
-            <WidgetAdder onWidgetAdded={onWidgetAdded} />
-
+            
+            <h2 className='mt-4'>Widgets</h2>
+            <div className='mt-3 d-flex flex-grow-1 align-items-center justify-content-between'>
+                <StatusBarPreview
+                    widgetGroups={statusBar.widgetGroups}
+                    selectedWidget={selectedWidget}
+                    onWidgetSelected={onWidgetSelected}
+                    onWidgetUnselected={onWidgetUnselected}
+                    onWidgetGroupsUpdated={onWidgetGroupsUpdated}
+                    onWidgetDeleted={onWidgetDeleted}/>
+                <WidgetAdder onWidgetAdded={onWidgetAdded} />
+            </div>
             {selectedWidgetEditor}
         </>
     )
