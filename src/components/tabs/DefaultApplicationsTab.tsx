@@ -3,6 +3,7 @@ import { Options } from "../../config";
 import TerminalEditor from "../TerminalEditor";
 import { makePartialUpdater } from "../../utils";
 import Container from "react-bootstrap/Container";
+import Fade from "react-bootstrap/Fade";
 
 type Props = {
     options: Options
@@ -13,8 +14,10 @@ export default function DefaultApplicationsTab({ options, onOptionsUpdated }: Pr
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
 
     return (
-        <Container>
-            <TerminalEditor terminal={options.terminal} onTerminalSelected={(terminal) => updateOptions({ terminal })} /> 
-        </Container>
+        <Fade in={true} appear={true}>
+            <Container>
+                <TerminalEditor terminal={options.terminal} onTerminalSelected={(terminal) => updateOptions({ terminal })} /> 
+            </Container>
+        </Fade>
     )
 }

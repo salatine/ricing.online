@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container'
 import { Options } from '../../config'
 import { makePartialUpdater, readBlobIntoUint8Array, readStringIntoUint8Array } from '../../utils';
 import StatusBarEditor from "../StatusBarEditor";
+import Fade from 'react-bootstrap/Fade';
 
 type Props = {
     emulator: any
@@ -15,10 +16,12 @@ export default function StatusBarTab({ emulator, options, onOptionsUpdated }: Pr
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
 
     return (
-        <Container>
-            <StatusBarEditor
-                statusBar={options.statusBar}
-                onStatusBarUpdated={(statusBar) => updateOptions({ statusBar })}/> 
-        </Container>
+        <Fade in={true} appear={true}>
+            <Container>
+                <StatusBarEditor
+                    statusBar={options.statusBar}
+                    onStatusBarUpdated={(statusBar) => updateOptions({ statusBar })}/> 
+            </Container>
+        </Fade>
     )
 }

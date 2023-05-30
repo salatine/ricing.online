@@ -9,7 +9,7 @@ import BackgroundEditor from "../BackgroundEditor";
 import FontEditor from "../FontEditor";
 import WindowBorderEditor from "../WindowBorderEditor";
 import Stack from 'react-bootstrap/Stack';
-
+import Fade from 'react-bootstrap/Fade';
 import './AppearanceTab.scss';
 
 type Props = {
@@ -29,30 +29,32 @@ export default function AppearanceTab({ emulator, options, onOptionsUpdated }: P
     }
 
     return (
-        <Container>
-            <Stack gap={3}>
-                <Row>
-                    <Col>
-                        <BackgroundEditor 
-                            onBackgroundSelected={handleBackgroundSelected}/>
-                    </Col>
+        <Fade in={true} appear={true}>
+            <Container>
+                <Stack gap={3}>
+                    <Row>
+                        <Col>
+                            <BackgroundEditor 
+                                onBackgroundSelected={handleBackgroundSelected}/>
+                        </Col>
 
-                    <Col>
-                        <FontEditor 
-                            emulator={emulator} 
-                            font={options.font} 
-                            onFontUpdated={(font) => updateOptions({ font })}/>
-                    </Col>
-                </Row>
-                
-                <Row>
-                    <Col>
-                        <WindowBorderEditor
-                            windowBorder={options.windowBorder} 
-                            onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
-                    </Col>
-                </Row>
-            </Stack>
-        </Container>
+                        <Col>
+                            <FontEditor 
+                                emulator={emulator} 
+                                font={options.font} 
+                                onFontUpdated={(font) => updateOptions({ font })}/>
+                        </Col>
+                    </Row>
+                    
+                    <Row>
+                        <Col>
+                            <WindowBorderEditor
+                                windowBorder={options.windowBorder} 
+                                onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
+                        </Col>
+                    </Row>
+                </Stack>
+            </Container>
+        </Fade>
     )
 }
