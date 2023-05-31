@@ -103,7 +103,7 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
     );
 
     return (
-        <Row>
+        <Row className="mt-2">
             <Col xs={8}>
                 <Form.Control 
                     type="text" 
