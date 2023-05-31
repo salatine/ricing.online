@@ -101,7 +101,7 @@ export default function ReactApp({ emulator }: Props) {
                 handleUpdatePreviewClicked={handleUpdatePreviewClicked} 
                 handleExportConfigFilesClicked={handleExportConfigFilesClicked}
                 handleLockMouseClicked={handleLockMouseClicked}/>
-            <Container>
+            <Container className="pb-4">
                 <Stack gap={4}>
                     {navigationTabs}
                     {tabs[selectedTabId].component}
