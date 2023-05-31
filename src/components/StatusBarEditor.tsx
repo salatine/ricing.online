@@ -92,23 +92,28 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
         : <></>
 
     return (
-        <>
-            <h2>Properties</h2>
-            <Editor statusBar={statusBar} updateStatusBar={updateStatusBar}/>
+        <Stack gap={4}>
+            <Stack gap={2}>
+                <h2>Properties</h2>
+                <Editor statusBar={statusBar} updateStatusBar={updateStatusBar}/>
+            </Stack>
             
-            <h2 className='mt-4'>Widgets</h2>
-            <div className='mt-3 d-flex flex-grow-1 align-items-center justify-content-between'>
-                <StatusBarPreview
-                    widgetGroups={statusBar.widgetGroups}
-                    selectedWidget={selectedWidget}
-                    onWidgetSelected={onWidgetSelected}
-                    onWidgetUnselected={onWidgetUnselected}
-                    onWidgetGroupsUpdated={onWidgetGroupsUpdated}
-                    onWidgetDeleted={onWidgetDeleted}/>
-                <WidgetAdder onWidgetAdded={onWidgetAdded} />
-            </div>
+            <Stack gap={2}>
+                <h2>Widgets</h2>
+                <div className='d-flex flex-grow-1 align-items-center justify-content-between'>
+                    <StatusBarPreview
+                        widgetGroups={statusBar.widgetGroups}
+                        selectedWidget={selectedWidget}
+                        onWidgetSelected={onWidgetSelected}
+                        onWidgetUnselected={onWidgetUnselected}
+                        onWidgetGroupsUpdated={onWidgetGroupsUpdated}
+                        onWidgetDeleted={onWidgetDeleted}/>
+                    <WidgetAdder onWidgetAdded={onWidgetAdded} />
+                </div>
+            </Stack>
+
             {selectedWidgetEditor}
-        </>
+        </Stack>
     )
 }
 
@@ -149,67 +154,67 @@ type EditorProps = {
 function Editor({ statusBar, updateStatusBar }: EditorProps) {
     return (
         <Stack className='justify-content-between'>
-                <Row className='align-items-center'>
-                    <InputGroup>
-                        <Form.Label column="lg" sm={11}>Position</Form.Label>
-                        <Col>
-                            <Form.Select
-                                size="sm"
-                                value={statusBar.position}
-                                onChange={(e) => updateStatusBar({position: e.target.value as StatusBarPosition})}>
-                                <option value="top">Top</option>
-                                <option value="bottom">Bottom</option>
-                                <option value="left">Left</option>
-                                <option value="right">Right</option>
-                            </Form.Select>
-                        </Col>
-                    </InputGroup>
-                </Row>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Position</Form.Label>
+                    <Col>
+                        <Form.Select
+                            size="sm"
+                            value={statusBar.position}
+                            onChange={(e) => updateStatusBar({position: e.target.value as StatusBarPosition})}>
+                            <option value="top">Top</option>
+                            <option value="bottom">Bottom</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </Form.Select>
+                    </Col>
+                </InputGroup>
+            </Row>
 
-                <Row className='align-items-center'>
-                    <InputGroup>
-                        <Form.Label column="lg" sm={11}>Height</Form.Label>
-                        <Col>
-                            <Form.Control
-                                size="sm"
-                                min="3"
-                                max="36"
-                                type="number"
-                                value={statusBar.height}
-                                onChange={(e) => updateStatusBar({height: parseInt(e.target.value)})}>
-                            </Form.Control>
-                        </Col>
-                    </InputGroup>
-                </Row>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Height</Form.Label>
+                    <Col>
+                        <Form.Control
+                            size="sm"
+                            min="3"
+                            max="36"
+                            type="number"
+                            value={statusBar.height}
+                            onChange={(e) => updateStatusBar({height: parseInt(e.target.value)})}>
+                        </Form.Control>
+                    </Col>
+                </InputGroup>
+            </Row>
 
-                <Row className='align-items-center'>
-                    <InputGroup>
-                        <Form.Label column="lg" sm={11}>Width</Form.Label>
-                        <Col>
-                            <Form.Control
-                                size="sm"
-                                min="3"
-                                max="36"
-                                type="number"
-                                value={statusBar.borderWidth}
-                                onChange={(e) => updateStatusBar({borderWidth: parseInt(e.target.value)})}>
-                            </Form.Control>
-                        </Col>
-                    </InputGroup>
-                </Row>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Width</Form.Label>
+                    <Col>
+                        <Form.Control
+                            size="sm"
+                            min="3"
+                            max="36"
+                            type="number"
+                            value={statusBar.borderWidth}
+                            onChange={(e) => updateStatusBar({borderWidth: parseInt(e.target.value)})}>
+                        </Form.Control>
+                    </Col>
+                </InputGroup>
+            </Row>
 
-                <Row className='align-items-center'>
-                    <InputGroup>
-                        <Form.Label column="lg" sm={11}>Color</Form.Label>
-                        <Col>
-                            <Form.Control
-                                size="sm"
-                                type="color"
-                                onChange={(e) => updateStatusBar({color: e.target.value})}>
-                            </Form.Control>
-                        </Col>
-                    </InputGroup>
-                </Row>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Color</Form.Label>
+                    <Col>
+                        <Form.Control
+                            size="sm"
+                            type="color"
+                            onChange={(e) => updateStatusBar({color: e.target.value})}>
+                        </Form.Control>
+                    </Col>
+                </InputGroup>
+            </Row>
         </Stack>
     );
 }
