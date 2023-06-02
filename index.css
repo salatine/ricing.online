@@ -17,11 +17,31 @@
     grid-area: "react-app";
 }
 
-.body-container .emulator-screen {
-    grid-area: "emulator-screen";
-    overflow: hidden; /* FIXME ekrime */
+.body-container .emulator-preview {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    pointer-events: none;
+    width: 20vw;
+    height: calc(20vw * 3 / 4);
+}
+
+.body-container .emulator-preview .emulator-screen {
+    opacity: 0.5;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .body-container .debug-section {
     grid-area: "debug-section";
+}
+
+.fullscreen-toggle {
+    width: 10%;
+    height: 10%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 11;
 }

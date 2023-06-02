@@ -14,9 +14,14 @@
     <div id="reactApp" class="react-app">
     </div>
 
-    <div id="screen_container" class="emulator-screen">
-        <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
-        <canvas style="display: none"></canvas>
+    <div class="emulator-preview">
+        <a class="fullscreen-toggle" onClick="joia">
+            <svg fill="#ffffff" preserveAspectRatio="xMaxYMin meet" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v2h5.586L5 17.586V12H3v9h9v-2H6.414L19 6.414V12h2V3h-9z"/></svg> 
+        </a>
+        <div id="screen_container" class="emulator-screen">
+            <div style="white-space: pre; font: 14px monospace; line-height: 14px; display: none"></div>
+            <canvas width="1024" height="768"></canvas>
+        </div>
     </div>
 
     <div class="debug-section" hidden>

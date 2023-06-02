@@ -1,7 +1,12 @@
+interface NullEmulatorParams {
+    screen_container: HTMLElement
+}
+
 export default class NullEmulator {
     private serial0OutputCharCallbacks: SerialOutputCharCallback[] = []
 
-    constructor(params: unknown) {
+    constructor(params: NullEmulatorParams & unknown) {
+        this.drawPurpleAndPinkToCanvas(params.screen_container);
     }
 
     add_listener(name: string, callback: unknown): void {
@@ -61,6 +66,21 @@ export default class NullEmulator {
         chars.forEach((char) => {
             this.serial0OutputCharCallbacks.forEach((callback) => callback(char))
         })
+    }
+
+    private drawPurpleAndPinkToCanvas(screenContainer: HTMLElement): void {
+        const canvas = screenContainer.querySelector('canvas') as HTMLCanvasElement;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('could not get canvas context')
+        }
+
+        // fill half of the window with purple and half with pink
+        ctx.fillStyle = 'purple';
+        ctx.fillRect(0, 0, 512, 768);
+
+        ctx.fillStyle = 'pink';
+        ctx.fillRect(512, 0, 512, 768);
     }
 }
 

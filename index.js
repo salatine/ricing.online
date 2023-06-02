@@ -36,14 +36,45 @@ async function syncCaches(emulator) {
     await runCommand(emulator, 'sync')
 }
 
+function fitToParent(parent, child) {
+    resizeFittingToParent(parent, child)
+
+    const resizeObserver = new ResizeObserver(() => resizeFittingToParent(parent, child))
+    resizeObserver.observe(parent)
+}
+
+/**
+ * @param {HTMLElement} parent
+ * @param {HTMLElement} child
+ */ 
+function resizeFittingToParent(parent, child) {
+    const childSize = { width: child.width, height: child.height }
+    const parentSize = parent.getBoundingClientRect()
+
+    const scale = Math.min(parentSize.width / childSize.width, parentSize.height / childSize.height)
+
+    child.style.transform = `scale(${scale})`
+
+    const newChildSize = child.getBoundingClientRect()
+
+    const x = (parentSize.width - newChildSize.width) / 2
+    const y = (parentSize.height - newChildSize.height) / 2
+    child.style.transformOrigin = 'top left'
+    child.style.transform += ` translate(${x}px, ${y}px)` 
+}
+
 window.addEventListener("load", async () => {
     const emulatorClass = NullEmulator // NullEmulator or V86Starter
+    const screenContainer = document.getElementById('screen_container')
+    const screenCanvas = screenContainer.querySelector('canvas')
+
+    fitToParent(screenContainer, screenCanvas)
 
     const emulator = new emulatorClass({
         wasm_path: "/build/v86/v86.wasm",
         memory_size: 512 * 1024 * 1024,
         vga_memory_size: 8 * 1024 * 1024,
-        screen_container: document.getElementById("screen_container"),
+        screen_container: screenContainer,
         initial_state: { url: "/build/images/debian-state-base.bin.zst" },
         filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
         autostart: true,
