@@ -1,0 +1,27 @@
+name: Deploy to Netlify
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+      - netlify-deploy # TODO remover depois de testar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Build dist
+        runs: ./build-dist.sh
+
+      - uses: jsmrcaga/action-netlify-deploy@v2.0.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_TO_PROD: true
+          install_command: "echo Skipping installing the dependencies"
+          build_command: "echo Skipping building the web files"
+          build_directory: "dist"
