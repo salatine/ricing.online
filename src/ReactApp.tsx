@@ -1,53 +1,80 @@
-import { AWESOME_CONFIG } from "./constants";
 import React, { useState } from 'react';
+import Nav from 'react-bootstrap/Nav';
 import { runCommand } from "./rpc";
-import { readBlobIntoUint8Array, readStringIntoUint8Array } from './utils'
-import TerminalEditor from "./components/TerminalEditor";
-import BackgroundEditor from "./components/BackgroundEditor";
-import CustomCommandKeybindsEditor from "./components/CustomCommandKeybindsEditor";
+import Header from './components/Header'
 import UpdatePreviewButton from "./components/UpdatePreviewButton";
 import ExportConfigFilesButton from "./components/ExportConfigFilesButton";
 import LockMouseButton from "./components/LockMouseButton";
-import WindowBorderEditor from "./components/WindowBorderEditor";
-import FontEditor from "./components/FontEditor";
-import StatusBarEditor from "./components/StatusBarEditor";
-import DefaultCommandKeybindsEditor from "./components/DefaultCommandKeybindsEditor";
+import AppearanceTab from "./components/tabs/AppearanceTab"
+import StatusBarTab from "./components/tabs/StatusBarTab"
 import { DEFAULT_OPTIONS } from "./constants";
-import { Options, getConfigFiles, applyConfigFiles, CustomCommandKeybind, DefaultCommandKeybind, WindowBorder, exportConfigFiles } from "./config";
+import { Options, getConfigFiles, applyConfigFiles, exportConfigFiles } from "./config";
+import KeybindsTab from "./components/tabs/KeybindsTab";
+import DefaultApplicationsTab from "./components/tabs/DefaultApplicationsTab";
+import Stack from 'react-bootstrap/Stack';
+import { Container } from 'react-bootstrap';
 
 type Props = {
     emulator: any
 }
 
+type Tab = {
+    name: string
+    component: JSX.Element
+}
+
+type TabId 
+    = 'appearance' 
+    | 'status-bar' 
+    | 'default-applications' 
+    | 'keybinds'
+
 export default function ReactApp({ emulator }: Props) {
     const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS);
+    const [selectedTabId, setSelectedTabId] = useState<TabId>('appearance');
 
-    function updateOption(newFields: Partial<Options>) {
-        const newOptions = {
-            ...options,
-            ...newFields,
-        };
-
-        setOptions(newOptions);
+    const tabs: Record<TabId, Tab> = {
+        'appearance': {
+            name: 'Appearance',
+            component: 
+                <AppearanceTab
+                    emulator={emulator}
+                    options={options}
+                    onOptionsUpdated={handleOptionsUpdated}/>,
+        },
+        'status-bar': {
+            name: 'Status bar',
+            component:
+                <StatusBarTab
+                    emulator={emulator}
+                    options={options}
+                    onOptionsUpdated={handleOptionsUpdated}/>
+        },
+        'default-applications': { 
+            name: 'Default applications',
+            component: 
+                <DefaultApplicationsTab
+                    options={options}
+                    onOptionsUpdated={handleOptionsUpdated}/>,
+        },
+        'keybinds': {
+            name: 'Keybinds',
+            component: 
+                <KeybindsTab
+                    options={options}
+                    onOptionsUpdated={handleOptionsUpdated}/>,
+        },
     }
 
-    function handleTerminalSelected(newTerminal: string) {
-        updateOption({ terminal: newTerminal });
-    }
+    const tabItems = Object.entries(tabs).map(([tabId, tab]) => {
+        return (<Nav.Item key={tabId}>
+            <Nav.Link eventKey={tabId}>{tab.name}</Nav.Link>
+        </Nav.Item>)
+    })
 
-    async function handleBackgroundSelected(backgroundFile: File) {
-        const backgroundFileContents = await readBlobIntoUint8Array(backgroundFile);
-
-        await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
-    }
-
-    function handleCustomCommandKeybindsUpdated(newCustomCommandKeybinds: CustomCommandKeybind[]) {
-        updateOption({ customCommandKeybinds: newCustomCommandKeybinds });
-    }
-
-    function handleDefaultCommandKeybindsUpdated(newDefaultCommandKeybinds: DefaultCommandKeybind[]) {
-        updateOption({ defaultCommandKeybinds: newDefaultCommandKeybinds });
-    }
+    const navigationTabs = (<Nav fill variant='pills' activeKey={selectedTabId} onSelect={(newTabId) => setSelectedTabId(newTabId as TabId)}>
+        {tabItems}
+    </Nav>)
 
     async function handleUpdatePreviewClicked() {
         const configFiles = getConfigFiles(options)
@@ -64,64 +91,22 @@ export default function ReactApp({ emulator }: Props) {
         emulator.lock_mouse();
     }
 
-    function handleWindowBorderUpdated(newWindowBorder: WindowBorder) {
-        updateOption({ windowBorder: newWindowBorder })
-    }
-
-    function handleFontUpdated(newFont) {
-        updateOption({ font: newFont })
-    }
-    
-    function handleStatusBarUpdated(newStatusBar) {
-        updateOption({ statusBar: newStatusBar })
-    }
-
-    function handleMainModKeyUpdated(newMainModKey) {
-        updateOption({ mainModKey: newMainModKey })
+    function handleOptionsUpdated(newOptions: Options) {
+        setOptions(newOptions)
     }
 
     return (
-        <div>
-            <TerminalEditor 
-                terminal={options.terminal} 
-                onTerminalSelected={handleTerminalSelected}/>
-
-            <BackgroundEditor 
-                onBackgroundSelected={handleBackgroundSelected}/>
-
-            <FontEditor 
-                emulator={emulator} 
-                font={options.font} 
-                onFontUpdated={handleFontUpdated}/>
-            
-            <DefaultCommandKeybindsEditor
-                defaultCommandKeybinds={options.defaultCommandKeybinds}
-                onDefaultCommandKeybindsUpdated={handleDefaultCommandKeybindsUpdated}
-                mainModKey={options.mainModKey}/>
-            
-            <CustomCommandKeybindsEditor
-                customCommandKeybinds={options.customCommandKeybinds} 
-                onCustomCommandKeybindsUpdated={handleCustomCommandKeybindsUpdated}
-                mainModKey={options.mainModKey}
-                onMainModKeyUpdated={handleMainModKeyUpdated}/>
-
-            <WindowBorderEditor
-                windowBorder={options.windowBorder} 
-                onWindowBorderUpdated={handleWindowBorderUpdated}/>
-
-            <UpdatePreviewButton 
-                onUpdateClicked={handleUpdatePreviewClicked}/>
-
-            <ExportConfigFilesButton
-                onExportClicked={handleExportConfigFilesClicked}/>
-
-            <LockMouseButton 
-                onLockClicked={handleLockMouseClicked}/>
-
-            <StatusBarEditor
-                statusBar={options.statusBar} onStatusBarUpdated={handleStatusBarUpdated}/> 
-        </div>
+        <>
+            <Header
+                handleUpdatePreviewClicked={handleUpdatePreviewClicked} 
+                handleExportConfigFilesClicked={handleExportConfigFilesClicked}
+                handleLockMouseClicked={handleLockMouseClicked}/>
+            <Container className="pb-4">
+                <Stack gap={4}>
+                    {navigationTabs}
+                    {tabs[selectedTabId].component}
+                </Stack>
+            </Container>
+        </>
     ); 
 }
-
-

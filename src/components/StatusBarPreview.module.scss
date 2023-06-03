@@ -1,0 +1,46 @@
+@import "../variables.scss";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+.leftWidgets {
+    background-color: $left-widget-group-color;
+}
+
+.middleWidgets {
+    background-color: $middle-widget-group-color;
+}
+
+.rightWidgets {
+    background-color: $right-widget-group-color;
+}
+
+$left-widget-button-color: shade-color($left-widget-group-color, 25%);
+$middle-widget-button-color: shade-color($middle-widget-group-color, 25%);
+$right-widget-button-color: shade-color($right-widget-group-color, 25%);
+
+$widget-button-border-color: rgba(0, 0, 0, 0.4);
+
+$widget-button-colors: (
+    "left": $left-widget-button-color,
+    "middle": $middle-widget-button-color,
+    "right": $right-widget-button-color,
+);
+
+@each $group, $color in $widget-button-colors {
+    // we want to create custom Bootstrap button variants named `<group>Widget` inside 
+    // each `<group>Widgets` class.
+    //
+    // using the :global selector is needed here because Bootstrap uses the `btn-<variant name>`
+    // class on buttons with a given variant name, and without it the name would get
+    // mangled to something like `J6RYTa_btn-<variantName>`.
+    .#{$group}Widgets :global(.btn.btn-#{$group}Widget) {
+        @include button-variant(
+            $color,
+            $widget-button-border-color,
+            $hover-background: shade-color($color, $btn-hover-bg-shade-amount),
+            $hover-border: $widget-button-border-color,
+            $active-background: shade-color($color, $btn-active-bg-shade-amount),
+            $active-border: $widget-button-border-color
+        );
+    }
+}

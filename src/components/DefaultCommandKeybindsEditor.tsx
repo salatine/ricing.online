@@ -1,36 +1,43 @@
 import React, { useState } from 'react'
 import { DefaultCommandKeybind, MainModKey, ModKey } from '../config'
+import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
 import { DEFAULT_COMMANDS } from '../constants'
 import KeybindInput from './KeybindInput'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
+import { Dropdown } from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type DefaultCommandKeybindsEditorProps = {
     defaultCommandKeybinds: DefaultCommandKeybind[]
     onDefaultCommandKeybindsUpdated: (newDefaultCommandKeybinds: DefaultCommandKeybind[]) => void
     mainModKey: MainModKey
+    onMainModKeyUpdated: (newMainModKey: MainModKey) => void
 }
 
-// q: how to pick random element from object, answer without links
-// a: Object.values(obj)[Math.floor(Math.random() * Object.values(obj).length)]
-
-
-export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, onDefaultCommandKeybindsUpdated, mainModKey }: DefaultCommandKeybindsEditorProps) {
-    const [isSelectedCommand, setIsSelectedCommand] = useState(false)
-
-    const addCommandButton = (
-        <button 
-            onClick={(e) => setIsSelectedCommand(true)}>
-            +
-        </button>
-    )
-    
+export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, onDefaultCommandKeybindsUpdated, mainModKey, onMainModKeyUpdated }: DefaultCommandKeybindsEditorProps) {
     const commandOptions = Object.values(DEFAULT_COMMANDS).map(command => {
         return (
-            <option 
+            <Dropdown.Item
                 title={command.description} 
-                value={command.id}>{command.name}
-            </option>
+                eventKey={command.id}>{command.name}
+            </Dropdown.Item>
         )    
     })
+
+    const addCommandButton = (
+        <DropdownButton
+            onSelect={(key, e) => handleCommandChange(key as keyof typeof DEFAULT_COMMANDS)}
+            title={<FontAwesomeIcon icon={faPlus}/>}>
+            {commandOptions}
+        </DropdownButton>
+    )
 
     function handleCommandChange(id: keyof typeof DEFAULT_COMMANDS) {
         const newDefaultCommandKeybinds = [...defaultCommandKeybinds]
@@ -44,16 +51,6 @@ export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, o
 
         onDefaultCommandKeybindsUpdated(newDefaultCommandKeybinds)
     }
-
-    const commandChooser = (
-        <select 
-            onChange={(e) => {
-                handleCommandChange(e.target.value as keyof typeof DEFAULT_COMMANDS)
-                setIsSelectedCommand(false)
-                }}>
-            {commandOptions}
-        </select>
-    )
 
     const keybindsList = defaultCommandKeybinds.map((keybind, index) => {
         function handleKeybindUpdated(newKeybind: DefaultCommandKeybind) {
@@ -81,12 +78,22 @@ export default function DefaultCommandKeybindsEditor({ defaultCommandKeybinds, o
 
     return (
         <>
-            <div>
-                {isSelectedCommand ? commandChooser : addCommandButton}
-            </div>
-            <div>
+            <Row className="align-items-center">
+                <Col xs='auto'>
+                    <h2>Default commands</h2>
+                </Col>
+
+                <Col xs='auto' className='ms-auto'>
+                    <MainModKeyChooser mainModKey={mainModKey} onMainModKeyUpdated={onMainModKeyUpdated}></MainModKeyChooser>
+                </Col>
+
+                <Col xs='auto'>
+                    {addCommandButton}
+                </Col>
+            </Row>
+            <Form>
                 {keybindsList}
-            </div>
+            </Form>
         </>
     )
 }
@@ -98,7 +105,7 @@ type DefaultCommandKeybindEditorProps = {
     mainModKey: MainModKey
 }
 
-function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted, mainModKey }: DefaultCommandKeybindEditorProps) {
+function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDeleted, mainModKey}: DefaultCommandKeybindEditorProps) {
     function handleCommandChange(e) {
         const newKeybind = {
             ...keybind,
@@ -123,17 +130,51 @@ function DefaultCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelet
         onKeybindUpdated(newKeybind);
     }
 
+    const { input, feedback } = KeybindInput({
+        keybind: inputKeybind,
+        onKeybindUpdated: handleKeybindInputUpdated,
+        mainModKey,
+    })
+
     return (
-        <div>
-            <label>{keybind.command.name}</label>
-            <KeybindInput 
-                keybind={inputKeybind} 
-                onKeybindUpdated={handleKeybindInputUpdated} 
-                mainModKey={mainModKey} />
-            <button 
-                onClick={onKeybindDeleted}>
-                X
-            </button>
-        </div>
+        <Form.Group as={Row} className='mt-2'>
+            <Form.Label column xs={4}>{keybind.command.name}</Form.Label>
+
+            <Col xs='auto' className='flex-grow-1'>
+                <InputGroup hasValidation>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faKeyboard} />
+                    </InputGroup.Text>
+                    {input}
+                    <Button
+                        onClick={onKeybindDeleted}>
+                        <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                    {feedback}
+                </InputGroup>
+            </Col>
+        </Form.Group>
     )
 }
+
+type MainModKeyChooserProps = {
+    mainModKey: MainModKey
+    onMainModKeyUpdated: (mainModKey: MainModKey) => void
+}
+
+function MainModKeyChooser({ mainModKey, onMainModKeyUpdated }: MainModKeyChooserProps) {
+    const mainModOptions = MAIN_MOD_OPTIONS.map((modKey) => {
+        return (
+            <option value={modKey}>{modKey}</option>
+        )
+    })
+
+    return (
+        <FloatingLabel label="Mod key">
+            <Form.Select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
+                {mainModOptions}
+            </Form.Select>
+        </FloatingLabel>
+    )
+}
+

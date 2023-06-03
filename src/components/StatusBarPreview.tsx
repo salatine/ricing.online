@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
 import { IdentifiableStatusBarWidget, StatusBarWidgetGroups } from '../config'
+import Button from 'react-bootstrap/Button'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Stack from 'react-bootstrap/Stack'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import * as styles from './StatusBarPreview.module.scss';
 
 type Props = {
     widgetGroups: StatusBarWidgetGroups
@@ -11,49 +17,14 @@ type Props = {
     onWidgetDeleted: (widget: IdentifiableStatusBarWidget) => void
 }
 
-
 export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidgetSelected, onWidgetUnselected, onWidgetGroupsUpdated, onWidgetDeleted }: Props): JSX.Element {
     const orderedGroupNames: (keyof StatusBarWidgetGroups)[] = ['left', 'middle', 'right'] 
-    /*
-    const widgets = orderedGroupNames.flatMap((groupName) => widgetGroups[groupName])
-    
-    const widgetButtons = widgets.map((widget, index) => {
-        const isSelectedWidget = selectedWidget !== null && widget.id === selectedWidget.id
-
-        const buttonStyle = isSelectedWidget
-            ? { backgroundColor: 'green' }
-            : {}
-        
-        const clickCallback = isSelectedWidget
-            ? onWidgetUnselected
-            : onWidgetSelected
-
-        return (
-            <Draggable draggableId={'widget-' + index} index={index}>
-                {(provided, snapshot) => (
-                    <div
-                        onClick={(e) => clickCallback(widget)}
-                        style={buttonStyle}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}>
-                        {widget.type}
-                    </div>
-                )}
-            </Draggable>
-        )
-    })
-    */
 
     const droppables = orderedGroupNames.map((groupName) => {
         const widgetsForThisGroup = widgetGroups[groupName]
         const draggables = widgetsForThisGroup.map((widget, index) => {
             const isSelectedWidget = selectedWidget !== null && widget.id === selectedWidget.id
 
-            const buttonStyle = isSelectedWidget
-                ? { backgroundColor: 'green', padding: '10px' }
-                : {}
-        
             const clickCallback = isSelectedWidget
                 ? onWidgetUnselected
                 : onWidgetSelected
@@ -63,28 +34,31 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
                     <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}>
-                        <div onClick={(e) => clickCallback(widget)}
-                            style={buttonStyle}>
-                            {widget.type}
-                        </div>
-                        <button onClick={(e) => onWidgetDeleted(widget)}>X</button>
+                        {...provided.dragHandleProps}
+                        style={{ ...provided.draggableProps.style }}
+                        className={'d-flex'}>
+                        <ButtonGroup className={'mx-2'}>
+                            <Button 
+                                as="a" 
+                                onClick={(e) => clickCallback(widget)}
+                                variant={`${groupName}Widget`}>
+                                {widget.type}
+                            </Button>
+                            <Button onClick={(e) => onWidgetDeleted(widget)} variant={`${groupName}Widget`}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </Button>
+                        </ButtonGroup>
                     </div>
                 )}
             </Draggable>)
         })
 
-        const droppableBackgroundColor = {
-            'left': 'pink',
-            'middle': 'purple',
-            'right': 'blue',
-        }
-
         return (
-            <Droppable droppableId={groupName} key={groupName}>
+            <Droppable droppableId={groupName} key={groupName} direction='horizontal'>
                 {(provided, snapshot) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}
-                        style={{ backgroundColor: droppableBackgroundColor[groupName], padding: '20px', margin: '10px' }}>
+                    <div 
+                        ref={provided.innerRef} {...provided.droppableProps}
+                        className={`d-flex p-2 ${styles[groupName+'Widgets']} ${styles.widgetGroup}`}>
                         {draggables}
                         {provided.placeholder}
                     </div>
@@ -115,15 +89,9 @@ export default function StatusBarPreview({ widgetGroups, selectedWidget, onWidge
 
     return (
         <DragDropContext onDragEnd={handleDragEnd}>
-            {droppables}
-            {/* <Droppable droppableId='droppable-1'>
-                {(provided, snapshot) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {widgetButtons}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable> */}
+            <Stack direction='horizontal' className='align-items-stretch'>
+                {droppables}
+            </Stack>
         </DragDropContext>
     )
 }

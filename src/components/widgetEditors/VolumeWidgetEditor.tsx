@@ -6,5 +6,3 @@ type Props = {
 }
 
 export const VolumeWidgetEditor: ({widget}: Props) => JSX.Element = NoOptionsWidgetEditor
-
-

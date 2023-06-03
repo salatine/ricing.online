@@ -1,32 +1,43 @@
 <!doctype html>
-<html>
+<html data-bs-theme="dark">
 
 <head>
     <title>awesome!</title>
 
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/build/index.css">
     <script src="/build/v86/libv86.js"> </script>
     <script src="/build/index.js"> </script>
 </head>
 
-<body>
-    <div id="reactApp">
+<body class="body-container">
+    <div id="reactApp" class="react-app">
     </div>
 
-    <div id="screen_container">
-        <div style="white-space: pre; font: 14px monospace; line-height: 14px"></div>
-        <canvas style="display: none"></canvas>
+    <div class="emulator-preview">
+        <a class="fullscreen-toggle" id="emulator_fullscreen_toggle">
+            <svg fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 3v2h5.586L5 17.586V12H3v9h9v-2H6.414L19 6.414V12h2V3h-9z"/>
+            </svg> 
+        </a>
+        <div id="screen_container" class="emulator-screen">
+            <div style="white-space: pre; font: 14px monospace; line-height: 14px; display: none"></div>
+            <canvas width="1024" height="768"></canvas>
+        </div>
     </div>
 
-    <textarea readonly spellcheck="false" cols="40" rows="12" id="serial">
-    </textarea>
+    <div class="debug-section" hidden>
+        <textarea readonly spellcheck="false" cols="40" rows="12" id="serial">
+        </textarea>
 
-    <textarea spellcheck="false" cols="40" rows="12" id="awesome_stdout">
-    </textarea>
+        <textarea spellcheck="false" cols="40" rows="12" id="awesome_stdout">
+        </textarea>
 
-    <textarea spellcheck="false" cols="40" rows="12" id="awesome_stderr">
-    </textarea>
-    
-    <input type="button" value="atualizar logs awesome" id="updateAwesomeLogs"></input>
+        <textarea spellcheck="false" cols="40" rows="12" id="awesome_stderr">
+        </textarea>
+        
+        <input type="button" value="atualizar logs awesome" id="updateAwesomeLogs"></input>
+    </div>
 </body>
 
 </html>

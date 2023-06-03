@@ -5,6 +5,16 @@ import { createIdentifiableWidget, findWidget } from '../widgets';
 import StatusBarPreview from './StatusBarPreview';
 import WidgetEditor from './WidgetEditor';
 import { DEFAULT_WIDGETS } from '../constants' 
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Stack from 'react-bootstrap/Stack';
+import InputGroup from 'react-bootstrap/InputGroup';
+import { Col } from 'react-bootstrap';
+import Row from 'react-bootstrap/Row';
+import { Dropdown } from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faKeyboard, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     statusBar: StatusBar
@@ -79,21 +89,31 @@ export default function StatusBarEditor({ statusBar, onStatusBarUpdated }: Props
 
     const selectedWidgetEditor = selectedWidget !== null
         ? <WidgetEditor widget={selectedWidget} onWidgetUpdated={onWidgetUpdated}/>
-        : <Editor statusBar={statusBar} updateStatusBar={updateStatusBar}/>
+        : <></>
 
     return (
-        <div>
-            <StatusBarPreview
-                widgetGroups={statusBar.widgetGroups}
-                selectedWidget={selectedWidget}
-                onWidgetSelected={onWidgetSelected}
-                onWidgetUnselected={onWidgetUnselected}
-                onWidgetGroupsUpdated={onWidgetGroupsUpdated}
-                onWidgetDeleted={onWidgetDeleted}/>
-            <WidgetAdder onWidgetAdded={onWidgetAdded} />
+        <Stack gap={4}>
+            <Stack gap={2}>
+                <h2>Properties</h2>
+                <Editor statusBar={statusBar} updateStatusBar={updateStatusBar}/>
+            </Stack>
+            
+            <Stack gap={2}>
+                <h2>Widgets</h2>
+                <div className='d-flex flex-grow-1 align-items-center justify-content-between'>
+                    <StatusBarPreview
+                        widgetGroups={statusBar.widgetGroups}
+                        selectedWidget={selectedWidget}
+                        onWidgetSelected={onWidgetSelected}
+                        onWidgetUnselected={onWidgetUnselected}
+                        onWidgetGroupsUpdated={onWidgetGroupsUpdated}
+                        onWidgetDeleted={onWidgetDeleted}/>
+                    <WidgetAdder onWidgetAdded={onWidgetAdded} />
+                </div>
+            </Stack>
 
             {selectedWidgetEditor}
-        </div>
+        </Stack>
     )
 }
 
@@ -102,53 +122,27 @@ type WidgetAdderProps = {
 }
 
 function WidgetAdder({onWidgetAdded}: WidgetAdderProps) {
-
-    const [isWidgetAdderSelected, setIsWidgetAdderSelected] = useState(false)
-
     const widgetTypes = Object.keys(DEFAULT_WIDGETS).map((groupName) => {
         const group = DEFAULT_WIDGETS[groupName]
         return group.map((widget: StatusBarWidget) => widget.type)
     }).flat()
 
-    const plusButton = (
-        <button 
-            onClick={(e) => setIsWidgetAdderSelected(true)}>
-                +
-        </button>
-    )
+    const plusIcon = <FontAwesomeIcon icon={faPlus} />
 
-    function handleOnMouseLeave(e: React.MouseEvent<HTMLSelectElement, MouseEvent>) {
-        if (e.target === document.activeElement) {
-            return
-        }
-
-        console.log('bimba insana')
-        console.log(e.target)
-        console.log(document.activeElement)
-
-        setIsWidgetAdderSelected(false)
-    }
-
-    const widgetChooser = (
-        <select 
-            onChange={(e) => { 
-                onWidgetAdded(e.target.value as keyof StatusBarWidget) 
-                setIsWidgetAdderSelected(false)
-                } 
-            }
-
-            onBlur={(e) => setIsWidgetAdderSelected(false)}
-            onMouseLeave={handleOnMouseLeave}>
-            {widgetTypes.map((widgetType) => 
-                <option 
-                    value={widgetType}>
-                        {widgetType}
-                </option>
+    const addWidgetButton = (
+        <DropdownButton 
+            title={plusIcon}
+            onSelect={(key, e) => onWidgetAdded(key as keyof StatusBarWidget)}>
+                {widgetTypes.map((widgetType) => 
+                <Dropdown.Item
+                    eventKey={widgetType}>
+                    {widgetType}
+                </Dropdown.Item>
             )}
-        </select>
+        </DropdownButton>
     )
 
-    return isWidgetAdderSelected ? widgetChooser : plusButton
+    return addWidgetButton; 
 }
 
 type EditorProps = {
@@ -159,36 +153,68 @@ type EditorProps = {
 
 function Editor({ statusBar, updateStatusBar }: EditorProps) {
     return (
-        <div>
-            <select 
-                value={statusBar.position}
-                onChange={(e) => updateStatusBar({position: e.target.value as StatusBarPosition})}>
-                <option value="top">top</option>
-                <option value="bottom">bottom</option>
-                <option value="left">left</option>
-                <option value="right">right</option>
-            </select>
+        <Stack className='justify-content-between'>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Position</Form.Label>
+                    <Col>
+                        <Form.Select
+                            size="sm"
+                            value={statusBar.position}
+                            onChange={(e) => updateStatusBar({position: e.target.value as StatusBarPosition})}>
+                            <option value="top">Top</option>
+                            <option value="bottom">Bottom</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                        </Form.Select>
+                    </Col>
+                </InputGroup>
+            </Row>
 
-            <input 
-                min="3"
-                max="36"
-                type="number"
-                value={statusBar.height}
-                onChange={(e) => updateStatusBar({height: parseInt(e.target.value)})}>
-            </input>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Height</Form.Label>
+                    <Col>
+                        <Form.Control
+                            size="sm"
+                            min="3"
+                            max="36"
+                            type="number"
+                            value={statusBar.height}
+                            onChange={(e) => updateStatusBar({height: parseInt(e.target.value)})}>
+                        </Form.Control>
+                    </Col>
+                </InputGroup>
+            </Row>
 
-            <input
-                min="3"
-                max="36"
-                type="number"
-                value={statusBar.borderWidth}
-                onChange={(e) => updateStatusBar({borderWidth: parseInt(e.target.value)})}>
-            </input>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Width</Form.Label>
+                    <Col>
+                        <Form.Control
+                            size="sm"
+                            min="3"
+                            max="36"
+                            type="number"
+                            value={statusBar.borderWidth}
+                            onChange={(e) => updateStatusBar({borderWidth: parseInt(e.target.value)})}>
+                        </Form.Control>
+                    </Col>
+                </InputGroup>
+            </Row>
 
-            <input 
-                type="color"
-                onChange={(e) => updateStatusBar({color: e.target.value})}>
-            </input>
-        </div>
+            <Row className='align-items-center'>
+                <InputGroup>
+                    <Form.Label column="lg" xs={11}>Color</Form.Label>
+                    <Col>
+                        <Form.Control
+                            size="sm"
+                            type="color"
+                            onChange={(e) => updateStatusBar({color: e.target.value})}>
+                        </Form.Control>
+                    </Col>
+                </InputGroup>
+            </Row>
+        </Stack>
     );
 }

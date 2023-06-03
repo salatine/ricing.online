@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { CustomCommandKeybind, ModKey, MainModKey } from '../config';
-import { getModKeys, MAIN_MOD_OPTIONS } from '../constants';
 import KeybindInput from './KeybindInput';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import InputGroup from 'react-bootstrap/InputGroup'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
     customCommandKeybinds: CustomCommandKeybind[]
     onCustomCommandKeybindsUpdated: (customCommandKeybinds: CustomCommandKeybind[]) => void
     mainModKey: MainModKey
-    onMainModKeyUpdated: (mainModKey: MainModKey) => void
 }
 
-export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated, mainModKey, onMainModKeyUpdated }: Props) {
+export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onCustomCommandKeybindsUpdated, mainModKey}: Props) {
     const customCommandKeybindList = customCommandKeybinds.map((keybind, index) => {
         function handleKeybindEdited(newKeybind: CustomCommandKeybind) {
             const newCustomKeybinds = [...customCommandKeybinds];
@@ -41,16 +46,20 @@ export default function CustomCommandKeybindsEditor({ customCommandKeybinds, onC
     }
 
     return (
-        <>
-            <div>
-                <MainModKeyChooser mainModKey={mainModKey} onMainModKeyUpdated={onMainModKeyUpdated} />
-            </div>
-            <div>
-                <h1>teste keybinds</h1>
-                <button onClick={handleNewKeybindClicked}>New keybind</button>
-                {customCommandKeybindList}
-            </div>
-        </>
+        <div>
+            <Row>
+                <Col xs='auto'>
+                    <h2>Custom commands</h2>
+                </Col>
+                <Col xs='auto' className='ms-auto'>
+                    <Button onClick={handleNewKeybindClicked}>
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </Button>
+                </Col>
+            </Row>
+
+            {customCommandKeybindList}
+        </div>
     )
 }
 
@@ -85,42 +94,37 @@ function CustomCommandKeybindEditor({ keybind, onKeybindUpdated, onKeybindDelete
 
         onKeybindUpdated(newKeybind);
     }
+    const KeybindInputComponents = KeybindInput(
+        {
+            keybind: inputKeybind, 
+            onKeybindUpdated: handleKeybindInputUpdated, 
+            mainModKey: mainModKey
+        }
+    );
 
     return (
-        <div>
-            <KeybindInput 
-                keybind={inputKeybind} 
-                onKeybindUpdated={handleKeybindInputUpdated} 
-                mainModKey={mainModKey} />
-            <input 
-                type="text" 
-                value={keybind.command} 
-                onChange={handleCommandChange}>
-            </input>
-            <button 
-                onClick={onKeybindDeleted}>
-                X
-            </button>
-        </div>
+        <Row className="mt-2">
+            <Col xs={8}>
+                <Form.Control 
+                    type="text" 
+                    value={keybind.command} 
+                    onChange={handleCommandChange}>
+                </Form.Control>
+            </Col>
+
+            <Col xs='auto' className='flex-grow-1'>
+                <InputGroup>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={faKeyboard} />
+                    </InputGroup.Text>
+                    {KeybindInputComponents.input}
+                    <Button
+                        onClick={onKeybindDeleted}>
+                        <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                    {KeybindInputComponents.feedback}
+                </InputGroup>
+            </Col>
+        </Row>
     )
 }
-
-type MainModKeyChooserProps = {
-    mainModKey: MainModKey
-    onMainModKeyUpdated: (mainModKey: MainModKey) => void
-}
-
-function MainModKeyChooser({ mainModKey, onMainModKeyUpdated }: MainModKeyChooserProps) {
-    const mainModOptions = MAIN_MOD_OPTIONS.map((modKey) => {
-        return (
-            <option value={modKey}>{modKey}</option>
-        )
-    })
-
-    return (
-        <select value={mainModKey} onChange={(e) => onMainModKeyUpdated(e.target.value as MainModKey)}>
-            {mainModOptions}
-        </select>
-    )
-}
-
