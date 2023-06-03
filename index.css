@@ -43,7 +43,7 @@
 
 .body-container .emulator-preview .fullscreen-toggle {
     width: 10%;
-    height: 10%;
+    height: auto;
     position: absolute;
     right: 0;
     top: 0;

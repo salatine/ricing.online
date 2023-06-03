@@ -72,7 +72,9 @@ function toggleFullscreenEmulator(screenContainer) {
 }
 
 window.addEventListener("load", async () => {
-    const emulatorClass = V86Starter // NullEmulator or V86Starter
+    const searchParams = new URLSearchParams(window.location.search)
+    
+    const emulatorClass = searchParams.has('nullEmulator') ? NullEmulator : V86Starter // NullEmulator or V86Starter
     const screenContainer = document.getElementById('screen_container')
     const screenCanvas = screenContainer.querySelector('canvas')
 
