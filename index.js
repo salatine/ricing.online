@@ -63,8 +63,16 @@ function resizeFittingToParent(parent, child) {
     child.style.transform += ` translate(${x}px, ${y}px)` 
 }
 
+function toggleFullscreenEmulator(screenContainer) {
+    if (document.fullscreenElement) {
+        document.exitFullscreen()
+    } else {
+        screenContainer.requestFullscreen()
+    }
+}
+
 window.addEventListener("load", async () => {
-    const emulatorClass = NullEmulator // NullEmulator or V86Starter
+    const emulatorClass = V86Starter // NullEmulator or V86Starter
     const screenContainer = document.getElementById('screen_container')
     const screenCanvas = screenContainer.querySelector('canvas')
 
@@ -92,6 +100,9 @@ window.addEventListener("load", async () => {
 
     const updateAwesomeLogsButton = document.getElementById("updateAwesomeLogs")
     updateAwesomeLogsButton.addEventListener("click", () => updateAwesomeLogs(emulator))
+
+    const fullscreenToggle = document.getElementById('emulator_fullscreen_toggle')
+    fullscreenToggle.addEventListener('click', () => toggleFullscreenEmulator(screenContainer))
 
     const reactApp = document.getElementById("reactApp");
     createRoot(reactApp).render(<ReactApp emulator={emulator}/>);

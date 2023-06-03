@@ -33,15 +33,21 @@
     max-height: 100%;
 }
 
+.body-container .emulator-preview .emulator-screen:fullscreen {
+    opacity: 1;
+}
+
 .body-container .debug-section {
     grid-area: "debug-section";
 }
 
-.fullscreen-toggle {
+.body-container .emulator-preview .fullscreen-toggle {
     width: 10%;
     height: 10%;
     position: absolute;
     right: 0;
     top: 0;
     z-index: 11;
+    pointer-events: auto;
+    cursor: pointer;
 }
