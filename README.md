@@ -12,5 +12,5 @@
 2. Clone all the submodules with `git submodule update --init --recursive`
 3. Install [Docker](https://www.docker.com/) and [Node.js](https://nodejs.org). Remember to also install the `buildx` plugin for Docker and the `npm` package manager, if they aren't already.
 4. Install the Node modules with `npm install`
-5. Build the project with `build.sh`
+5. Build the project with `build-image.sh`
 6. Run the project with `npm run watch-and-serve`
