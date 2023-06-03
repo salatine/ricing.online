@@ -6,6 +6,9 @@ set -e
 # Create dist folder
 mkdir dist
 
+# install docker
+apt install docker
+
 # Build the Debian image used by the emulator
 ./build-image.sh
 
