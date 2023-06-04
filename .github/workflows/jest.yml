@@ -9,8 +9,7 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install dependencies
-        run: npm install && sudo apt install awesome
-      
-      - name: test
-        run: npm run test
+      - name: Run tests
+        run: |
+          npm install && sudo apt install awesome
+          npm run test
