@@ -17,6 +17,7 @@ fi
 
 rm -rf "$DOCKER_CONTEXT"/inputs
 mkdir -p "$DOCKER_CONTEXT"/inputs
+mkdir -p "$OUTPUT_PATH"
 
 cp -rf "$IMAGES_PATH" "$DOCKER_CONTEXT"/inputs/images
 

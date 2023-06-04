@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-set -e
+set -veu
+
+DOCKER_CACHE_FLAGS=()
+if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
+    DOCKER_CACHE_FLAGS=(
+        "--cache-from=type=gha"
+        "--cache-to=type=gha,mode=max"
+    )
+fi
 
 # Buildar a imagem do v86, que irá conter os arquivos JS
-docker build -f v86/tools/docker/exec/Dockerfile -t v86:alpine-3.14 v86
+docker build -f v86/tools/docker/exec/Dockerfile -t v86:alpine-3.14 "${DOCKER_CACHE_FLAGS[@]}" v86
 
 # Iniciar um container temporário rodando a imagem acima, para copiarmos os arquivos que precisamos
 # O -d inicia ele em plano de fundo, o -q imprime o ID do container na saida padrão
