@@ -18,6 +18,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+      
+      # As we do not use the build-push-action, we need to expose a few GitHub runtime variables
+      # so that the GHA Docker cache works. See https://github.com/moby/buildkit#github-actions-cache-experimental
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v2
 
       - name: Build dist
         run: ./build-dist.sh
