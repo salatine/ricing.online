@@ -221,7 +221,7 @@ export const DEFAULT_OPTIONS: Options = {
     }
 };
 
-function makeDefaultCommands<K extends string>(commandFieldsById: Record<K, Omit<DefaultCommand, 'id'>>): Record<K, DefaultCommand> {
+export function makeDefaultCommands<K extends string>(commandFieldsById: Record<K, Omit<DefaultCommand, 'id'>>): Record<K, DefaultCommand> {
     return Object.fromEntries(
         Object.entries(commandFieldsById).map(([id, fields]) => [id, { id, ...(fields as object) }]) 
     ) as Record<K, DefaultCommand>

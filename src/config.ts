@@ -11,6 +11,9 @@ import JSZip from "jszip";
 
 // handlebars sucks 👍
 Handlebars.registerHelper('eq', (a, b) => a === b) 
+Handlebars.registerHelper('filterDefaultCommandKeybindsByType', (defaultCommandKeybinds: DefaultCommandKeybind[], type: DefaultCommand['type']) => {
+    return defaultCommandKeybinds.filter(defaultCommandKeybind => defaultCommandKeybind.command.type === type)
+})
 Handlebars.registerHelper('formatModkeysAsLuaArray', (modKeys: ModKey[], mainModKey: MainModKey) => {
     const luaModKeys = modKeys.map(modKey => {
         if (modKey === 'MainModKey') {

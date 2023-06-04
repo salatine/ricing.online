@@ -28,6 +28,6 @@ test('generates valid config files', async () => {
     }
 
     function deleteTemporaryConfigFiles(tempDir: string) {
-        fs.rmdirSync(tempDir, { recursive: true });
+        fs.rmSync(tempDir, { recursive: true });
     }
 })

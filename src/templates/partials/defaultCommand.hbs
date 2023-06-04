@@ -1,4 +1,4 @@
-{{#if (eq id "restart")}}
+{{#if (eq command.id "restart")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
@@ -7,7 +7,7 @@ awful.key(
 )
 {{/if}}
 
-{{#if (eq id "quit")}}
+{{#if (eq command.id "quit")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
@@ -15,28 +15,28 @@ awful.key(
         awesome.quit()
     end,
     {description = "quit awesome", group = "awesome"}
-),
+)
 {{/if}}
 
-{{#if (eq id "previousTag")}}
+{{#if (eq command.id "previousTag")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
     awful.tag.viewprev,
     {description = "view previous", group = "tag"}
-),
+)
 {{/if}}
 
-{{#if (eq id "nextTag")}}
+{{#if (eq command.id "nextTag")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
     awful.tag.viewnext,
     {description = "view next", group = "tag"}
-),
+)
 {{/if}}
 
-{{#if (eq id "focusPreviousClient")}}
+{{#if (eq command.id "focusPreviousClient")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
@@ -44,10 +44,10 @@ awful.key(
         awful.client.focus.byidx(-1)
     end,
     {description = "focus previous by index", group = "client"}
-),
+)
 {{/if}}
 
-{{#if (eq id "focusNextClient")}}
+{{#if (eq command.id "focusNextClient")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
@@ -55,30 +55,30 @@ awful.key(
         awful.client.focus.byidx(1)
     end,
     {description = "focus next by index", group = "client"}
-),
+)
 {{/if}}
 
-{{#if (eq id "swapWithPreviousClient")}}
+{{#if (eq command.id "swapWithPreviousClient")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.client.swap.byidx( -1)    end,
-            {description = "swap with previous client by index", group = "client"}),
+            {description = "swap with previous client by index", group = "client"})
 {{/if}}
 
-{{#if (eq id "swapWithNextClient")}}
+{{#if (eq command.id "swapWithNextClient")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.client.swap.byidx(  1)    end,
             {description = "swap with next client by index", group = "client"})
 {{/if}}
 
-{{#if (eq id "selectPreviousLayout")}}
+{{#if (eq command.id "selectPreviousLayout")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.layout.inc(-1)                end,
-            {description = "select previous", group = "layout"}),
+            {description = "select previous", group = "layout"})
 {{/if}}
 
-{{#if (eq id "selectNextLayout")}}
+{{#if (eq command.id "selectNextLayout")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.layout.inc( 1)                end,
-            {description = "select next", group = "layout"}),
+            {description = "select next", group = "layout"})
 {{/if}}
 
-{{#if (eq id "toggleWibarVisibility")}}
+{{#if (eq command.id "toggleWibarVisibility")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{normalKey}}",
@@ -87,25 +87,25 @@ awful.key(
         screen.mywibox.visible = not screen.mywibox.visible
     end,
     {description = "turn wibar invisible", group = "client"}
-),
+)
 {{/if}}
 
-{{#if (eq id "openBrowser")}}
+{{#if (eq command.id "openBrowser")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.spawn(#TODO)    end,
             {description = "launch browser", group = "client"})
 {{/if}}
 
-{{#if (eq id "openFileManager")}}
+{{#if (eq command.id "openFileManager")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.spawn(#TODO)    end,
             {description = "launch file manager", group = "client"})
 {{/if}}
 
-{{#if (eq id "openTerminal")}}
+{{#if (eq command.id "openTerminal")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.spawn(#TODO)    end,
             {description = "launch terminal", group = "client"})
 {{/if}}
 
-{{#if (eq id "showMenubar")}}
+{{#if (eq command.id "showMenubar")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
@@ -113,25 +113,25 @@ awful.key(
         awful.screen.focused().mypromptbox:run()
     end,
     {description = "show the menubar", group = "launcher"}
-),
+)
 {{/if}}
 
-{{#if (eq id "fullscreen")}}
+{{#if (eq command.id "fullscreen")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.client.floating.toggle()    end,
-            {description = "toggle fullscreen", group = "client"}),
+            {description = "toggle fullscreen", group = "client"})
 {{/if}}
 
-{{#if (eq id "closeWindow")}}
+{{#if (eq command.id "closeWindow")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () client.focus:kill()                         end,
-            {description = "close", group = "client"}),
+            {description = "close", group = "client"})
 {{/if}}
 
-{{#if (eq id "toggleFloating")}}
+{{#if (eq command.id "toggleFloating")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () awful.client.floating.toggle()    end,
-            {description = "toggle floating", group = "client"}),
+            {description = "toggle floating", group = "client"})
 {{/if}}
 
-{{#if (eq id "moveToScreen")}}
+{{#if (eq command.id "moveToScreen")}}
 awful.key(
     {{formatModkeysAsLuaArray modKeys mainModKey}},
     "{{ normalKey }}",
@@ -139,25 +139,25 @@ awful.key(
         awful.screen.focus_relative(1)
     end,
     {description = "focus the next screen", group = "screen"}
-),
+)
 {{/if}}
 
-{{#if (eq id "toggleOnTop")}}
+{{#if (eq command.id "toggleKeepOnTop")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () client.focus.ontop = not client.focus.ontop end,
-            {description = "toggle keep on top", group = "client"}),
+            {description = "toggle keep on top", group = "client"})
 {{/if}}
 
-{{#if (eq id "minimize")}}
+{{#if (eq command.id "minimize")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () client.focus.minimized = true    end,
-            {description = "minimize", group = "client"}),
+            {description = "minimize", group = "client"})
 {{/if}}
 
-{{#if (eq id "unminimize")}}
+{{#if (eq command.id "unminimize")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () client.focus.minimized = false   end,
-            {description = "unminimize", group = "client"}),
+            {description = "unminimize", group = "client"})
 {{/if}}
 
-{{#if (eq id "toggleMaximize")}}
+{{#if (eq command.id "toggleMaximize")}}
 awful.key({{formatModkeysAsLuaArray modKeys mainModKey}}, "{{normalKey}}", function () client.focus.maximized = not client.focus.maximized  end,
-            {description = "maximize", group = "client"}),
+            {description = "maximize", group = "client"})
 {{/if}}

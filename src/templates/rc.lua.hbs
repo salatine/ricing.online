@@ -128,10 +128,8 @@ end)
 
 -- Global keys
 globalkeys = gears.table.join(
-    {{#each defaultCommandKeybinds}}
-        {{#if (eq type "global")}}
-            {{> defaultCommand }}
-        {{/if}}{{#unless @last}},{{/unless}}
+    {{#each (filterDefaultCommandKeybindsByType defaultCommandKeybinds "global")}}
+        {{> defaultCommand }}{{#unless @last}},{{/unless}}
     {{/each}}
     
     {{#if customCommandKeybinds}},{{/if}}
@@ -175,11 +173,9 @@ end
 
 -- Client keys
 clientkeys = gears.table.join(
-    {{#each defaultCommandKeybinds}}
-        {{#if (eq type "client")}}
-            {{> defaultCommand }}
-        {{/if}}{{#unless @last}},{{/unless}}
-    {{/each}}
+    {{#each (filterDefaultCommandKeybindsByType defaultCommandKeybinds "client")}}
+        {{> defaultCommand }}{{#unless @last}},{{/unless}}
+    {{/each}} 
 )
 
 -- Client buttons
