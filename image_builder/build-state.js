@@ -17,10 +17,12 @@ const V86_ROOT = path.join(__dirname, "../v86");
 
 const OUTPUT_FILE = path.join(BUILD_OUTPUT_FOLDER, "images/debian-state-base.bin");
 
-process.stdin.setRawMode(true);
-process.stdin.resume();
-process.stdin.setEncoding("utf8");
-process.stdin.on("data", handle_key);
+if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+    process.stdin.resume();
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", handle_key);
+}
 
 const emulator = new V86({
     bios: { url: path.join(V86_ROOT, "/bios/seabios.bin") },

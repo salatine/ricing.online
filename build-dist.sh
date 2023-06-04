@@ -9,6 +9,9 @@ mkdir dist
 # Build the Debian image used by the emulator
 ./build-image.sh
 
+# Install the dependencies
+npm install
+
 # Build the JS/CSS files
 parcel build
 
