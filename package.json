@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "serve": "node serve.mjs",
     "watch": "parcel watch",
     "watch-and-serve": "npm-run-all --parallel watch serve",
-    "test": "jest --no-cache"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
