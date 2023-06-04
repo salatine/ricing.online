@@ -10,7 +10,7 @@ if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
 fi
 
 # Buildar a imagem do v86, que irá conter os arquivos JS
-docker build -f v86/tools/docker/exec/Dockerfile -t v86:alpine-3.14 "${DOCKER_CACHE_FLAGS[@]}" v86
+docker buildx build -f v86/tools/docker/exec/Dockerfile -t v86:alpine-3.14 "${DOCKER_CACHE_FLAGS[@]}" v86
 
 # Iniciar um container temporário rodando a imagem acima, para copiarmos os arquivos que precisamos
 # O -d inicia ele em plano de fundo, o -q imprime o ID do container na saida padrão
