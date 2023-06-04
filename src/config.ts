@@ -8,6 +8,7 @@ import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } 
 import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
+import { formatText } from "lua-fmt";
 
 // handlebars sucks 👍
 Handlebars.registerHelper('eq', (a, b) => a === b) 
@@ -205,5 +206,5 @@ function render(options: Options, template: string): string {
         AWESOME_CONFIG,
     }
 
-    return renderTemplate(templateContext)
+    return formatText(renderTemplate(templateContext), {})
 }
