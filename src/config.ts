@@ -1,9 +1,9 @@
 import Handlebars from "handlebars";
-import RcLuaTemplate from "bundle-text:./templates/rc.lua.hbs";
-import MyTasklistLuaTemplate from "bundle-text:./templates/mytasklist.lua.hbs";
-import ThemeLuaTemplate from "bundle-text:./templates/theme.lua.hbs";
-import DefaultCommandPartial from "bundle-text:./templates/partials/defaultCommand.hbs";
-import WidgetPartial from "bundle-text:./templates/partials/widget.hbs";
+import RcLuaTemplate from "./templates/rc.lua.hbs";
+import MyTasklistLuaTemplate from "./templates/mytasklist.lua.hbs";
+import ThemeLuaTemplate from "./templates/theme.lua.hbs";
+import DefaultCommandPartial from "./templates/partials/defaultCommand.hbs";
+import WidgetPartial from "./templates/partials/widget.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
 import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
