@@ -3,19 +3,14 @@
 
 const path = require("path");
 
-// TODO:
-// - Timeout
-
-// yeah not really
-// console.log("Don't forget to run `make all` before running this script");
-
 const fs = require("fs");
-const BUILD_OUTPUT_FOLDER = path.join(__dirname, '../build');
+const IMAGE_INPUTS_FOLDER = '/inputs/images/';
+const OUTPUT_FOLDER = '/outputs/';
 
-const V86 = require(path.join(BUILD_OUTPUT_FOLDER, "v86/libv86.js")).V86;
-const V86_ROOT = path.join(__dirname, "../v86");
+const V86 = require("/inputs/v86/build/libv86.js").V86;
+const V86_ROOT = path.join("/inputs/v86/src");
 
-const OUTPUT_FILE = path.join(BUILD_OUTPUT_FOLDER, "images/debian-state-base.bin");
+const OUTPUT_FILE = path.join(OUTPUT_FOLDER, "debian-state-base.bin");
 
 if (process.stdin.isTTY) {
     process.stdin.setRawMode(true);
@@ -35,9 +30,9 @@ const emulator = new V86({
     cmdline: "rw init=/bin/systemd root=host9p console=ttyS0 spectre_v2=off pti=off",
     filesystem: {
         basefs: {
-            url: path.join(BUILD_OUTPUT_FOLDER, "/images/debian-base-fs.json"),
+            url: path.join(IMAGE_INPUTS_FOLDER, "debian-base-fs.json"),
         },
-        baseurl: path.join(BUILD_OUTPUT_FOLDER, "/images/debian-9p-rootfs-flat/"),
+        baseurl: path.join(IMAGE_INPUTS_FOLDER, "debian-9p-rootfs-flat/"),
     },
     screen_dummy: true,
 });
