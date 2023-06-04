@@ -10,8 +10,8 @@ DOCKER_CONTEXT="$(dirname "$0")"
 DOCKER_CACHE_FLAGS=()
 if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
     DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha"
-        "--cache-to=type=gha,mode=max"
+        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-image-state"
+        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-image-state"
     )
 fi
 

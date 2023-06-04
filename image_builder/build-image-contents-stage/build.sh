@@ -14,8 +14,8 @@ IMAGE_NAME=i386/debian-full
 DOCKER_CACHE_FLAGS=()
 if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
     DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha"
-        "--cache-to=type=gha,mode=max"
+        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-image-contents"
+        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-image-contents"
     )
 fi
 

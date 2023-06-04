@@ -4,8 +4,8 @@ set -veu
 DOCKER_CACHE_FLAGS=()
 if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
     DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha"
-        "--cache-to=type=gha,mode=max"
+        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-v86"
+        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-v86"
     )
 fi
 
