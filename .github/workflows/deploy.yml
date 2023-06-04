@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - netlify-deploy # TODO remover depois de testar
 
 jobs:
   deploy:
