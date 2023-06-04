@@ -20,7 +20,7 @@ if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
 fi
 
 mkdir -p "$IMAGES_OUTPUT"
-docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" "${DOCKER_CACHE_FLAGS[@]}"
+docker buildx build "$DOCKER_CONTEXT" --load --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" "${DOCKER_CACHE_FLAGS[@]}"
 docker rm "$CONTAINER_NAME" || true
 docker create --platform linux/386 -t -i --name "$CONTAINER_NAME" "$IMAGE_NAME" bash
 
