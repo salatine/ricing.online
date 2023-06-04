@@ -1,0 +1,2 @@
+# Ignore existing state files in the inputs directory
+inputs/images/debian-state-base.bin.zst

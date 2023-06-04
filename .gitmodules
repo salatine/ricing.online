@@ -4,5 +4,5 @@
 
 
 [submodule "image_builder/awesome-wm-widgets"]
-	path = image_builder/awesome-wm-widgets
+	path = image_builder/build-image-contents-stage/awesome-wm-widgets
 	url = https://github.com/streetturtle/awesome-wm-widgets
