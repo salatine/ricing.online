@@ -13,7 +13,6 @@ type Response = {
 
 export async function startRPCServer(emulator: any): Promise<void> {
     await waitUntilEmulatorStarts(emulator)
-    emulator.serial0_send("python3 vm_rpc_server.py\n");
     await ping(emulator)
 }
 

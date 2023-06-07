@@ -29,6 +29,7 @@ def execute_request(request):
     }
 
 def main():
+    print('JSON RPC server is ready!')
     while True:
         # Le uma request da entrada padrão, realizando o parse para JSON
         request = json.loads(input())

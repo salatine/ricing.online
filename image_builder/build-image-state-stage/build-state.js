@@ -49,15 +49,21 @@ emulator.add_listener("serial0-output-char", function(c)
 
     serial_text += c;
 
-    if(!booted && serial_text.endsWith("root@localhost:~# "))
+    if(!booted && serial_text.endsWith("JSON RPC server is ready!"))
     {
         console.error("\nBooted in %d", (Date.now() - boot_start) / 1000);
         booted = true;
 
         // wait for startx to finish
         setTimeout(function() {
-            // sync and drop caches: Makes it safer to change the filesystem as fewer files are rendered
-            emulator.serial0_send("sync;echo 3 >/proc/sys/vm/drop_caches\n");
+            // send a RPC commmand to sync and drop caches: Makes it safer to change the filesystem as fewer files are rendered
+            const rpcRequest = {
+                jsonrpc: '2.0',
+                id: '1',
+                method: 'run_command',
+                params: ['sync;echo 3 >/proc/sys/vm/drop_caches']
+            }
+            emulator.serial0_send(JSON.stringify(rpcRequest) + "\n");
 
             setTimeout(async function ()
                 {

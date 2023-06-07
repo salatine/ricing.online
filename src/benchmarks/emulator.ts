@@ -58,7 +58,7 @@ async function main() {
         }),
         complete(),
         save({
-            file: (summary) => summary.date.toISOString().replace(':', '-'),
+            file: (summary) => summary.date.toISOString().replace(/:/g, '-'),
             format: 'json',
             details: true
         }),

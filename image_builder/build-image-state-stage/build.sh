@@ -25,7 +25,7 @@ mkdir -p "$DOCKER_CONTEXT"/inputs/v86
 cp -rf "$V86_SRC_PATH" "$DOCKER_CONTEXT"/inputs/v86/src
 cp -rf "$V86_BUILD_PATH" "$DOCKER_CONTEXT"/inputs/v86/build
 
-docker buildx build --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
+docker buildx build --progress plain --no-cache --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
     "$DOCKER_CONTEXT" \
     -o "$OUTPUT_PATH"
 

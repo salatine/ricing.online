@@ -20,14 +20,12 @@ if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
 fi
 
 mkdir -p "$IMAGES_OUTPUT"
-docker buildx build "$DOCKER_CONTEXT" --load --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" "${DOCKER_CACHE_FLAGS[@]}"
-docker rm "$CONTAINER_NAME" || true
-docker create --platform linux/386 -t -i --name "$CONTAINER_NAME" "$IMAGE_NAME" bash
-
-docker export "$CONTAINER_NAME" > "$OUT_ROOTFS_TAR"
+docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" \
+    "${DOCKER_CACHE_FLAGS[@]}" -o "type=tar,dest=$OUT_ROOTFS_TAR"
 
 "$(dirname "$0")"/fs2json.py --ignore-mtime --out "$OUT_FSJSON" "$OUT_ROOTFS_TAR"
 
+rm -rf "$OUT_ROOTFS_FLAT"
 mkdir -p "$OUT_ROOTFS_FLAT"
 # This emits way too much text
 "$V86_SRC_PATH"/tools/copy-to-sha256.py "$OUT_ROOTFS_TAR" "$OUT_ROOTFS_FLAT" > /dev/null 2>&1

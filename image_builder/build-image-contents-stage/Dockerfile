@@ -53,19 +53,9 @@ COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.servi
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
 
 COPY logind.conf /etc/systemd/logind.conf
-RUN { \
-    echo 'if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]] && [[ ! -f ~/.x-autostarted ]]; then';\
-    # echo 'echo "Waiting for 90s"';\
-    # echo 'sleep 90s';\
-    echo 'touch ~/.x-autostarted';\
-    echo '. startx';\
-    echo 'logout';\
-    echo 'fi';\
-} >> /root/.profile
+COPY profile /root/.profile
 COPY xinitrc /root/.xinitrc
 COPY vm_rpc_server.py /root/vm_rpc_server.py
-# COPY xorg.conf /etc/X11/
-# COPY networking.sh /root/
 
 RUN mkdir -p /root/.config/awesome/awesome-wm-widgets
 

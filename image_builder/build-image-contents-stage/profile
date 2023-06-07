@@ -1,0 +1,13 @@
+# If we're on the TTY1, autostart the X server
+if [[ -z "$DISPLAY" ]] && [[ $(tty) = /dev/tty1 ]] && [[ ! -f ~/.x-autostarted ]]; then
+    touch ~/.x-autostarted
+    . startx
+    logout
+fi
+
+# If we're on the serial console, autostart the RPC server
+if [[ $(tty) = /dev/ttyS0 ]] && [[ ! -f ~/.rpc-server-autostarted ]]; then
+    touch ~/.rpc-server-autostarted
+    python3 vm_rpc_server.py
+    logout
+fi
