@@ -13,14 +13,14 @@ type Response = {
 
 export async function startRPCServer(emulator: any): Promise<void> {
     await waitUntilEmulatorStarts(emulator)
+    emulator.serial0_send("python3 vm_rpc_server.py\n");
     await ping(emulator)
 }
 
-function waitUntilEmulatorStarts(emulator: any): Promise<void> {
+export function waitUntilEmulatorStarts(emulator: any): Promise<void> {
     return new Promise((resolve) => {
         const interval = setInterval(() => {
             if (emulator.is_running()) {
-                emulator.serial0_send("python3 vm_rpc_server.py\n");
                 clearInterval(interval)
 
                 resolve()
