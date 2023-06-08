@@ -2,6 +2,7 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "module": "ESNext",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "jsx": "react"
     }
 }
