@@ -9,6 +9,7 @@ import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
 import { formatText } from "lua-fmt";
+import { runCommand } from "./rpc";
 
 // handlebars sucks 👍
 Handlebars.registerHelper('eq', (a, b) => a === b) 
@@ -179,12 +180,13 @@ export function getConfigFiles(options: Options): ConfigFile[] {
 }
 
 export async function applyConfigFiles(emulator: any, configFiles: ConfigFile[]): Promise<void> {
-    const emulatorHome = '/root/'; 
-    const promises = configFiles.map(async ({ path, contents }) => {
-        await emulator.create_file(emulatorHome + path, await readBlobIntoUint8Array(contents))
-    })
+    const emulatorHome = '/root/';
 
-    await Promise.allSettled(promises)
+    for (const configFile of configFiles) {
+        const absolutePath = emulatorHome + configFile.path
+        await runCommand(emulator, 'rm ' + absolutePath)
+        await emulator.create_file(absolutePath, await readBlobIntoUint8Array(configFile.contents))
+    }
 }
 
 export async function exportConfigFiles(configFiles: ConfigFile[]): Promise<void> {
