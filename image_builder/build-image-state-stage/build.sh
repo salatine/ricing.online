@@ -6,7 +6,8 @@ V86_SRC_PATH=$(realpath "$2")
 V86_BUILD_PATH=$(realpath "$3")
 OUTPUT_PATH=$(realpath "$4")
 
-DOCKER_CONTEXT="$(dirname "$0")"
+THIS_DIRECTORY="$(realpath $(dirname "$0"))"
+DOCKER_CONTEXT="/"
 DOCKER_CACHE_FLAGS=()
 if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
     DOCKER_CACHE_FLAGS=(
@@ -15,18 +16,21 @@ if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
     )
 fi
 
-rm -rf "$DOCKER_CONTEXT"/inputs
-mkdir -p "$DOCKER_CONTEXT"/inputs
+# Create .dockerignore file, specifying the files we're interested
+echo '*' > "$THIS_DIRECTORY"/Dockerfile.dockerignore
+echo "!$IMAGES_PATH" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
+# echo "$IMAGES_PATH/debian-state-base.bin.zst" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
+echo "!$V86_SRC_PATH" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
+echo "!$V86_BUILD_PATH" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
+echo "!$THIS_DIRECTORY" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
+
 mkdir -p "$OUTPUT_PATH"
 
-cp -rf "$IMAGES_PATH" "$DOCKER_CONTEXT"/inputs/images
-
-mkdir -p "$DOCKER_CONTEXT"/inputs/v86
-cp -rf "$V86_SRC_PATH" "$DOCKER_CONTEXT"/inputs/v86/src
-cp -rf "$V86_BUILD_PATH" "$DOCKER_CONTEXT"/inputs/v86/build
-
 docker buildx build --progress plain --no-cache --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
+    --build-arg "IMAGES_PATH=$IMAGES_PATH" \
+    --build-arg "V86_SRC_PATH=$V86_SRC_PATH" \
+    --build-arg "V86_BUILD_PATH=$V86_BUILD_PATH" \
+    --build-arg "SCRIPTS_PATH=$THIS_DIRECTORY" \
+    -f "$THIS_DIRECTORY"/Dockerfile \
     "$DOCKER_CONTEXT" \
     -o "$OUTPUT_PATH"
-
-rm -rf "$DOCKER_CONTEXT"/inputs

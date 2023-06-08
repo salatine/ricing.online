@@ -25,7 +25,6 @@ docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm
 
 "$(dirname "$0")"/fs2json.py --ignore-mtime --out "$OUT_FSJSON" "$OUT_ROOTFS_TAR"
 
-rm -rf "$OUT_ROOTFS_FLAT"
 mkdir -p "$OUT_ROOTFS_FLAT"
 # This emits way too much text
 "$V86_SRC_PATH"/tools/copy-to-sha256.py "$OUT_ROOTFS_TAR" "$OUT_ROOTFS_FLAT" > /dev/null 2>&1

@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { runCommand } from "./rpc";
 import Header from './components/Header'
-import UpdatePreviewButton from "./components/UpdatePreviewButton";
-import ExportConfigFilesButton from "./components/ExportConfigFilesButton";
-import LockMouseButton from "./components/LockMouseButton";
 import AppearanceTab from "./components/tabs/AppearanceTab"
 import StatusBarTab from "./components/tabs/StatusBarTab"
 import { DEFAULT_OPTIONS } from "./constants";
@@ -80,7 +77,7 @@ export default function ReactApp({ emulator }: Props) {
         const configFiles = getConfigFiles(options)
         await applyConfigFiles(emulator, configFiles)
 
-        runCommand(emulator, "DISPLAY=:0 awesome-client 'awesome.restart()'"); 
+        runCommand(emulator, "kill -1 $(pidof awesome)"); 
     }
 
     async function handleExportConfigFilesClicked() {

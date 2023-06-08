@@ -1,8 +1,9 @@
 import path from 'path';
 import { add, complete, cycle, save, suite } from 'benny'
-import { startRPCServer } from '../rpc';
+import { runCommand, startRPCServer } from '../rpc';
 import { getConfigFiles, applyConfigFiles } from '../config';
 import { DEFAULT_OPTIONS } from '../constants';
+import { sleep } from '../utils';
 
 if (!global.gc) {
     console.error('this benchmark suite must be ran with the --expose-gc flag set');
@@ -17,7 +18,8 @@ async function main() {
 
     await suite(
         'Emulator',
-        add('wait for RPC server to be started', async () => {
+        add.skip('wait for RPC server to be started', async () => {
+            // FIXME deduplicate the logic for creating the emulator
             const emulator = new V86({
                 wasm_path: path.join(BUILD_DIR_PATH, "/v86/v86.wasm"),
                 memory_size: 512 * 1024 * 1024,
@@ -26,6 +28,7 @@ async function main() {
                 filesystem: { baseurl: path.join(BUILD_DIR_PATH, "/images/debian-9p-rootfs-flat/") },
                 autostart: true,
                 screen_dummy: true,
+                uart1: true,
             });
 
             await startRPCServer(emulator);
@@ -41,6 +44,7 @@ async function main() {
                 filesystem: { baseurl: path.join(BUILD_DIR_PATH, "/images/debian-9p-rootfs-flat/") },
                 autostart: true,
                 screen_dummy: true,
+                uart1: true,
             });
 
             await startRPCServer(emulator);
@@ -48,7 +52,17 @@ async function main() {
             return async () => {
                 const configFiles = getConfigFiles(DEFAULT_OPTIONS)
                 await applyConfigFiles(emulator, configFiles);
-                await emulator.destroy();
+                await runCommand(emulator, "kill -1 $(pidof awesome)"); 
+
+                let r: string;
+                while (!(r = await runCommand(emulator, "echo 'return awesome.startup' | DISPLAY=':0' awesome-client") ?? '').includes('false')) {
+                    console.log(await runCommand(emulator, "echo 'return awesome.startup' | DISPLAY=':0' awesome-client"))
+
+                    await sleep(1000);
+                }
+
+                console.log('got it');
+                console.log(r);
             }
         }),
         cycle(() => {

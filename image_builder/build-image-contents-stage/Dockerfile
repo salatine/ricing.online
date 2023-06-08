@@ -7,7 +7,7 @@ RUN apt update && \
         linux-image-686 grub2 systemd \
         libterm-readline-perl-perl \
         git \
-        python \
+        python python3-serial \
         awesome \
         feh \
         wget ca-certificates \

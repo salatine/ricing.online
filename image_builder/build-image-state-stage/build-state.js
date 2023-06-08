@@ -35,6 +35,7 @@ const emulator = new V86({
         baseurl: path.join(IMAGE_INPUTS_FOLDER, "debian-9p-rootfs-flat/"),
     },
     screen_dummy: true,
+    uart1: true,
 });
 
 console.log("Now booting, please stand by ...");
@@ -63,7 +64,7 @@ emulator.add_listener("serial0-output-char", function(c)
                 method: 'run_command',
                 params: ['sync;echo 3 >/proc/sys/vm/drop_caches']
             }
-            emulator.serial0_send(JSON.stringify(rpcRequest) + "\n");
+            serial_send(emulator, 1, JSON.stringify(rpcRequest) + "\n");
 
             setTimeout(async function ()
                 {
@@ -91,6 +92,12 @@ function handle_key(c)
     {
         emulator.serial0_send(c);
     }
+}
+
+function serial_send(emulator, serial, data) {
+    const bytes = new TextEncoder().encode(data)
+
+    emulator.serial_send_bytes(serial, bytes)
 }
 
 function stop()

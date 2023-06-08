@@ -1,3 +1,5 @@
+import { readStringIntoUint8Array } from "./utils"
+
 type Request = {
     jsonrpc: string,
     method: string,
@@ -62,7 +64,7 @@ function sendRequest(emulator: any, request: Request): Promise<Response> {
             capturedOutput += char;
             const capturedOutputLines = capturedOutput.split('\n');
 
-            for (let i = 1; i < capturedOutputLines.length - 1; i++) {
+            for (let i = 0; i < capturedOutputLines.length; i++) {
                 const line = capturedOutputLines[i];
                 if (line.endsWith("\r")) {
                     complete = true;
@@ -72,6 +74,7 @@ function sendRequest(emulator: any, request: Request): Promise<Response> {
             }
         });
 
-        emulator.serial0_send(JSON.stringify(request) + "\n");
+        const bytes = readStringIntoUint8Array(JSON.stringify(request) + "\n");
+        emulator.serial_send_bytes(1, bytes);
     });
 }

@@ -88,6 +88,7 @@ window.addEventListener("load", async () => {
         initial_state: { url: "/build/images/debian-state-base.bin.zst" },
         filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
         autostart: true,
+        uart1: true,
     });
 
     emulator.add_listener("serial0-output-char", function (char) {
@@ -106,8 +107,8 @@ window.addEventListener("load", async () => {
     const fullscreenToggle = document.getElementById('emulator_fullscreen_toggle')
     fullscreenToggle.addEventListener('click', () => toggleFullscreenEmulator(screenContainer))
 
+    window.globalRunCommand = async (command) => await runCommand(emulator, command)
+
     const reactApp = document.getElementById("reactApp");
     createRoot(reactApp).render(<ReactApp emulator={emulator}/>);
 })
-
-window.runCommand = runCommand
