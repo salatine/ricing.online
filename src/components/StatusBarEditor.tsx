@@ -210,6 +210,7 @@ function Editor({ statusBar, updateStatusBar }: EditorProps) {
                         <Form.Control
                             size="sm"
                             type="color"
+                            value={statusBar.color}
                             onChange={(e) => updateStatusBar({color: e.target.value})}>
                         </Form.Control>
                     </Col>
