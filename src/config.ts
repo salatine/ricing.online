@@ -129,7 +129,6 @@ export type StatusBarWidgetGroups = {
 export type StatusBar = {
     position: StatusBarPosition,
     height: number,
-    borderWidth: number,
     color: Color,
     widgetGroups: StatusBarWidgetGroups,
 }

@@ -5,11 +5,16 @@ local beautiful = require("beautiful")
 -- Set theme
 local theme = {}
 -- theme.useless_gap = {{ gap }} or 0
-theme.bg_focus   = "#ff0000"
+
+-- Configure colors
+{{#with statusBar}}
+theme.bg_normal = "{{ color }}"
+theme.bg_focus = "{{ color }}"
+{{/with}}
 
 -- Configure window border
+theme.border_width = dpi(1)
 {{#with windowBorder}}
-theme.border_width = dpi({{ size }})
 theme.border_normal = '{{ normalColor }}'
 theme.border_focus = '{{ focusColor }}'
 theme.border_marked = '{{ markedColor }}'
