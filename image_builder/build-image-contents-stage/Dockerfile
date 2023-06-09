@@ -61,6 +61,7 @@ COPY vm_rpc_server.py /root/vm_rpc_server.py
 RUN mkdir -p /root/.config/awesome/awesome-wm-widgets
 
 COPY awesome-wm-widgets /root/.config/awesome/awesome-wm-widgets
+COPY background /root/.config/awesome/background
 COPY fake-acpi /usr/local/bin/acpi
 
 RUN { \
