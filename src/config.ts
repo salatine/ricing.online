@@ -60,6 +60,7 @@ export type WindowBorder = {
 export type FontOptions = {
     family: string,
     size: number,
+    color: Color,
 }
 
 export type StatusBarPosition = 'left' | 'top' | 'right' | 'bottom'

@@ -205,13 +205,14 @@ export const DEFAULT_OPTIONS: Options = {
         markedColor: '#00ff00',
     },
     font: {
-        family: "Ubuntu Mono",
+        family: "Lato",
         size: 12,
+        color: "#DCD7BA",
     }, 
     statusBar: {
         position: 'top',
         height: 24,
-        color: '#ff0000',
+        color: '#1F1F28',
         widgetGroups: Object.fromEntries(
             Object.entries(DEFAULT_WIDGETS).map(([group, widgets]) => [
                 group,

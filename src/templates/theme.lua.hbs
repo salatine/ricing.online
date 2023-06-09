@@ -7,10 +7,10 @@ local theme = {}
 -- theme.useless_gap = {{ gap }} or 0
 
 -- Configure colors
-{{#with statusBar}}
-theme.bg_normal = "{{ color }}"
-theme.bg_focus = "{{ color }}"
-{{/with}}
+theme.bg_normal = "{{ statusBar.color }}"
+theme.bg_focus = "{{ statusBar.color }}"
+theme.fg_normal = "{{ font.color }}"
+theme.fg_focus = "{{ font.color }}"
 
 -- Configure window border
 theme.border_width = dpi(1)
