@@ -48,14 +48,13 @@ mytasklist {
 {{/if}}
 
 {{#if (eq type "volume")}}
-volume_widget{
-    widget_type = "arc"
-}
+volume_widget()
 {{/if}}
 
 {{#if (eq type "battery")}}
 battery_widget{
     show_current_level = true,
+    font = beautiful.font
 }
 {{/if}}
 
@@ -92,7 +91,7 @@ end)()
     -- Create a systray toggle widget
     local systoggle = wibox.widget {
         text = "ᐸ",
-        font = "{{ font.family }} {{ font.size}}",
+        font = beautiful.font,
         widget = wibox.widget.textbox
     }
     systoggle:connect_signal("button::press",

@@ -210,7 +210,7 @@ export const DEFAULT_OPTIONS: Options = {
     }, 
     statusBar: {
         position: 'top',
-        height: 5,
+        height: 24,
         color: '#ff0000',
         widgetGroups: Object.fromEntries(
             Object.entries(DEFAULT_WIDGETS).map(([group, widgets]) => [
