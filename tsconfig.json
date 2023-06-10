@@ -4,6 +4,6 @@
         "jsx": "react-jsx",
         "module": "ESNext",
         "moduleResolution": "node",
-        "jsx": "react"
+        "target": "ES2022"
     }
 }

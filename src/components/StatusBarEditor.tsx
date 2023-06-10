@@ -189,27 +189,12 @@ function Editor({ statusBar, updateStatusBar }: EditorProps) {
 
             <Row className='align-items-center'>
                 <InputGroup>
-                    <Form.Label column="lg" xs={11}>Width</Form.Label>
-                    <Col>
-                        <Form.Control
-                            size="sm"
-                            min="3"
-                            max="36"
-                            type="number"
-                            value={statusBar.borderWidth}
-                            onChange={(e) => updateStatusBar({borderWidth: parseInt(e.target.value)})}>
-                        </Form.Control>
-                    </Col>
-                </InputGroup>
-            </Row>
-
-            <Row className='align-items-center'>
-                <InputGroup>
                     <Form.Label column="lg" xs={11}>Color</Form.Label>
                     <Col>
                         <Form.Control
                             size="sm"
                             type="color"
+                            value={statusBar.color}
                             onChange={(e) => updateStatusBar({color: e.target.value})}>
                         </Form.Control>
                     </Col>
