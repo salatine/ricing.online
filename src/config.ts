@@ -184,7 +184,8 @@ export async function applyConfigFiles(emulator: any, configFiles: ConfigFile[])
 
     for (const configFile of configFiles) {
         const absolutePath = emulatorHome + configFile.path
-        await runCommand(emulator, 'rm ' + absolutePath)
+        // from https://unix.stackexchange.com/questions/36907/drop-a-specific-file-from-the-linux-filesystem-cache
+        await runCommand(emulator, `dd of=ofile oflag=nocache conv=notrunc,fdatasync count=0 ${absolutePath}`)
         await emulator.create_file(absolutePath, await readBlobIntoUint8Array(configFile.contents))
     }
 }

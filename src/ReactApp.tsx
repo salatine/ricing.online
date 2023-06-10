@@ -79,7 +79,7 @@ export default function ReactApp({ emulator }: Props) {
         // FIXME acho que isso n devia estar aqui
         if (options.background) {
             const backgroundFileContents = await readBlobIntoUint8Array(options.background);
-    -       await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
+            await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
         }
 
         const configFiles = getConfigFiles(options)
