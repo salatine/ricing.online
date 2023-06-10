@@ -6,7 +6,7 @@ type Props = {
     onBackgroundSelected: (file: File) => void
 }
 
-export default function BackgroundEditor({ onBackgroundSelected }) {
+export default function BackgroundEditor({ onBackgroundSelected }: Props) {
     function handleFileChanged(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files === null) {
             return

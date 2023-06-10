@@ -21,13 +21,6 @@ type Props = {
 export default function AppearanceTab({ emulator, options, onOptionsUpdated }: Props) {
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
 
-    // FIXME maybe this should be in the component itself?
-    async function handleBackgroundSelected(backgroundFile: File) {
-        const backgroundFileContents = await readBlobIntoUint8Array(backgroundFile);
-
-        await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
-    }
-
     return (
         <Fade in={true} appear={true}>
             <Container>
@@ -35,7 +28,7 @@ export default function AppearanceTab({ emulator, options, onOptionsUpdated }: P
                     <Row>
                         <Col>
                             <BackgroundEditor 
-                                onBackgroundSelected={handleBackgroundSelected}/>
+                                onBackgroundSelected={(background) => updateOptions({ background })}/>
                         </Col>
 
                         <Col>

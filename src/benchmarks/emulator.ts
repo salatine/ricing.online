@@ -3,7 +3,7 @@ import { add, complete, cycle, save, suite } from 'benny'
 import { runCommand, startRPCServer } from '../rpc';
 import { getConfigFiles, applyConfigFiles } from '../config';
 import { DEFAULT_OPTIONS } from '../constants';
-import { sleep } from '../utils';
+import { createEmulator, waitForAwesomeStartup } from '../emulator';
 
 if (!global.gc) {
     console.error('this benchmark suite must be ran with the --expose-gc flag set');
@@ -18,17 +18,12 @@ async function main() {
 
     await suite(
         'Emulator',
-        add.skip('wait for RPC server to be started', async () => {
-            // FIXME deduplicate the logic for creating the emulator
-            const emulator = new V86({
+        add('wait for RPC server to be started', async () => {
+            const emulator = createEmulator({
                 wasm_path: path.join(BUILD_DIR_PATH, "/v86/v86.wasm"),
-                memory_size: 512 * 1024 * 1024,
-                vga_memory_size: 8 * 1024 * 1024,
                 initial_state: { url: path.join(BUILD_DIR_PATH, "/images/debian-state-base.bin.zst") },
                 filesystem: { baseurl: path.join(BUILD_DIR_PATH, "/images/debian-9p-rootfs-flat/") },
-                autostart: true,
                 screen_dummy: true,
-                uart1: true,
             });
 
             await startRPCServer(emulator);
@@ -36,34 +31,19 @@ async function main() {
             await emulator.destroy();
         }),
         add('applying config to emulator', async () => {
-            const emulator = new V86({
+            const emulator = createEmulator({
                 wasm_path: path.join(BUILD_DIR_PATH, "/v86/v86.wasm"),
-                memory_size: 512 * 1024 * 1024,
-                vga_memory_size: 8 * 1024 * 1024,
                 initial_state: { url: path.join(BUILD_DIR_PATH, "/images/debian-state-base.bin.zst") },
                 filesystem: { baseurl: path.join(BUILD_DIR_PATH, "/images/debian-9p-rootfs-flat/") },
-                autostart: true,
                 screen_dummy: true,
-                uart1: true,
             });
 
             await startRPCServer(emulator);
 
-            return async () => {
-                const configFiles = getConfigFiles(DEFAULT_OPTIONS)
-                await applyConfigFiles(emulator, configFiles);
-                await runCommand(emulator, "kill -1 $(pidof awesome)"); 
+            const configFiles = getConfigFiles(DEFAULT_OPTIONS);
+            await applyConfigFiles(emulator, configFiles);
 
-                let r: string;
-                while (!(r = await runCommand(emulator, "echo 'return awesome.startup' | DISPLAY=':0' awesome-client") ?? '').includes('false')) {
-                    console.log(await runCommand(emulator, "echo 'return awesome.startup' | DISPLAY=':0' awesome-client"))
-
-                    await sleep(1000);
-                }
-
-                console.log('got it');
-                console.log(r);
-            }
+            await runCommand(emulator, "DISPLAY=:0 awesome-client 'awesome.emit_signal(\"load-rc-lua\")'");
         }),
         cycle(() => {
             if (global.gc) {

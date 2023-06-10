@@ -54,6 +54,7 @@ COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.
 
 COPY logind.conf /etc/systemd/logind.conf
 COPY profile /root/.profile
+COPY rc-loader.lua /root/.config/awesome/rc-loader.lua
 COPY xinitrc /root/.xinitrc
 COPY vm_rpc_server.py /root/vm_rpc_server.py
 

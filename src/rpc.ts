@@ -1,3 +1,4 @@
+import { waitForEmulatorStartup } from "./emulator"
 import { readStringIntoUint8Array } from "./utils"
 
 type Request = {
@@ -14,20 +15,8 @@ type Response = {
 }
 
 export async function startRPCServer(emulator: any): Promise<void> {
-    await waitUntilEmulatorStarts(emulator)
+    await waitForEmulatorStartup(emulator)
     await ping(emulator)
-}
-
-export function waitUntilEmulatorStarts(emulator: any): Promise<void> {
-    return new Promise((resolve) => {
-        const interval = setInterval(() => {
-            if (emulator.is_running()) {
-                clearInterval(interval)
-
-                resolve()
-            }
-        }, 500)
-    })
 }
 
 export async function runCommand(emulator: any, command: string): Promise<string> {

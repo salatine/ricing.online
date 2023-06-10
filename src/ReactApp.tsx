@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import { runCommand } from "./rpc";
 import Header from './components/Header'
 import AppearanceTab from "./components/tabs/AppearanceTab"
 import StatusBarTab from "./components/tabs/StatusBarTab"
-import { DEFAULT_OPTIONS } from "./constants";
+import { AWESOME_CONFIG, DEFAULT_OPTIONS } from "./constants";
 import { Options, getConfigFiles, applyConfigFiles, exportConfigFiles } from "./config";
 import KeybindsTab from "./components/tabs/KeybindsTab";
 import DefaultApplicationsTab from "./components/tabs/DefaultApplicationsTab";
 import Stack from 'react-bootstrap/Stack';
 import { Container } from 'react-bootstrap';
+import { restoreState } from './emulator';
+import { readBlobIntoUint8Array } from './utils';
 
 type Props = {
     emulator: any
@@ -73,11 +75,23 @@ export default function ReactApp({ emulator }: Props) {
         {tabItems}
     </Nav>)
 
-    async function handleUpdatePreviewClicked() {
+    async function updatePreview(options: Options) {
+        // FIXME acho que isso n devia estar aqui
+        if (options.background) {
+            const backgroundFileContents = await readBlobIntoUint8Array(options.background);
+    -       await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
+        }
+
         const configFiles = getConfigFiles(options)
         await applyConfigFiles(emulator, configFiles)
 
-        runCommand(emulator, "kill -1 $(pidof awesome)"); 
+        await runCommand(emulator, "echo 'awesome.emit_signal(\"load-rc-lua\")' | DISPLAY=':0' awesome-client"); 
+    }
+
+    async function handleUpdatePreviewClicked() {
+        await restoreState(emulator, "/build/images/debian-state-base.bin.zst")
+
+        await updatePreview(options)
     }
 
     async function handleExportConfigFilesClicked() {
@@ -91,6 +105,15 @@ export default function ReactApp({ emulator }: Props) {
     function handleOptionsUpdated(newOptions: Options) {
         setOptions(newOptions)
     }
+
+    // FIXME sla crime
+    useEffect(() => {
+        async function applyDefaultConfigOnStartup() {
+            updatePreview(DEFAULT_OPTIONS)
+        }
+
+        applyDefaultConfigOnStartup()
+    }, [emulator])
 
     return (
         <>
