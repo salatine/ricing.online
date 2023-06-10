@@ -4,8 +4,6 @@
         "jsx": "react-jsx",
         "module": "ESNext",
         "moduleResolution": "node",
-        "jsx": "react",
-        "noEmit": true,
-        "allowImportingTsExtensions": true,
+        "target": "ES2022"
     }
 }
