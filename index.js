@@ -2,8 +2,8 @@
 import { createRoot } from "react-dom/client";
 import ReactApp from "./src/ReactApp";
 import { runCommand, startRPCServer } from "./src/rpc";
-import { getAvailableFonts } from "./src/fonts";
 import NullEmulator from "./src/NullEmulator";
+import { createEmulator } from "./src/emulator";
 
 import './src/customBootstrap.scss';
 
@@ -80,15 +80,9 @@ window.addEventListener("load", async () => {
 
     fitToParent(screenContainer, screenCanvas)
 
-    const emulator = new emulatorClass({
-        wasm_path: "/build/v86/v86.wasm",
-        memory_size: 512 * 1024 * 1024,
-        vga_memory_size: 8 * 1024 * 1024,
+    const emulator = createEmulator({
         screen_container: screenContainer,
-        initial_state: { url: "/build/images/debian-state-base.bin.zst" },
-        filesystem: { baseurl: "/build/images/debian-9p-rootfs-flat/" },
-        autostart: true,
-    });
+    }, emulatorClass);
 
     emulator.add_listener("serial0-output-char", function (char) {
         if(char === "\r") {
@@ -106,8 +100,8 @@ window.addEventListener("load", async () => {
     const fullscreenToggle = document.getElementById('emulator_fullscreen_toggle')
     fullscreenToggle.addEventListener('click', () => toggleFullscreenEmulator(screenContainer))
 
+    window.globalRunCommand = async (command) => await runCommand(emulator, command)
+
     const reactApp = document.getElementById("reactApp");
     createRoot(reactApp).render(<ReactApp emulator={emulator}/>);
 })
-
-window.runCommand = runCommand

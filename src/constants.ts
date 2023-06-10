@@ -167,6 +167,7 @@ export const DEFAULT_OPTIONS: Options = {
         { commandLine: "fcitx &" },
         { commandLine: "feh something" },
     ],
+    background: null,
     defaultCommandKeybinds: [
         { modKeys: ["MainModKey"], normalKey: "b", command: DEFAULT_COMMANDS.openBrowser },
         { modKeys: ["MainModKey"], normalKey: "e", command: DEFAULT_COMMANDS.openFileManager },

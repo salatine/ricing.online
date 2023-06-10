@@ -30,3 +30,7 @@ export function makePartialUpdater<T>(original: T, onUpdateCallback: (value: T) 
         onUpdateCallback(updated);
     }
 }
+
+export function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}

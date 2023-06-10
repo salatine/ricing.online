@@ -1,4 +1,7 @@
+import io
+import os
 import json
+import serial
 import subprocess
 
 def ping():
@@ -29,9 +32,13 @@ def execute_request(request):
     }
 
 def main():
+    # Le os comandos da porta serial 1, e escreve pra saida padrão (normalmente na porta serial 0)
+    tty = serial.Serial('/dev/ttyS1')
+
+    print('JSON RPC server is ready!')
     while True:
-        # Le uma request da entrada padrão, realizando o parse para JSON
-        request = json.loads(input())
+        # Le uma request da porta serial 1, realizando o parse para JSON
+        request = json.loads(tty.readline())
         # Executa a request, obtendo uma resposta
         response = execute_request(request)
         # Escreve a resposta na saida padrão, codificando em JSON

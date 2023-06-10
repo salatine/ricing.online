@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "bench": "parcel build --target benchmarks && node --expose-gc ./build/benchmarks/emulator.js",
     "serve": "node serve.mjs",
     "watch": "parcel watch",
     "watch-and-serve": "npm-run-all --parallel watch serve",
@@ -43,8 +44,10 @@
     "@types/react-dom": "^18.2.1",
     "@types/uuid": "^9.0.1",
     "babel-jest": "^29.5.0",
+    "benny": "^3.7.1",
     "buffer": "^5.7.1",
     "constants-browserify": "^1.0.0",
+    "crypto-browserify": "^3.12.0",
     "jest": "^29.5.0",
     "jest-text-transformer": "^1.0.4",
     "npm-run-all": "^4.1.5",
@@ -54,6 +57,7 @@
     "querystring-es3": "^0.2.1",
     "serve": "^14.2.0",
     "ts-jest": "^29.1.0",
+    "tsx": "^3.12.7",
     "url": "^0.11.0",
     "util": "^0.12.5"
   },
@@ -61,6 +65,11 @@
     "index": {
       "distDir": "./build",
       "source": "index.js"
+    },
+    "benchmarks": {
+      "context": "node",
+      "distDir": "./build/benchmarks",
+      "source": "./src/benchmarks/emulator.ts"
     }
   }
 }

@@ -148,6 +148,7 @@ export type DefaultCommandKeybind = {
 
 export type Options = {
     autostartApplications: AutostartApplication[],
+    background: Blob | null,
     defaultCommandKeybinds: DefaultCommandKeybind[],
     customCommandKeybinds: CustomCommandKeybind[],
     mainModKey: MainModKey,

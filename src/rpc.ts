@@ -1,3 +1,6 @@
+import { waitForEmulatorStartup } from "./emulator"
+import { readStringIntoUint8Array } from "./utils"
+
 type Request = {
     jsonrpc: string,
     method: string,
@@ -12,21 +15,8 @@ type Response = {
 }
 
 export async function startRPCServer(emulator: any): Promise<void> {
-    await waitUntilEmulatorStarts(emulator)
+    await waitForEmulatorStartup(emulator)
     await ping(emulator)
-}
-
-function waitUntilEmulatorStarts(emulator: any): Promise<void> {
-    return new Promise((resolve) => {
-        const interval = setInterval(() => {
-            if (emulator.is_running()) {
-                emulator.serial0_send("python3 vm_rpc_server.py\n");
-                clearInterval(interval)
-
-                resolve()
-            }
-        }, 500)
-    })
 }
 
 export async function runCommand(emulator: any, command: string): Promise<string> {
@@ -63,7 +53,7 @@ function sendRequest(emulator: any, request: Request): Promise<Response> {
             capturedOutput += char;
             const capturedOutputLines = capturedOutput.split('\n');
 
-            for (let i = 1; i < capturedOutputLines.length - 1; i++) {
+            for (let i = 0; i < capturedOutputLines.length; i++) {
                 const line = capturedOutputLines[i];
                 if (line.endsWith("\r")) {
                     complete = true;
@@ -73,6 +63,7 @@ function sendRequest(emulator: any, request: Request): Promise<Response> {
             }
         });
 
-        emulator.serial0_send(JSON.stringify(request) + "\n");
+        const bytes = readStringIntoUint8Array(JSON.stringify(request) + "\n");
+        emulator.serial_send_bytes(1, bytes);
     });
 }
