@@ -19,7 +19,7 @@ type Props = {
 
 export default function Header({handleUpdatePreviewClicked, handleExportConfigFilesClicked, handleLockMouseClicked}: Props) {
     return (
-        <Row className={`p-3 mb-4 align-items-center ${styles.header}`}>
+        <Row className={`p-3 mb-4 ms-0 me-0 align-items-center ${styles.header}`}>
             <Col xs='auto'>
                 <h1 className={styles.logoTitle}>ricing.online</h1>
             </Col>
