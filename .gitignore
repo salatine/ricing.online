@@ -143,4 +143,5 @@ benchmark
 # Testing snapshots
 cypress/screenshots/*
 cypress/snapshots/*
+cypress/videos/*
 !cypress/snapshots/base
