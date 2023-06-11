@@ -1,10 +1,12 @@
 {
-    "extends": "../tsconfig.json",
     "compilerOptions": {
         "esModuleInterop": true,
         "types": [
             "cypress",
             "cypress-visual-regression"
         ]
-    }
+    },
+    "include": [
+        "./**/*.ts"
+    ]
 }
