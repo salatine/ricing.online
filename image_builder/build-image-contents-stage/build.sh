@@ -14,7 +14,7 @@ CONTAINER_NAME=debian-full
 IMAGE_NAME=i386/debian-full
 
 source "$THIS_DIRECTORY"/../set-docker-cache-flags.sh
-set_docker_cache_flags
+set_docker_cache_flags "image-contents"
 
 mkdir -p "$IMAGES_OUTPUT"
 docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" \

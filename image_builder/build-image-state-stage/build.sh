@@ -10,7 +10,7 @@ THIS_DIRECTORY="$(realpath $(dirname "$0"))"
 DOCKER_CONTEXT="/"
 
 source "$THIS_DIRECTORY"/../set-docker-cache-flags.sh
-set_docker_cache_flags
+set_docker_cache_flags "image-state"
 
 # Create .dockerignore file, specifying the files we're interested
 echo '*' > "$THIS_DIRECTORY"/Dockerfile.dockerignore
