@@ -85,7 +85,7 @@ export default function ReactApp({ emulator }: Props) {
         const configFiles = getConfigFiles(options)
         await applyConfigFiles(emulator, configFiles)
 
-        await runCommand(emulator, "echo 'awesome.emit_signal(\"load-rc-lua\")' | DISPLAY=':0' awesome-client"); 
+        await runCommand(emulator, "echo 'awesome.emit_signal(\"load-rc-lua\")' | DISPLAY=':0' awesome-client");
     }
 
     async function handleUpdatePreviewClicked() {
