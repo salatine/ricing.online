@@ -8,7 +8,9 @@
     "serve": "node serve.mjs",
     "watch": "parcel watch",
     "watch-and-serve": "npm-run-all --parallel watch serve",
-    "test": "jest"
+    "test": "jest",
+    "cypress:run": "./node_modules/.bin/cypress run --env type=actual",
+    "cypress:updateSnapshots": "./node_modules/.bin/cypress run --env type=base --config screenshotsFolder=cypress/snapshots/base"
   },
   "author": "",
   "license": "ISC",
