@@ -1,23 +1,20 @@
 #!/usr/bin/env bash
 set -veu
 
+THIS_DIRECTORY="$(dirname "$0")"
+
 V86_SRC_PATH=$(realpath "$1")
 IMAGES_OUTPUT=$(realpath "$2")
 
-DOCKER_CONTEXT="$(dirname "$0")"
+DOCKER_CONTEXT="$THIS_DIRECTORY"
 OUT_ROOTFS_TAR="$IMAGES_OUTPUT"/debian-9p-rootfs.tar
 OUT_ROOTFS_FLAT="$IMAGES_OUTPUT"/debian-9p-rootfs-flat
 OUT_FSJSON="$IMAGES_OUTPUT"/debian-base-fs.json
 CONTAINER_NAME=debian-full
 IMAGE_NAME=i386/debian-full
 
-DOCKER_CACHE_FLAGS=()
-if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
-    DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-image-contents"
-        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-image-contents"
-    )
-fi
+source "$THIS_DIRECTORY"/../set-docker-cache-flags.sh
+set_docker_cache_flags
 
 mkdir -p "$IMAGES_OUTPUT"
 docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" \

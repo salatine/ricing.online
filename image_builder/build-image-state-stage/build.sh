@@ -8,13 +8,9 @@ OUTPUT_PATH=$(realpath "$4")
 
 THIS_DIRECTORY="$(realpath $(dirname "$0"))"
 DOCKER_CONTEXT="/"
-DOCKER_CACHE_FLAGS=()
-if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
-    DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-image-state"
-        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-image-state"
-    )
-fi
+
+source "$THIS_DIRECTORY"/../set-docker-cache-flags.sh
+set_docker_cache_flags
 
 # Create .dockerignore file, specifying the files we're interested
 echo '*' > "$THIS_DIRECTORY"/Dockerfile.dockerignore
