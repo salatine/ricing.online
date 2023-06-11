@@ -4,6 +4,10 @@
         "jsx": "react-jsx",
         "module": "ESNext",
         "moduleResolution": "node",
-        "target": "ES2022"
-    }
+        "target": "ES6"
+    },
+    "exclude": [
+        "./cypress",
+        "./cypress.config.ts"
+    ]
 }
