@@ -141,6 +141,6 @@ dist
 benchmark
 
 # Testing snapshots
-cypress/screenshots
-cypress/snapshots
+cypress/screenshots/*
+cypress/snapshots/*
 !cypress/snapshots/base
