@@ -54,13 +54,6 @@ function resizeFittingToParent(parent, child) {
     const scale = Math.min(parentSize.width / childSize.width, parentSize.height / childSize.height)
 
     child.style.transform = `scale(${scale})`
-
-    const newChildSize = child.getBoundingClientRect()
-
-    const x = (parentSize.width - newChildSize.width) / 2
-    const y = (parentSize.height - newChildSize.height) / 2
-    child.style.transformOrigin = 'top left'
-    child.style.transform += ` translate(${x}px, ${y}px)` 
 }
 
 function toggleFullscreenEmulator(screenContainer) {

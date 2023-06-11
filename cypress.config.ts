@@ -20,5 +20,5 @@ export default defineConfig({
   },
   screenshotsFolder: './cypress/snapshots/actual',
   trashAssetsBeforeRuns: true,
-  video: false
+  video: true
 });
