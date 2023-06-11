@@ -29,4 +29,12 @@ jobs:
         run: npm run serve &
 
       - name: Run Cypress tests
+        id: cypress
         run: npm run cypress:run
+
+      - name: Upload Cypress failure snapshots
+        uses: actions/upload-artifact@v3
+        if: ${{ failure() && steps.cypress.conclusion == 'failure'}}
+        with:
+          name: cypress-snapshots
+          path: cypress/snapshots
