@@ -13,13 +13,11 @@ RUN apt update && \
 
 FROM i386/debian:buster AS icons_downloader
 ENV DEBIAN_FRONTEND noninteractive
-WORKDIR /additional-icons
 
-RUN apt update && \
-    apt --yes --no-install-recommends install build-essential autoconf autotools-dev automake ca-certificates git sudo && \
+RUN mkdir -p /additional-icons && \
+    apt update && \
+    apt --yes --no-install-recommends install ca-certificates git && \
     git clone https://github.com/horst3180/arc-icon-theme --depth 1 && cd arc-icon-theme && \
-    ./autogen.sh --prefix=/usr && \
-    sudo make install && \
     mv Arc/ /additional-icons
 
 FROM i386/debian:buster
