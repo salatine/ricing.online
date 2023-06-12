@@ -13,7 +13,7 @@ describe('template spec', () => {
     compareEmulatorScreenshot('updated-rice')
   })
 
-  function compareEmulatorScreenshot(name: string, threshold: number = 0.1, tolerancyTime: number = 15000): void {
+  function compareEmulatorScreenshot(name: string, threshold: number = 0.1, tolerancyTime: number = 22500): void {
     cy.wait(tolerancyTime)
     emulator().compareSnapshot(name, threshold)
   }
