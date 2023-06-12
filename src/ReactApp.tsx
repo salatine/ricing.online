@@ -10,11 +10,15 @@ import KeybindsTab from "./components/tabs/KeybindsTab";
 import DefaultApplicationsTab from "./components/tabs/DefaultApplicationsTab";
 import Stack from 'react-bootstrap/Stack';
 import { Container } from 'react-bootstrap';
-import { restoreState } from './emulator';
+import { restoreState, waitForRcLuaLoaded } from './emulator';
 import { readBlobIntoUint8Array } from './utils';
+import { makePartialUpdater } from './utils';
+import Spinner from 'react-bootstrap/Spinner';
+import Fade from 'react-bootstrap/Fade';
+import assertNever from 'assert-never';
 
 type Props = {
-    emulator: any
+    loadEmulator: () => Promise<any>
 }
 
 type Tab = {
@@ -28,10 +32,132 @@ type TabId
     | 'default-applications' 
     | 'keybinds'
 
-export default function ReactApp({ emulator }: Props) {
-    const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS);
-    const [selectedTabId, setSelectedTabId] = useState<TabId>('appearance');
+type LoadingEmulator = {
+    type: 'loading_emulator'
+}
 
+type UpdatingPreview = {
+    type: 'updating_preview',
+    emulator: any,
+    options: Options,
+    selectedTabId: TabId,
+}
+
+type Ready = {
+    type: 'ready',
+    emulator: any,
+    options: Options,
+    selectedTabId: TabId,
+}
+
+type AppState
+    = LoadingEmulator
+    | UpdatingPreview
+    | Ready
+
+export default function ReactApp({ loadEmulator }: Props) {
+    const [appState, setAppState] = useState<AppState>({ type: 'loading_emulator' })
+
+    const loadingSpinner = (
+        <Fade in={true} appear={true}>
+            <div className="d-flex justify-content-center align-items-center" style={{ position: 'absolute', backgroundColor: '#212529', width: '100vw', height: '100vh', zIndex: 12 }}>
+                <Spinner data-testid="loading" animation="border" variant="primary" />
+            </div>
+        </Fade>
+    )
+
+    useEffect(() => {
+        async function callLoadingEmulator() {
+            const emulator = await loadEmulator()
+
+            await updatePreviewFromLoadingState(emulator)
+        }
+
+        callLoadingEmulator()
+    }, [setAppState])
+
+    async function updatePreview(emulator: any, options: Options) {
+        // FIXME acho que isso n devia estar aqui
+        if (options.background) {
+            const backgroundFileContents = await readBlobIntoUint8Array(options.background);
+            await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
+        }
+
+        const configFiles = getConfigFiles(options)
+        await applyConfigFiles(emulator, configFiles)
+
+        await runCommand(emulator, "echo 'awesome.emit_signal(\"load-rc-lua\")' | DISPLAY=':0' awesome-client");
+        await waitForRcLuaLoaded(emulator)
+    }
+
+    async function updatePreviewFromLoadingState(emulator: any) {
+        if (appState.type !== 'loading_emulator') {
+            return
+        }
+
+        const updatingAppState: UpdatingPreview = {
+            type: 'updating_preview',
+            emulator,
+            options: DEFAULT_OPTIONS,
+            selectedTabId: 'appearance',
+        }
+        setAppState(updatingAppState)
+
+        await updatePreview(updatingAppState.emulator, updatingAppState.options)
+
+        const readyAppState: Ready = {...updatingAppState, type: 'ready'}
+        setAppState(readyAppState)
+    }
+
+    async function updatePreviewFromReadyState() {
+        if (appState.type !== 'ready') {
+            return
+        }
+        
+        const updatingAppState: UpdatingPreview = {...appState, type: 'updating_preview'}
+        setAppState(updatingAppState)
+
+        await restoreState(appState.emulator, "/build/images/debian-state-base.bin.zst")
+        await updatePreview(appState.emulator, appState.options)
+
+        const readyAppState: Ready = {...updatingAppState, type: 'ready'}
+        setAppState(readyAppState)
+    }
+
+    const updateAppState = makePartialUpdater(appState, setAppState)
+
+    switch (appState.type) {
+        case 'loading_emulator':
+            return loadingSpinner
+        case 'updating_preview':
+            return loadingSpinner
+        case 'ready':
+            return (
+            <Fade in={true} appear={true}>
+                <ReadyReactApp 
+                    emulator={appState.emulator} 
+                    options={appState.options} 
+                    setOptions={(options) => updateAppState({ options })} 
+                    selectedTabId={appState.selectedTabId}
+                    setSelectedTabId={(selectedTabId) => updateAppState({ selectedTabId })}
+                    updatePreview={updatePreviewFromReadyState}/>
+            </Fade>
+            )
+        default:
+            return assertNever(appState)
+    }
+}
+
+type ReadyProps = {
+    emulator: any,
+    options: Options,
+    setOptions: (options: Options) => void,
+    selectedTabId: TabId,
+    setSelectedTabId: (tabId: TabId) => void,
+    updatePreview: (options: Options) => Promise<void>,
+}
+
+function ReadyReactApp({ emulator, options, setOptions, selectedTabId, setSelectedTabId, updatePreview }: ReadyProps) {
     const tabs: Record<TabId, Tab> = {
         'appearance': {
             name: 'Appearance',
@@ -75,22 +201,7 @@ export default function ReactApp({ emulator }: Props) {
         {tabItems}
     </Nav>)
 
-    async function updatePreview(options: Options) {
-        // FIXME acho que isso n devia estar aqui
-        if (options.background) {
-            const backgroundFileContents = await readBlobIntoUint8Array(options.background);
-            await emulator.create_file(AWESOME_CONFIG + "/background", backgroundFileContents);
-        }
-
-        const configFiles = getConfigFiles(options)
-        await applyConfigFiles(emulator, configFiles)
-
-        await runCommand(emulator, "echo 'awesome.emit_signal(\"load-rc-lua\")' | DISPLAY=':0' awesome-client");
-    }
-
     async function handleUpdatePreviewClicked() {
-        await restoreState(emulator, "/build/images/debian-state-base.bin.zst")
-
         await updatePreview(options)
     }
 
@@ -106,15 +217,6 @@ export default function ReactApp({ emulator }: Props) {
         setOptions(newOptions)
     }
 
-    // FIXME sla crime
-    useEffect(() => {
-        async function applyDefaultConfigOnStartup() {
-            updatePreview(DEFAULT_OPTIONS)
-        }
-
-        applyDefaultConfigOnStartup()
-    }, [emulator])
-
     return (
         <>
             <Header
@@ -128,5 +230,5 @@ export default function ReactApp({ emulator }: Props) {
                 </Stack>
             </Container>
         </>
-    ); 
+    );
 }

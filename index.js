@@ -66,13 +66,19 @@ function toggleFullscreenEmulator(screenContainer) {
 }
 
 window.addEventListener("load", async () => {
-    const searchParams = new URLSearchParams(window.location.search)
-    
-    const emulatorClass = searchParams.has('nullEmulator') ? NullEmulator : V86Starter // NullEmulator or V86Starter
     const screenContainer = document.getElementById('screen_container')
     const screenCanvas = screenContainer.querySelector('canvas')
 
     fitToParent(screenContainer, screenCanvas)
+
+    const reactApp = document.getElementById("reactApp");
+    createRoot(reactApp).render(<ReactApp loadEmulator={loadEmulator} />)
+})
+
+async function loadEmulator() {
+    const searchParams = new URLSearchParams(window.location.search)
+    const emulatorClass = searchParams.has('nullEmulator') ? NullEmulator : V86Starter // NullEmulator or V86Starter
+    const screenContainer = document.getElementById('screen_container')
 
     const emulator = createEmulator({
         screen_container: screenContainer,
@@ -96,6 +102,5 @@ window.addEventListener("load", async () => {
 
     window.globalRunCommand = async (command) => await runCommand(emulator, command)
 
-    const reactApp = document.getElementById("reactApp");
-    createRoot(reactApp).render(<ReactApp emulator={emulator}/>);
-})
+    return emulator
+}

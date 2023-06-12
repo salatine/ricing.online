@@ -57,7 +57,6 @@ function sendRequest(emulator: any, request: Request): Promise<Response> {
                 const line = capturedOutputLines[i];
                 if (line.endsWith("\r")) {
                     complete = true;
-
                     resolve(JSON.parse(line));
                 }
             }
