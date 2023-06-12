@@ -66,8 +66,15 @@ RUN apt update && \
     rm -r /usr/share/locale/?? && \
     rm /var/log/*.log /var/log/lastlog /var/log/wtmp /var/log/apt/*.log /var/log/apt/*.xz
 
-COPY --from=fonts_downloader /additional-fonts/* /usr/share/fonts/
-COPY --from=icons_downloader /additional-icons/* /usr/share/icons/
+COPY boot-9p /etc/initramfs-tools/scripts/boot-9p
+
+# this needs to be commented out in order to boot from hdd
+RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /etc/initramfs-tools/modules && \
+    echo 'BOOT=boot-9p' | tee -a /etc/initramfs-tools/initramfs.conf && \
+    update-initramfs -u
+
+COPY --from=fonts_downloader /additional-fonts/ /usr/share/fonts/
+COPY --from=icons_downloader /additional-icons/ /usr/share/icons/
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
@@ -78,15 +85,6 @@ COPY rc-loader.lua /root/.config/awesome/rc-loader.lua
 COPY xinitrc /root/.xinitrc
 COPY vm_rpc_server.py /root/vm_rpc_server.py
 
-RUN mkdir -p /root/.config/awesome/awesome-wm-widgets
-
 COPY awesome-wm-widgets /root/.config/awesome/awesome-wm-widgets
 COPY background /root/.config/awesome/background
 COPY fake-acpi /usr/local/bin/acpi
-
-COPY boot-9p /etc/initramfs-tools/scripts/boot-9p
-
-# this needs to be commented out in order to boot from hdd
-RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /etc/initramfs-tools/modules && \
-    echo 'BOOT=boot-9p' | tee -a /etc/initramfs-tools/initramfs.conf && \
-    update-initramfs -u

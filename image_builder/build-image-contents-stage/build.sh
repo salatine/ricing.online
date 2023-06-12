@@ -10,14 +10,12 @@ DOCKER_CONTEXT="$THIS_DIRECTORY"
 OUT_ROOTFS_TAR="$IMAGES_OUTPUT"/debian-9p-rootfs.tar
 OUT_ROOTFS_FLAT="$IMAGES_OUTPUT"/debian-9p-rootfs-flat
 OUT_FSJSON="$IMAGES_OUTPUT"/debian-base-fs.json
-CONTAINER_NAME=debian-full
-IMAGE_NAME=i386/debian-full
 
 source "$THIS_DIRECTORY"/../set-docker-cache-flags.sh
 set_docker_cache_flags "image-contents"
 
 mkdir -p "$IMAGES_OUTPUT"
-docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm --tag "$IMAGE_NAME" \
+docker buildx build "$DOCKER_CONTEXT" --progress plain --platform linux/386 --rm \
     "${DOCKER_CACHE_FLAGS[@]}" -o "type=tar,dest=$OUT_ROOTFS_TAR"
 
 "$(dirname "$0")"/fs2json.py --ignore-mtime --out "$OUT_FSJSON" "$OUT_ROOTFS_TAR"
