@@ -6,5 +6,7 @@ pcall(require, "luarocks.loader")
 local awful = require('awful')
 
 awesome.connect_signal('load-rc-lua', function()
-    dofile('/root/.config/awesome/rc.lua')
+    local awesomePath = '/root/.config/awesome/'
+    dofile(awesomePath .. 'rc.lua')
+    awful.spawn('touch ' .. awesomePath .. 'awesomeInitialized')
 end)

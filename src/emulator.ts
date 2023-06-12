@@ -1,5 +1,6 @@
 import { runCommand } from "./rpc";
 import { sleep } from "./utils";
+import { AWESOME_CONFIG } from "./constants";
 
 // @ts-ignore
 export function createEmulator(options: Record<string, unknown>, emulatorClass: any = V86Starter) {
@@ -43,4 +44,15 @@ async function hasAwesomeStartedUp(emulator: any): Promise<boolean> {
     // somewhat unintuitively, `awesome.startup` contains whether awesome is starting up (therefore, when
     // it finishes starting up it returns false)
     return (await runCommand(emulator, "echo 'return awesome.startup' | DISPLAY=':0' awesome-client") ?? '').includes('false');
+}
+
+export async function waitForRcLuaLoaded(emulator: any, pollingIntervalMs: number = 500): Promise<void> {
+    while (!await hasRcLuaLoaded(emulator)) {
+        await sleep(pollingIntervalMs)
+    }
+}
+
+async function hasRcLuaLoaded(emulator: any): Promise<boolean> {
+    // after rc.lua is loaded (not the same as awesome starting up), this file is created by rc-loader.lua
+    return (await runCommand(emulator, `[ -e '${AWESOME_CONFIG}/awesomeInitialized' ] && echo 'true' || echo 'false'`)).includes('true')
 }
