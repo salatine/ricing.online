@@ -22,7 +22,7 @@ echo "!$THIS_DIRECTORY" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
 
 mkdir -p "$OUTPUT_PATH"
 
-docker buildx build --progress plain --no-cache --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
+docker buildx build --progress plain --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
     --build-arg "IMAGES_PATH=$IMAGES_PATH" \
     --build-arg "V86_SRC_PATH=$V86_SRC_PATH" \
     --build-arg "V86_BUILD_PATH=$V86_BUILD_PATH" \
