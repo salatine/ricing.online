@@ -18,7 +18,7 @@ RUN mkdir -p /additional-icons && \
     apt update && \
     apt --yes --no-install-recommends install ca-certificates git && \
     git clone https://github.com/horst3180/arc-icon-theme --depth 1 && cd arc-icon-theme && \
-    mv Arc/ /additional-icons
+    mv Arc /additional-icons/
 
 FROM i386/debian:buster
 
