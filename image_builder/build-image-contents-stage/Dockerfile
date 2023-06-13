@@ -84,6 +84,7 @@ RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /
 # install picom
 COPY --from=libs_downloader /additional-libs/picom /additional-libs/picom
 RUN cd /additional-libs/picom && meson --buildtype=release . build && ninja -C build && ninja -C build install
+RUN mkdir -p ~/.config/picom
 
 COPY --from=fonts_downloader /additional-fonts/ /usr/share/fonts/
 COPY --from=icons_downloader /additional-icons/ /usr/share/icons/

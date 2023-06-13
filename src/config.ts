@@ -9,7 +9,7 @@ import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } 
 import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
-import { formatText } from "lua-fmt";
+import { formatText as formatLuaCode } from "lua-fmt";
 import { runCommand } from "./rpc";
 
 // handlebars sucks 👍
@@ -167,9 +167,9 @@ export type ConfigFile = {
 
 export function getConfigFiles(options: Options): ConfigFile[] {
     const configTextFiles: Record<string, string> = {
-        ".config/awesome/mytasklist.lua": render(options, MyTasklistLuaTemplate),
-        ".config/awesome/rc.lua": render(options, RcLuaTemplate),
-        ".config/awesome/theme.lua": render(options, ThemeLuaTemplate),
+        ".config/awesome/mytasklist.lua": renderLua(options, MyTasklistLuaTemplate),
+        ".config/awesome/rc.lua": renderLua(options, RcLuaTemplate),
+        ".config/awesome/theme.lua": renderLua(options, ThemeLuaTemplate),
         ".config/picom/picom.conf": render(options, PicomConfTemplate),
     }
 
@@ -205,6 +205,10 @@ async function zipConfigFiles(configFiles: ConfigFile[]): Promise<Blob> {
     return rice
 }
 
+function renderLua(options: Options, template: string): string {
+    return formatLuaCode(render(options, template))
+}
+
 function render(options: Options, template: string): string {
     const renderTemplate = Handlebars.compile(template);
     const templateContext = {
@@ -212,5 +216,5 @@ function render(options: Options, template: string): string {
         AWESOME_CONFIG,
     }
 
-    return formatText(renderTemplate(templateContext), {})
+    return renderTemplate(templateContext)
 }
