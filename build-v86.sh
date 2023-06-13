@@ -3,9 +3,11 @@ set -veu
 
 DOCKER_CACHE_FLAGS=()
 if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
+    # mode=min only caches the final result, I think it's useful here because we won't change this a lot
+    # so caching all layers is pretty useless
     DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-v86"
-        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-v86"
+        "--cache-from=type=gha,scope=v86"
+        "--cache-to=type=gha,mode=min,scope=v86"
     )
 fi
 

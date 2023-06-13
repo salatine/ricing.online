@@ -9,7 +9,7 @@ import Stack from 'react-bootstrap/Stack'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
-import * as styles from './Header.module.scss';
+import styles from './Header.module.scss';
 
 type Props = {
     handleUpdatePreviewClicked: () => void

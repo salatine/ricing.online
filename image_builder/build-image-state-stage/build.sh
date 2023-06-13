@@ -8,13 +8,9 @@ OUTPUT_PATH=$(realpath "$4")
 
 THIS_DIRECTORY="$(realpath $(dirname "$0"))"
 DOCKER_CONTEXT="/"
-DOCKER_CACHE_FLAGS=()
-if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
-    DOCKER_CACHE_FLAGS=(
-        "--cache-from=type=gha,scope=$GITHUB_REF_NAME-image-state"
-        "--cache-to=type=gha,mode=max,scope=$GITHUB_REF_NAME-image-state"
-    )
-fi
+
+source "$THIS_DIRECTORY"/../set-docker-cache-flags.sh
+set_docker_cache_flags "image-state"
 
 # Create .dockerignore file, specifying the files we're interested
 echo '*' > "$THIS_DIRECTORY"/Dockerfile.dockerignore
@@ -26,7 +22,7 @@ echo "!$THIS_DIRECTORY" >> "$THIS_DIRECTORY"/Dockerfile.dockerignore
 
 mkdir -p "$OUTPUT_PATH"
 
-docker buildx build --progress plain --no-cache --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
+docker buildx build --progress plain --rm -t build-image-state-outputs "${DOCKER_CACHE_FLAGS[@]}" \
     --build-arg "IMAGES_PATH=$IMAGES_PATH" \
     --build-arg "V86_SRC_PATH=$V86_SRC_PATH" \
     --build-arg "V86_BUILD_PATH=$V86_BUILD_PATH" \

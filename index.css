@@ -33,6 +33,11 @@
     max-height: 100%;
 }
 
+.body-container .emulator-preview .emulator-screen canvas {
+    image-rendering: auto !important;
+    image-rendering: smooth !important;
+}
+
 .body-container .emulator-preview .emulator-screen:fullscreen {
     opacity: 1;
 }

@@ -1,3 +1,25 @@
+FROM i386/debian:buster AS fonts_downloader
+WORKDIR /additional-fonts
+RUN apt update && \
+    apt --yes --no-install-recommends install ca-certificates wget && \
+    wget "https://github.com/google/fonts/raw/main/ofl/inconsolata/static/Inconsolata-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/firasans/FiraSans-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/lato/Lato-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ufl/ubuntu/Ubuntu-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ufl/ubuntumono/UbuntuMono-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/rubik/Rubik%5Bwght%5D.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf" \
+        "https://github.com/google/fonts/raw/main/ofl/ibmplexsans/IBMPlexSans-Regular.ttf"
+
+FROM i386/debian:buster AS icons_downloader
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN mkdir -p /additional-icons && \
+    apt update && \
+    apt --yes --no-install-recommends install ca-certificates git && \
+    git clone https://github.com/horst3180/arc-icon-theme --depth 1 && cd arc-icon-theme && \
+    mv Arc /additional-icons/
+
 FROM i386/debian:buster
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -6,11 +28,9 @@ RUN apt update && \
     apt --yes --no-install-recommends install \
         linux-image-686 grub2 systemd \
         libterm-readline-perl-perl \
-        git \
-        python python3-serial \
+        python3 python3-serial \
         awesome \
         feh \
-        wget ca-certificates \
         xserver-xorg-input-kbd xserver-xorg-input-mouse xserver-xorg-input-evdev \
         xserver-xorg-video-fbdev xserver-xorg-video-vesa \
         xserver-xorg x11-xserver-utils xinit dbus-x11 \
@@ -26,8 +46,8 @@ RUN apt update && \
         mesa-utils libgl1-mesa-dri \
     && \
     touch /root/.Xdefaults && \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-    locale-gen \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen && \
     chsh -s /bin/bash && \
     echo "root:root" | chpasswd && \
     mkdir -p /etc/systemd/system/serial-getty@ttyS0.service.d/ && \
@@ -38,17 +58,24 @@ RUN apt update && \
     systemctl disable apt-daily.timer && \
     systemctl disable apt-daily-upgrade.timer && \
     systemctl disable dhcpcd.service && \
-    echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab
+    echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab && \
+    apt-get --yes clean && \
+    rm -r /var/lib/apt/lists/* && \
+    rm -r /usr/share/doc/* && \
+    rm -r /usr/share/man/* && \
+    rm -r /usr/share/locale/?? && \
+    rm /var/log/*.log /var/log/lastlog /var/log/wtmp /var/log/apt/*.log /var/log/apt/*.xz
 
-WORKDIR /usr/share/fonts
-RUN wget "https://github.com/google/fonts/raw/main/ofl/inconsolata/static/Inconsolata-Regular.ttf" \
-        "https://github.com/google/fonts/raw/main/ofl/firasans/FiraSans-Regular.ttf" \
-        "https://github.com/google/fonts/raw/main/ofl/lato/Lato-Regular.ttf" \
-        "https://github.com/google/fonts/raw/main/ufl/ubuntu/Ubuntu-Regular.ttf" \
-        "https://github.com/google/fonts/raw/main/ufl/ubuntumono/UbuntuMono-Regular.ttf" \
-        "https://github.com/google/fonts/raw/main/ofl/rubik/Rubik%5Bwght%5D.ttf" \
-        "https://github.com/google/fonts/raw/main/ofl/ibmplexmono/IBMPlexMono-Regular.ttf" \
-        "https://github.com/google/fonts/raw/main/ofl/ibmplexsans/IBMPlexSans-Regular.ttf"
+COPY boot-9p /etc/initramfs-tools/scripts/boot-9p
+
+# this needs to be commented out in order to boot from hdd
+RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /etc/initramfs-tools/modules && \
+    echo 'BOOT=boot-9p' | tee -a /etc/initramfs-tools/initramfs.conf && \
+    update-initramfs -u
+
+COPY --from=fonts_downloader /additional-fonts/ /usr/share/fonts/
+COPY --from=icons_downloader /additional-icons/ /usr/share/icons/
+
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
 
@@ -58,29 +85,6 @@ COPY rc-loader.lua /root/.config/awesome/rc-loader.lua
 COPY xinitrc /root/.xinitrc
 COPY vm_rpc_server.py /root/vm_rpc_server.py
 
-RUN mkdir -p /root/.config/awesome/awesome-wm-widgets
-
 COPY awesome-wm-widgets /root/.config/awesome/awesome-wm-widgets
 COPY background /root/.config/awesome/background
 COPY fake-acpi /usr/local/bin/acpi
-
-RUN { \
-    git clone https://github.com/horst3180/arc-icon-theme --depth 1 && cd arc-icon-theme; \
-    ./autogen.sh --prefix=/usr; \
-    sudo make install; \
-    mv Arc/ /usr/share/icons/; \
-}
-
-COPY boot-9p /etc/initramfs-tools/scripts/boot-9p
-
-# this needs to be commented out in order to boot from hdd
-RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /etc/initramfs-tools/modules && \
-    echo 'BOOT=boot-9p' | tee -a /etc/initramfs-tools/initramfs.conf && \
-    update-initramfs -u
-
-RUN apt-get --yes clean && \
-    rm -r /var/lib/apt/lists/* && \
-    rm -r /usr/share/doc/* && \
-    rm -r /usr/share/man/* && \
-    rm -r /usr/share/locale/?? && \
-    rm /var/log/*.log /var/log/lastlog /var/log/wtmp /var/log/apt/*.log /var/log/apt/*.xz
