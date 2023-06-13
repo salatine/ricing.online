@@ -20,11 +20,12 @@ RUN mkdir -p /additional-icons && \
     git clone https://github.com/horst3180/arc-icon-theme --depth 1 && cd arc-icon-theme && \
     mv Arc /additional-icons/
 
-FROM i386/debian:buster AS libs_downloader
+FROM i386/debian:buster AS picom_builder
 WORKDIR /additional-libs
 RUN apt update && \
-    apt --yes --no-install-recommends install ca-certificates git && \
-    git clone "https://github.com/pijulius/picom" && cd picom && git submodule update --init --recursive
+    apt --yes --no-install-recommends install ca-certificates git ninja-build meson gcc libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev && \
+    git clone "https://github.com/pijulius/picom" && cd picom && git submodule update --init --recursive && \
+    meson --buildtype=release . build && ninja -C build && meson configure -Dprefix=/usr/local/picom build && ninja -C build install 
 
 FROM i386/debian:buster
 
@@ -82,8 +83,7 @@ RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /
     update-initramfs -u
 
 # install picom
-COPY --from=libs_downloader /additional-libs/picom /additional-libs/picom
-RUN cd /additional-libs/picom && meson --buildtype=release . build && ninja -C build && ninja -C build install
+COPY --from=picom_builder /usr/local/picom /usr/local/
 RUN mkdir -p ~/.config/picom
 
 COPY --from=fonts_downloader /additional-fonts/ /usr/share/fonts/
