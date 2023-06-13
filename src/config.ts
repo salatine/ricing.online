@@ -2,6 +2,7 @@ import Handlebars from "handlebars";
 import RcLuaTemplate from "./templates/rc.lua.hbs";
 import MyTasklistLuaTemplate from "./templates/mytasklist.lua.hbs";
 import ThemeLuaTemplate from "./templates/theme.lua.hbs";
+import PicomConfTemplate from "./templates/picom.conf.hbs";
 import DefaultCommandPartial from "./templates/partials/defaultCommand.hbs";
 import WidgetPartial from "./templates/partials/widget.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
@@ -169,6 +170,7 @@ export function getConfigFiles(options: Options): ConfigFile[] {
         ".config/awesome/mytasklist.lua": render(options, MyTasklistLuaTemplate),
         ".config/awesome/rc.lua": render(options, RcLuaTemplate),
         ".config/awesome/theme.lua": render(options, ThemeLuaTemplate),
+        ".config/picom/picom.conf": render(options, PicomConfTemplate),
     }
 
     const configFiles: ConfigFile[] = Object.entries(configTextFiles)

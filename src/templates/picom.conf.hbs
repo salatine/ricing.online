@@ -1,0 +1,60 @@
+######################
+#     animations     #
+######################
+
+animations = true;
+animation-clamping = true;
+animation-delta = 15;
+animation-dampening = 30.0;
+animation-stiffness = 500.0;
+animation-window-mass = 1;
+animation-for-open-window = "zoom";
+animation-for-unmap-window = "zoom";
+animation-for-transient-window = "none";
+animation-for-workspace-switch-in = "slide-up";
+animation-for-workspace-switch-out = "slide-down";
+
+
+######################
+#       corners      #
+######################
+
+corner-radius = 12.0;
+
+rounded-corners-exclude = [
+    "window_type = 'dock'",
+    "window_type = 'desktop'",
+    "window_type = 'menu'"
+];
+
+
+######################
+#       shadows      #
+######################
+
+shadow = true;
+shadow-radius = 12;
+shadow-opacity = 0;
+
+
+######################
+#       fading       #
+######################
+
+fading = true;
+fade-in-step = 0.09;
+fade-out-step = 0.09;
+fade-delta = 10;
+
+
+######################
+#  general settings  #
+######################
+
+backend = "xrender";
+unredir-if-possible = true;
+vsync = false;
+mark-wmwin-focused = true;
+detect-rounded-corners = false;
+detect-client-opacity = true;
+refresh-rate = 0;
