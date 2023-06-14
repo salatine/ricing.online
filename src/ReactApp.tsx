@@ -134,13 +134,15 @@ export default function ReactApp({ loadEmulator }: Props) {
         case 'ready':
             return (
             <Fade in={true} appear={true}>
-                <ReadyReactApp 
-                    emulator={appState.emulator} 
-                    options={appState.options} 
-                    setOptions={(options) => updateAppState({ options })} 
-                    selectedTabId={appState.selectedTabId}
-                    setSelectedTabId={(selectedTabId) => updateAppState({ selectedTabId })}
-                    updatePreview={updatePreviewFromReadyState}/>
+                <div>
+                    <ReadyReactApp 
+                        emulator={appState.emulator} 
+                        options={appState.options} 
+                        setOptions={(options) => updateAppState({ options })} 
+                        selectedTabId={appState.selectedTabId}
+                        setSelectedTabId={(selectedTabId) => updateAppState({ selectedTabId })}
+                        updatePreview={updatePreviewFromReadyState}/>
+                </div>
             </Fade>
             )
         default:
