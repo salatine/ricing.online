@@ -21,9 +21,11 @@ RUN mkdir -p /additional-icons && \
     mv Arc /additional-icons/
 
 FROM i386/debian:buster AS picom_builder
-WORKDIR /additional-libs
-RUN apt update && \
-    apt --yes --no-install-recommends install ca-certificates git ninja-build meson gcc libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev && \
+
+RUN echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list && \
+    apt update && \
+    apt --yes --no-install-recommends install ca-certificates git ninja-build meson gcc libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev/buster libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev && \
+    apt --yes --no-install-recommends install -t buster-backports libglx0 libglx-dev && \
     git clone "https://github.com/pijulius/picom" && cd picom && git submodule update --init --recursive && \
     meson --buildtype=release . build && ninja -C build && meson configure -Dprefix=/usr/local/picom build && ninja -C build install 
 
@@ -31,7 +33,8 @@ FROM i386/debian:buster
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt update && \
+RUN echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list && \
+    apt update && \
     apt --yes --no-install-recommends install \
         linux-image-686 grub2 systemd \
         libterm-readline-perl-perl \
@@ -45,13 +48,18 @@ RUN apt update && \
         libc-l10n locales \
         fonts-noto fonts-droid-fallback \
         strace file xterm vim apt-file \
+        # picom runtime dependencies
+        libconfig9 libev4 libgles1 libgles2 libopengl0 libpcre2-16-0 libpcre2-32-0 libpcre2-8-0 libpcre2-posix0 \
+        libxcb-composite0 libxcb-damage0 \
         # As we have no networking, those are somewhat useless
         # dhcpcd5 \
         # wget curl \
         # net-tools netcat \
         wmctrl xdotool \
-        mesa-utils libgl1-mesa-dri \
-    && \
+        mesa-utils libgl1-mesa-dri && \
+    apt --yes --no-install-recommends install -t buster-backports \
+        # backports picom dependencies
+        libglx0 && \
     touch /root/.Xdefaults && \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen && \
