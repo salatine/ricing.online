@@ -3,8 +3,8 @@
 ######################
 
 animations = true;
+animation-delta = {{if (eq window.animation.speed 0) }};
 animation-clamping = true;
-animation-delta = 15;
 animation-dampening = 30.0;
 animation-stiffness = 500.0;
 animation-window-mass = 1;
@@ -29,10 +29,10 @@ rounded-corners-exclude = [
 
 
 ######################
-#       shadows      #
+#       shadows      # 
 ######################
 
-shadow = true;
+shadow = {{ if (eq theme.shadowOpacity 0 ) }} false {{ else }} true {{ /if }};
 shadow-radius = 12;
 shadow-opacity = 0;
 

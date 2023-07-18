@@ -51,6 +51,16 @@ export type AutostartApplication = {
     commandLine: string,
 }
 
+export type WindowOptions = {
+    border: WindowBorder,
+    animationSpeed: number,
+    shadow: {
+        opacity: number,
+        radius: number,
+    },
+    cornerRadius: number
+}
+
 export type WindowBorder = {
     size: number,
     normalColor: Color,
@@ -155,7 +165,9 @@ export type Options = {
     customCommandKeybinds: CustomCommandKeybind[],
     mainModKey: MainModKey,
     terminal: string,
-    windowBorder: WindowBorder,
+    browser: string,
+    fileManager: string,
+    window: WindowOptions,
     font: FontOptions,
     statusBar: StatusBar,
 }

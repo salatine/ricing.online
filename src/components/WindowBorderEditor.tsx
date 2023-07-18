@@ -1,5 +1,5 @@
 import React from 'react';
-import { WindowBorder } from '../config';
+import { WindowOptions, WindowBorder } from '../config';
 import { makePartialUpdater } from '../utils';
 import Form from 'react-bootstrap/Form';
 import Stack from 'react-bootstrap/Stack';
@@ -18,7 +18,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
 
     return (
         <Stack gap={2}>
-            <h2>Border</h2>
+            <h3>Border</h3>
             <InputGroup>
                 <InputGroup.Text>Size</InputGroup.Text>
                 <Form.Control type="number"

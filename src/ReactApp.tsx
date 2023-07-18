@@ -133,17 +133,17 @@ export default function ReactApp({ loadEmulator }: Props) {
             return loadingSpinner
         case 'ready':
             return (
-            <Fade in={true} appear={true}>
-                <div>
-                    <ReadyReactApp 
-                        emulator={appState.emulator} 
-                        options={appState.options} 
-                        setOptions={(options) => updateAppState({ options })} 
-                        selectedTabId={appState.selectedTabId}
-                        setSelectedTabId={(selectedTabId) => updateAppState({ selectedTabId })}
-                        updatePreview={updatePreviewFromReadyState}/>
-                </div>
-            </Fade>
+                <Fade in={true} appear={true}>
+                    <div>
+                        <ReadyReactApp 
+                            emulator={appState.emulator} 
+                            options={appState.options} 
+                            setOptions={(options) => updateAppState({ options })} 
+                            selectedTabId={appState.selectedTabId}
+                            setSelectedTabId={(selectedTabId) => updateAppState({ selectedTabId })}
+                            updatePreview={updatePreviewFromReadyState}/>
+                    </div>
+                </Fade>
             )
         default:
             return assertNever(appState)
@@ -194,14 +194,18 @@ function ReadyReactApp({ emulator, options, setOptions, selectedTabId, setSelect
     }
 
     const tabItems = Object.entries(tabs).map(([tabId, tab]) => {
-        return (<Nav.Item key={tabId}>
-            <Nav.Link eventKey={tabId}>{tab.name}</Nav.Link>
-        </Nav.Item>)
+        return (
+            <Nav.Item key={tabId}>
+                <Nav.Link eventKey={tabId}>{tab.name}</Nav.Link>
+            </Nav.Item>
+        )
     })
 
-    const navigationTabs = (<Nav fill variant='pills' activeKey={selectedTabId} onSelect={(newTabId) => setSelectedTabId(newTabId as TabId)}>
-        {tabItems}
-    </Nav>)
+    const navigationTabs = (
+        <Nav fill variant='pills' activeKey={selectedTabId} onSelect={(newTabId) => setSelectedTabId(newTabId as TabId)}>
+            {tabItems}
+        </Nav>
+    )
 
     async function handleUpdatePreviewClicked() {
         await updatePreview(options)
