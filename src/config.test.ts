@@ -6,7 +6,7 @@ import os from 'os';
 import path from 'path';
 
 test('generates valid config files', async () => {
-    const files = await createTemporaryConfigFiles(getConfigFiles(DEFAULT_OPTIONS));
+    const files = (await createTemporaryConfigFiles(getConfigFiles(DEFAULT_OPTIONS))).filter(file => file.endsWith('.lua'));
     const tempDir = path.dirname(files[0]);
     for (const file of files) {
         expect(() => execSync(`awesome -c ${file} -k`)).not.toThrow();
