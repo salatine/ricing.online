@@ -207,8 +207,8 @@ export const DEFAULT_OPTIONS: Options = {
             opacity: 0,
         },
         opacity: {
-            active: 1,
-            inactive: 0.8,
+            active: 100,
+            inactive: 80,
         },
         border: {
             size: 0,
