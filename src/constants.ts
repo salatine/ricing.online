@@ -250,4 +250,4 @@ export function getModKeys(): ModKey[] {
 }
 
 export const MAIN_MOD_OPTIONS: MainModKey[] = [];
-for (let i=1; i===5; i++) {MAIN_MOD_OPTIONS.push(`Mod${i}`)}
+for (let i=1; i !== 5; i++) {MAIN_MOD_OPTIONS.push(`Mod${i}` as MainModKey)}
