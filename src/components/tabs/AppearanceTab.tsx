@@ -7,7 +7,7 @@ import { Options } from '../../config'
 import { makePartialUpdater, readBlobIntoUint8Array, readStringIntoUint8Array } from '../../utils';
 import BackgroundEditor from "../BackgroundEditor";
 import FontEditor from "../FontEditor";
-import WindowBorderEditor from "../WindowBorderEditor";
+import WindowEditor from "../WindowEditor";
 import Stack from 'react-bootstrap/Stack';
 import Fade from 'react-bootstrap/Fade';
 import './AppearanceTab.scss';
@@ -20,6 +20,7 @@ type Props = {
 
 export default function AppearanceTab({ emulator, options, onOptionsUpdated }: Props) {
     const updateOptions = makePartialUpdater(options, onOptionsUpdated)
+    const updateWindow = makePartialUpdater(options.window, (window) => updateOptions({ window }))
 
     return (
         <Fade in={true} appear={true}>
@@ -41,9 +42,9 @@ export default function AppearanceTab({ emulator, options, onOptionsUpdated }: P
                     
                     <Row>
                         <Col>
-                            <WindowBorderEditor
-                                windowBorder={options.windowBorder} 
-                                onWindowBorderUpdated={(windowBorder) => updateOptions({ windowBorder })}/>
+                            <WindowEditor 
+                                window={options.window} 
+                                onWindowUpdated={(window) => updateOptions({ window })}/>
                         </Col>
                     </Row>
                 </Stack>

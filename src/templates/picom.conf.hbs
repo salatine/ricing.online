@@ -1,0 +1,60 @@
+######################
+#     animations     #
+######################
+
+animations = {{#if (eq window.animationSpeed 0)}}false{{else}}true{{/if}};
+animation-delta = {{ window.animationSpeed }}
+animation-clamping = true;
+animation-dampening = 30.0;
+animation-stiffness = 500.0;
+animation-window-mass = 1;
+animation-for-open-window = "zoom";
+animation-for-unmap-window = "zoom";
+animation-for-transient-window = "none";
+animation-for-workspace-switch-in = "slide-up";
+animation-for-workspace-switch-out = "slide-down";
+
+
+######################
+#       corners      #
+######################
+
+corner-radius = {{ window.cornerRadius }};
+
+rounded-corners-exclude = [
+    "window_type = 'dock'",
+    "window_type = 'desktop'",
+    "window_type = 'menu'"
+];
+
+
+######################
+#       shadows      # 
+######################
+
+shadow = {{#if (eq window.shadow.opacity 0 )}}false{{else}}true{{/if}};
+shadow-radius = {{ window.shadow.radius }};
+shadow-opacity = {{ window.shadow.opacity }};
+
+
+######################
+#       fading       #
+######################
+
+fading = true;
+fade-in-step = 0.09;
+fade-out-step = 0.09;
+fade-delta = 10;
+
+
+######################
+#  general settings  #
+######################
+
+backend = "xrender";
+unredir-if-possible = true;
+vsync = false;
+mark-wmwin-focused = true;
+detect-rounded-corners = false;
+detect-client-opacity = true;
+refresh-rate = 0;

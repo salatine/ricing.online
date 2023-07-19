@@ -198,11 +198,22 @@ export const DEFAULT_OPTIONS: Options = {
     ],
     mainModKey: "Mod4",
     terminal: "kitty",
-    windowBorder: {
-        size: 0,
-        normalColor: '#ffffff',
-        focusColor: '#ff0000',
-        markedColor: '#00ff00',
+    browser: "firefox",
+    fileManager: "nemo",
+    window: {
+        animationSpeed: 0,
+        shadow: {
+            radius: 12,
+            opacity: 0,
+        },
+        border: {
+            size: 0,
+            normalColor: '#ffffff',
+            focusColor: '#ff0000',
+            markedColor: '#00ff00',
+        },
+        cornerRadius: 12,
+
     },
     font: {
         family: "Lato",
@@ -238,11 +249,5 @@ export function getModKeys(): ModKey[] {
     ];
 }
 
-export const MAIN_MOD_OPTIONS: MainModKey[] = [
-    'Mod1',
-    'Mod2',
-    'Mod3',
-    'Mod4',
-    'Mod5',
-];
-
+export const MAIN_MOD_OPTIONS: MainModKey[] = [];
+for (let i=1; i !== 5; i++) {MAIN_MOD_OPTIONS.push(`Mod${i}` as MainModKey)}

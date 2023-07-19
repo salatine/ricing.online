@@ -2,13 +2,14 @@ import Handlebars from "handlebars";
 import RcLuaTemplate from "./templates/rc.lua.hbs";
 import MyTasklistLuaTemplate from "./templates/mytasklist.lua.hbs";
 import ThemeLuaTemplate from "./templates/theme.lua.hbs";
+import PicomConfTemplate from "./templates/picom.conf.hbs";
 import DefaultCommandPartial from "./templates/partials/defaultCommand.hbs";
 import WidgetPartial from "./templates/partials/widget.hbs";
 import { readBlobIntoUint8Array, readStringIntoUint8Array, makeBlobFromString } from "./utils";
 import { AWESOME_CONFIG } from "./constants";
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
-import { formatText } from "lua-fmt";
+import { formatText as formatLuaCode } from "lua-fmt";
 import { runCommand } from "./rpc";
 
 // handlebars sucks 👍
@@ -48,6 +49,16 @@ export type CustomCommandKeybind = {
 
 export type AutostartApplication = {
     commandLine: string,
+}
+
+export type WindowOptions = {
+    border: WindowBorder,
+    animationSpeed: number,
+    shadow: {
+        opacity: number,
+        radius: number,
+    },
+    cornerRadius: number
 }
 
 export type WindowBorder = {
@@ -154,7 +165,9 @@ export type Options = {
     customCommandKeybinds: CustomCommandKeybind[],
     mainModKey: MainModKey,
     terminal: string,
-    windowBorder: WindowBorder,
+    browser: string,
+    fileManager: string,
+    window: WindowOptions,
     font: FontOptions,
     statusBar: StatusBar,
 }
@@ -166,9 +179,10 @@ export type ConfigFile = {
 
 export function getConfigFiles(options: Options): ConfigFile[] {
     const configTextFiles: Record<string, string> = {
-        ".config/awesome/mytasklist.lua": render(options, MyTasklistLuaTemplate),
-        ".config/awesome/rc.lua": render(options, RcLuaTemplate),
-        ".config/awesome/theme.lua": render(options, ThemeLuaTemplate),
+        ".config/awesome/mytasklist.lua": renderLua(options, MyTasklistLuaTemplate),
+        ".config/awesome/rc.lua": renderLua(options, RcLuaTemplate),
+        ".config/awesome/theme.lua": renderLua(options, ThemeLuaTemplate),
+        ".config/picom/picom.conf": render(options, PicomConfTemplate),
     }
 
     const configFiles: ConfigFile[] = Object.entries(configTextFiles)
@@ -203,6 +217,10 @@ async function zipConfigFiles(configFiles: ConfigFile[]): Promise<Blob> {
     return rice
 }
 
+function renderLua(options: Options, template: string): string {
+    return formatLuaCode(render(options, template))
+}
+
 function render(options: Options, template: string): string {
     const renderTemplate = Handlebars.compile(template);
     const templateContext = {
@@ -210,5 +228,5 @@ function render(options: Options, template: string): string {
         AWESOME_CONFIG,
     }
 
-    return formatText(renderTemplate(templateContext), {})
+    return renderTemplate(templateContext)
 }
