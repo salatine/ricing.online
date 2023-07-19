@@ -18,7 +18,7 @@ export default function WindowBorderEditor({ windowBorder, onWindowBorderUpdated
 
     return (
         <Stack gap={2}>
-            <h3>Border</h3>
+            <h4>Border</h4>
             <InputGroup>
                 <InputGroup.Text>Size</InputGroup.Text>
                 <Form.Control type="number"

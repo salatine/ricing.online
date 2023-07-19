@@ -2,8 +2,8 @@
 #     animations     #
 ######################
 
-animations = true;
-animation-delta = {{#if (eq window.animationSpeed 0)}} false {{else}} true {{/if}};
+animations = {{#if (eq window.animationSpeed 0)}}false{{else}}true{{/if}};
+animation-delta = {{ window.animationSpeed }}
 animation-clamping = true;
 animation-dampening = 30.0;
 animation-stiffness = 500.0;
@@ -19,7 +19,7 @@ animation-for-workspace-switch-out = "slide-down";
 #       corners      #
 ######################
 
-corner-radius = 12.0;
+corner-radius = {{ window.cornerRadius }};
 
 rounded-corners-exclude = [
     "window_type = 'dock'",
@@ -32,9 +32,9 @@ rounded-corners-exclude = [
 #       shadows      # 
 ######################
 
-shadow = {{#if (eq window.shadow.opacity 0 )}} false {{else}} true {{/if}};
-shadow-radius = 12;
-shadow-opacity = 0;
+shadow = {{#if (eq window.shadow.opacity 0 )}}false{{else}}true{{/if}};
+shadow-radius = {{ window.shadow.radius }};
+shadow-opacity = {{ window.shadow.opacity }};
 
 
 ######################
