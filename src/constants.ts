@@ -206,6 +206,10 @@ export const DEFAULT_OPTIONS: Options = {
             radius: 12,
             opacity: 0,
         },
+        opacity: {
+            active: 100,
+            inactive: 80,
+        },
         border: {
             size: 0,
             normalColor: '#ffffff',

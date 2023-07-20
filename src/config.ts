@@ -30,6 +30,7 @@ Handlebars.registerHelper('formatModkeysAsLuaArray', (modKeys: ModKey[], mainMod
 
     return new Handlebars.SafeString(`{ ${luaModKeys.join(', ')} }`)
 })
+Handlebars.registerHelper('convertPercentToDecimal', (percent: number) => percent / 100)
 Handlebars.registerPartial('defaultCommand', DefaultCommandPartial)
 Handlebars.registerPartial('widget', WidgetPartial)
 
@@ -54,6 +55,10 @@ export type AutostartApplication = {
 export type WindowOptions = {
     border: WindowBorder,
     animationSpeed: number,
+    opacity: {
+        active: number,
+        inactive: number,
+    },
     shadow: {
         opacity: number,
         radius: number,
