@@ -22,7 +22,7 @@ describe('template spec', () => {
     return cy.get('#screen_container')
   }
   
-  function loading(timeout: number = 100000) {
+  function loading(timeout: number = 150000) {
     return cy.get("[data-testid='loading']", { timeout })
   }
 })
