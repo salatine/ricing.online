@@ -145,3 +145,6 @@ cypress/screenshots/*
 cypress/snapshots/*
 cypress/videos/*
 !cypress/snapshots/base
+
+# Terraform
+terraform/.terraform*

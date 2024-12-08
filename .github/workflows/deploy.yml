@@ -62,7 +62,7 @@ jobs:
         with:
           terraform_version: "1.5.0"
 
-      - run: terraform -chdir="./terraform" init && terraform -chdir="./terraform" validate && terraform chdir="./terraform" plan
+      - run: terraform -chdir="./terraform" init && terraform -chdir="./terraform" validate && terraform -chdir="./terraform" plan
       - run: terraform -chdir="./terraform" apply -auto-approve
       
       - uses: azure/webapps-deploy@v2
