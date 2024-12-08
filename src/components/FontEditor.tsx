@@ -28,7 +28,7 @@ export default function FontEditor({ emulator, font, onFontUpdated }: Props) {
 
     const updateFont = makePartialUpdater(font, onFontUpdated)
 
-    const fontFamilyOptions = availableFontFamilies.map(fontFamily => <option value={fontFamily}>{fontFamily}</option>);
+    const fontFamilyOptions = availableFontFamilies.map(fontFamily => <option key={fontFamily} value={fontFamily}>{fontFamily}</option>);
     return (
         <Stack gap={2}>
             <h2>Font</h2>

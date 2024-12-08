@@ -22,18 +22,24 @@ RUN mkdir -p /additional-icons && \
 
 FROM i386/debian:buster AS picom_builder
 
-RUN echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list && \
+RUN echo "deb http://archive.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list && \
     apt update && \
-    apt --yes --no-install-recommends install ca-certificates git ninja-build meson gcc libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev/buster libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev && \
+    apt --yes --no-install-recommends install ca-certificates git make build-essential wget tar ninja-build meson gcc libxext-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev libdbus-1-dev libgl1-mesa-dev/buster libpcre2-dev libpcre3-dev libevdev-dev uthash-dev libev-dev libx11-xcb-dev libxcb-util0-dev libepoxy-dev libxcb-dpms0-dev && \
     apt --yes --no-install-recommends install -t buster-backports libglx0 libglx-dev && \
-    git clone "https://github.com/pijulius/picom" && cd picom && git submodule update --init --recursive && \
+    wget "https://github.com/hyperrealm/libconfig/releases/download/v1.7.3/libconfig-1.7.3.tar.gz" && \
+    tar -xzvf libconfig-1.7.3.tar.gz && \
+    cd libconfig-1.7.3 && \
+    ./configure && \
+    make && \
+    make install && \
+    git clone "https://github.com/pijulius/picom" && cd picom && git reset --hard 6f868e54b93168fbed87b95700bdd3f0c1bfd973 && git submodule update --init --recursive && \
     meson --buildtype=release . build && ninja -C build && meson configure -Dprefix=/usr/local/picom build && ninja -C build install 
 
 FROM i386/debian:buster
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN echo "deb http://deb.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list && \
+RUN echo "deb http://archive.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list && \
     apt update && \
     apt --yes --no-install-recommends install \
         linux-image-686 grub2 systemd \
