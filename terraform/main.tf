@@ -12,6 +12,7 @@ resource "azurerm_app_service_plan" "ricing_online_plan" {
   name                = "ricingOnlineAppServicePlan"
   location            = azurerm_resource_group.ricing_online.location
   resource_group_name = azurerm_resource_group.ricing_online.name
+  reserved = true
   kind = "Linux"
   sku {
     tier = "Free"  # Plano gratuito para fins de teste
