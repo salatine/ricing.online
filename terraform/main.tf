@@ -5,7 +5,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "ricing_online" {
 	name = "ricingOnlineRG"
-	location = "East US"
+	location = "Central US"
 }
 
 resource "azurerm_app_service_plan" "ricing_online_plan" {

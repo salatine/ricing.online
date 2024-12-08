@@ -148,3 +148,4 @@ cypress/videos/*
 
 # Terraform
 terraform/.terraform*
+terraform/*.tfstate*
