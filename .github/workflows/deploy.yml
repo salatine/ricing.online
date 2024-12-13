@@ -83,6 +83,6 @@ jobs:
 
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: "ricingOnlineWebApp"
+          app-name: "webapp-ricingOnline"
           slot-name: "production"
           package: "dist"
