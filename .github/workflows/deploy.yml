@@ -31,13 +31,18 @@ jobs:
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_DEPLOY_TO_PROD: true
+          NETLIFY_DEPLOY_TO_PROD: false
           install_command: "echo Skipping installing the dependencies"
           build_command: "echo Skipping building the web files"
           build_directory: "dist"
 
   azure:
     runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -56,15 +61,26 @@ jobs:
 
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
+          creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: "1.5.0"
 
       - run: terraform -chdir="./terraform" init && terraform -chdir="./terraform" validate && terraform -chdir="./terraform" plan
+        env:
+          TF_VAR_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+          TF_VAR_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+
       - run: terraform -chdir="./terraform" apply -auto-approve
-      
+        env:
+          TF_VAR_client_id: ${{ secrets.AZURE_CLIENT_ID }}
+          TF_VAR_client_secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+
       - uses: azure/webapps-deploy@v2
         with:
           app-name: "ricingOnlineWebApp"
