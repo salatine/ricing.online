@@ -1,35 +1,37 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "~> 3.0.0"
+    }
+  }
+}
+
 provider "azurerm" {
-	features {}
-	subscription_id = "d8bd1f02-8f3c-497b-8104-48a24c869300"
+  features {}
+  subscription_id = "d8bd1f02-8f3c-497b-8104-48a24c869300"
 }
 
 resource "azurerm_resource_group" "ricing_online" {
-	name = "ricingOnlineRG"
-	location = "Central US"
+  name = "ricingOnlineRG"
+  location = "Central US"
 }
 
-resource "azurerm_app_service_plan" "ricing_online_plan" {
-  name                = "ricingOnlineAppServicePlan"
+resource "azurerm_service_plan" "ricing_online_plan" {
+  name                = "webapp-asp-ricingOnline"
   location            = azurerm_resource_group.ricing_online.location
   resource_group_name = azurerm_resource_group.ricing_online.name
-  reserved = true
-  kind = "Linux"
-  sku {
-    tier = "Free"  # Plano gratuito para fins de teste
-    size = "F1"    # Tamanho F1 (Free)
-  }
+  os_type = "Linux"
+  sku_name = "S1"
 }
 
-resource "azurerm_app_service" "ricing_online_webapp" {
-  name                = "ricingOnlineWebApp"
+resource "azurerm_linux_web_app" "ricing_online_webapp" {
+  name                = "webapp-ricingOnline"
   location            = azurerm_resource_group.ricing_online.location
   resource_group_name = azurerm_resource_group.ricing_online.name
-  app_service_plan_id = azurerm_app_service_plan.ricing_online_plan.id
+  service_plan_id = azurerm_service_plan.ricing_online_plan.id
+  https_only = true
   site_config {
-    always_on = true
-  }
-
-  app_settings = {
-    "WEBSITE_NODE_DEFAULT_VERSION" = "14"
+    minimum_tls_version = "1.2"
   }
 }
