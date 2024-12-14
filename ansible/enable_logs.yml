@@ -1,7 +1,7 @@
-- name: Enable web app's diagnostic logs
+- hosts: localhost
   tasks:
     - name: Create diagnostic setting for webapp with event hub and log analytics 
-      azure_rm_monitordiagnosticsetting:
+      azure.azcollection.azure_rm_monitordiagnosticsetting:
         name: "webapp-logs"
 
         resource:
@@ -16,6 +16,14 @@
         log_analytics:
           name: "log-analytics-ricingOnline"
           resource_group: "ricingOnlineRG"
+
+        logs:
+              - category: "AppServiceHTTPLogs"
+              - category: "AppServiceConsoleLogs"
+              - category: "AppServiceAppLogs"
+              - category: "AppServiceAuditLogs"
+              - category: "AppServiceIPSecAuditLogs"
+              - category: "AppServicePlatformLogs"
 
         client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
         secret: "{{ lookup('env', 'AZURE_CLIENT_SECRET') }}"

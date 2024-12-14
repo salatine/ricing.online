@@ -32,6 +32,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ansible
+          python3 -m pip install --upgrade pip
+          pip install ansible[azure]
           sudo ansible-galaxy collection install azure.azcollection
 
       - uses: hashicorp/setup-terraform@v1
