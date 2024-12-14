@@ -28,10 +28,11 @@ jobs:
       - name: Expose GitHub Runtime
         uses: crazy-max/ghaction-github-runtime@v2
 
-      - name: Install Ansible
+      - name: Install Ansible and collections dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ansible
+          sudo ansible-galaxy collection install azure.azcollection
 
       - uses: hashicorp/setup-terraform@v1
         with:

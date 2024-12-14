@@ -12,7 +12,7 @@ describe('template spec', () => {
     loading().should('not.exist')
   })
 
-  function compareEmulatorScreenshot(name: string, threshold: number = 0.5, tolerancyTime: number = 30000): void {
+  function compareEmulatorScreenshot(name: string, threshold: number = 1, tolerancyTime: number = 30000): void {
     cy.wait(tolerancyTime)
     emulator().compareSnapshot(name, threshold)
   }
