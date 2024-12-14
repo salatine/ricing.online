@@ -9,10 +9,6 @@
           type: "Microsoft.Web/sites"
           resource_group: "ricingOnlineRG"
 
-        event_hub:
-          namespace: "my-event-hub"
-          policy: "RootManageSharedAccessKey"
-
         log_analytics:
           name: "log-analytics-ricingOnline"
           resource_group: "ricingOnlineRG"
