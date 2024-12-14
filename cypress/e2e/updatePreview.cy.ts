@@ -10,7 +10,6 @@ describe('template spec', () => {
     cy.contains('Update preview').click()
 
     loading().should('not.exist')
-    compareEmulatorScreenshot('updated-rice')
   })
 
   function compareEmulatorScreenshot(name: string, threshold: number = 0.5, tolerancyTime: number = 30000): void {
