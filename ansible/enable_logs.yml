@@ -1,0 +1,17 @@
+- name: Enable web app's diagnostic logs
+  hosts: localhost
+  tasks:
+    - name: Configurar logs de diagnóstico
+      azure_rm_webapp:
+        resource_group: "ricingOnlineRG"
+        name: "ricingOnlineWebApp"
+        location: "East US"
+        logs:
+          application_logging: true
+          web_server_logging: true
+          detailed_error_messages: true
+          failed_request_tracing: true
+        client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
+        secret: "{{ lookup('env', 'AZURE_CLIENT_SECRET') }}"
+        tenant: "{{ lookup('env', 'AZURE_TENANT_ID') }}"
+        subscription_id: "{{ lookup('env', 'AZURE_SUBSCRIPTION_ID') }}"
