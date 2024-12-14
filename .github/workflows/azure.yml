@@ -33,7 +33,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ansible
           python3 -m pip install --upgrade pip
-          pip install azure>=2.0.0
+          pip install azure-mgmt-web azure-mgmt-monitor azure-identity
           sudo ansible-galaxy collection install azure.azcollection
 
       - uses: hashicorp/setup-terraform@v1
