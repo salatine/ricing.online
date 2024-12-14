@@ -5,7 +5,7 @@
         name: "webapp-logs"
 
         resource:
-          name: "ricingOnlineWebApp"
+          name: "webapp-ricingOnline"
           type: "Microsoft.Web/sites"
           resource_group: "ricingOnlineRG"
 
