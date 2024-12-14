@@ -38,7 +38,7 @@ resource "azurerm_linux_web_app" "ricing_online_webapp" {
 
 resource "azurerm_log_analytics_workspace" "ricing_online_logworkspace" {
   name = "log-analytics-ricingOnline"
-  location = azurerm_resourcegroup.ricing_online.location
-  resource_group_name = azurerm_resourcegroup.ricing_online.name
+  location = azurerm_resource_group.ricing_online.location
+  resource_group_name = azurerm_resource_group.ricing_online.name
   retention_in_days = 30
 }
